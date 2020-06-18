@@ -1,7 +1,9 @@
 import React from 'react';
-import {View, Text, Button} from 'react-native';
+import {View, Text, Button, Image} from 'react-native';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
+import {createStackNavigator} from 'react-navigation-stack';
 import TabIcon from './components/tab-icon';
+import HeaderMerchant from './components/layouts/header';
 
 const Home = ({navigation}) => {
   return (
@@ -31,7 +33,7 @@ const Profile = ({navigation}) => {
   );
 };
 
-export const Navigator = createBottomTabNavigator(
+const MerchantBottomTabNavigator = createBottomTabNavigator(
   {
     Home: {
       screen: Home,
@@ -44,9 +46,20 @@ export const Navigator = createBottomTabNavigator(
   {
     tabBarOptions: {
       style: {
-        height: 55,
-        backgroundColor: '#8e7e7e',
+        height: 64,
+        backgroundColor: '#ffffff',
       },
     },
   },
 );
+
+export const Navigator = createStackNavigator({
+  MerchantBottomTabNavigator: {
+    screen: MerchantBottomTabNavigator,
+    navigationOptions: (props) => {
+      return {
+        header: <HeaderMerchant {...props} />,
+      };
+    },
+  },
+});

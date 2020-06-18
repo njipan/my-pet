@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {StyleSheet, Text} from 'react-native';
-import {Colors, Typography} from './../../styles';
+import {Colors, Typography} from '@style';
 
 const Heading = ({
   color = Colors.PRIMARY,

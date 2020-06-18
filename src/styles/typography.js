@@ -47,3 +47,9 @@ export const FONT_SCREEN_DESCRIPTION = {
   fontSize: FONT_SIZE_REGULAR,
   color: Colors.BLACK54,
 };
+
+export const FONT_HEADER_TITLE = {
+  fontSize: FONT_SIZE_H5,
+  color: Colors.PRIMARY,
+  fontWeight: FONT_WEIGHT_REGULAR,
+};
