@@ -11,7 +11,6 @@ const HeaderMerchant = ({navigation}) => {
         alignItems: 'center',
         justifyContent: 'flex-start',
         ...Mixins.padding(16),
-        ...Mixins.boxShadow(Colors.PLACEHOLDER),
         backgroundColor: Colors.WHITE,
       }}>
       <View

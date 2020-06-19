@@ -9,6 +9,7 @@ const Heading = ({
   text = '',
   padding = {},
   margin = {},
+  styleText = {},
 }) => {
   const mergeStyles = {
     ...styles[type],
@@ -16,6 +17,7 @@ const Heading = ({
     color,
     ...padding,
     ...margin,
+    ...styleText,
   };
   return <Text style={mergeStyles}>{text}</Text>;
 };

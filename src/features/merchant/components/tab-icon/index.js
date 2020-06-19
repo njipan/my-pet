@@ -1,18 +1,8 @@
 import React from 'react';
-import {Image, Text} from 'react-native';
-// import {Screens} from './../../../../constants';
+import {Image, Text, TouchableOpacity} from 'react-native';
 
-// const config = {
-//     [Screens.HOME_MERCHANT] :
-// }
-
-const TabIcon = ({navigation}) => {
-  return (
-    <Image
-      source={require('./../../../../assets/icons/bookmark_24px.png')}
-      style={{width: 20, height: 20}}
-    />
-  );
+const TabIcon = ({navigation, icon, onPress = () => {}}) => {
+  return <TouchableOpacity onPress={onPress}>{icon}</TouchableOpacity>;
 };
 
 export default TabIcon;
