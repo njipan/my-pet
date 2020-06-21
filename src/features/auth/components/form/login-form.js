@@ -80,7 +80,7 @@ const LoginForm = ({navigation, ...props}) => {
           }}>
           <ButtonFluid
             text="Masuk"
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => navigation.navigate('Profile')}
           />
         </View>
         <View

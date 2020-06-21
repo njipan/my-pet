@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {View, Animated, Text} from 'react-native';
+import {View, Animated, Text, Dimensions} from 'react-native';
+import {Mixins} from '@style';
 
 const AlertModal = () => {
   const [bounceValue, setBounceValue] = useState(new Animated.Value(100));
