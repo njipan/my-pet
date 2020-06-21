@@ -1,15 +1,25 @@
-import React from 'react';
-import {View, Text, Button, Image, TouchableOpacity} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  Button,
+  Image,
+  TouchableOpacity,
+  Animated,
+  Dimensions,
+} from 'react-native';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
 import TabIcon from './components/tab-icon';
 import HeaderMerchant from './components/layouts/header';
 import {Mixins, Colors} from '@style';
 import {Icons, Heading} from '@component';
+import AlertModal from '@component/modals/alert';
 
 const Order = ({navigation}) => {
   return (
-    <View>
+    <View style={{flex: 1}}>
+      <AlertModal />
       <Text>HOME</Text>
       <Button
         title="Go to Login"

@@ -8,7 +8,7 @@ const RootNavigator = createSwitchNavigator(
     [Navigators.AUTH_NAVIGATOR]: Auth.Navigator,
   },
   {
-    initialRouteName: Navigators.MERCHANT_NAVIGATOR,
+    initialRouteName: Navigators.AUTH_NAVIGATOR,
   },
 );
 
