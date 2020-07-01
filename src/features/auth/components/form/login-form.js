@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image, Text, View, TouchableOpacity} from 'react-native';
 import {Colors, Mixins, Typography} from './../../../../styles';
-import {Texts, Screens} from '@constant';
+import {Texts, Screens} from '@component';
 import {
   TextInput,
   PasswordInput,
@@ -29,7 +29,16 @@ const VeterinarianIcon = () => {
   );
 };
 
-const LoginForm = ({navigation, ...props}) => {
+const LoginForm = ({
+  navigation,
+  onTypePress = (type) => {},
+  onEmailChange = (text) => {},
+  onPasswordChange = (text) => {},
+  onSubmit = () => {},
+  errorMessages = {},
+  type = 0,
+  ...props
+}) => {
   return (
     <>
       <View
@@ -40,13 +49,25 @@ const LoginForm = ({navigation, ...props}) => {
           marginBottom: 6,
         }}>
         <View style={{flex: 1, marginRight: 10}}>
-          <BoxButton text="Customer" color={null} icon={<CustomerIcon />} />
+          <BoxButton
+            text="Customer"
+            color={null}
+            icon={<CustomerIcon />}
+            focus={type == 1}
+            onPress={() => {
+              onTypePress(1);
+            }}
+          />
         </View>
         <View style={{flex: 1, marginLeft: 10}}>
           <BoxButton
             text="Veterinarian"
             color={null}
             icon={<VeterinarianIcon />}
+            focus={type == 2}
+            onPress={() => {
+              onTypePress(2);
+            }}
           />
         </View>
       </View>
@@ -55,11 +76,18 @@ const LoginForm = ({navigation, ...props}) => {
           flex: 1,
           ...Mixins.margin(0, 0, 20, 0),
         }}>
-        <TextInput icon={<Icons.MailOutlineFormIcon />} label="Email" />
+        <TextInput
+          icon={<Icons.MailOutlineFormIcon />}
+          label="Email"
+          onChangeText={onEmailChange}
+          error={errorMessages.email || false}
+        />
         <PasswordInput
           icon={<Icons.KeyFormIcon />}
           label="Kata Sandi"
           toggle={false}
+          onChangeText={onPasswordChange}
+          error={errorMessages.password || false}
         />
         <TouchableOpacity
           onPress={() => navigation.navigate(Screens.FORGOT_PASSWORD_SCREEN)}>
@@ -78,10 +106,7 @@ const LoginForm = ({navigation, ...props}) => {
             flexDirection: 'row',
             justifyContent: 'flex-end',
           }}>
-          <ButtonFluid
-            text="Masuk"
-            onPress={() => navigation.navigate('Profile')}
-          />
+          <ButtonFluid text="Masuk" onPress={() => onSubmit()} />
         </View>
         <View
           style={{

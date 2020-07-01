@@ -35,7 +35,7 @@ const TextInput = ({
   error = false,
   placeholder = '',
   style = {},
-  onChangeText = () => {},
+  onChangeText = (text) => {},
   ...props
 }) => {
   const errorMessage = error;

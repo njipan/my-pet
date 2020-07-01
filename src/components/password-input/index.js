@@ -20,6 +20,15 @@ const Icon = (props) => {
   return <Image style={{width: 32, height: 32}} source={icon} />;
 };
 
+const ErrorDangerIcon = () => {
+  return (
+    <Image
+      style={{width: 28, height: 28}}
+      source={require('./../../assets/icons/error-danger.png')}
+    />
+  );
+};
+
 const PasswordInput = ({
   backgroundColor = Colors.WHITE,
   borderColor = Colors.LIGHT_GREY,
@@ -31,6 +40,7 @@ const PasswordInput = ({
   secure = true,
   placeholder = '',
   style = {},
+  onChangeText = (text) => {},
   ...props
 }) => {
   const errorMessage = error;
@@ -105,6 +115,9 @@ const PasswordInput = ({
           placeholderTextColor="grey"
           onFocus={onFocus}
           onBlur={onBlur}
+          onChangeText={(text) => {
+            onChangeText(text);
+          }}
           {...props}
         />
         {toggle && (
@@ -125,6 +138,14 @@ const PasswordInput = ({
               <Icon icon={isSecure ? PasswordShow : PasswordHide} />
             </View>
           </TouchableHighlight>
+        )}
+        {!toggle && errorMessage !== false && (
+          <View
+            style={{
+              justifyContent: 'center',
+            }}>
+            <ErrorDangerIcon />
+          </View>
         )}
       </View>
       {errorMessage !== false && (
@@ -172,6 +193,7 @@ const styles = StyleSheet.create({
 });
 
 PasswordInput.propTypes = {
+  onChangeText: PropTypes.func,
   backgroundColor: PropTypes.string,
   borderColor: PropTypes.string,
   labelColor: PropTypes.string,

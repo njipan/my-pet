@@ -6,7 +6,7 @@ import {
   ForgotPasswordScreen,
   SplashScreen,
   RegisterScreen,
-} from './scenes';
+} from './screens';
 
 const AuthNavigatorConfig = {
   initialRouteName: Screens.SPLASH_SCREEN,
