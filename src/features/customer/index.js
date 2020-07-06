@@ -119,9 +119,21 @@ export const Navigator = createStackNavigator({
     },
   },
   [Screens.ADD_PET_CUSTOMER]: {
-    screen: CustomerScreens.CreatePetScreen,
+    screen: CustomerScreens.Pet.CreateScreen,
     navigationOptions: {
       title: 'Tambah Peliharaan',
+      headerTitleStyle: {
+        fontFamily: 'sans-serif-medium',
+      },
+    },
+  },
+  [Screens.EDIT_PET_CUSTOMER]: {
+    screen: CustomerScreens.Pet.CreateScreen,
+    navigationOptions: {
+      title: 'Ubah Peliharaan',
+      headerTitleStyle: {
+        fontFamily: 'sans-serif-medium',
+      },
     },
   },
   [Screens.VET_SERVICE_DETAIL_CUSTOMER]: {

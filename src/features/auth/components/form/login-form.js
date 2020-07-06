@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image, Text, View, TouchableOpacity} from 'react-native';
 import {Colors, Mixins, Typography} from './../../../../styles';
-import {Texts, Screens} from '@component';
+import {Texts, Screens} from '@constant';
 import {
   TextInput,
   PasswordInput,
@@ -35,6 +35,7 @@ const LoginForm = ({
   onEmailChange = (text) => {},
   onPasswordChange = (text) => {},
   onSubmit = () => {},
+  onRegister = () => {},
   errorMessages = {},
   type = 0,
   ...props
@@ -123,10 +124,7 @@ const LoginForm = ({
             }}>
             {Texts.ASK_NOT_REGISTERED}
           </Text>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('Register');
-            }}>
+          <TouchableOpacity onPress={onRegister}>
             <Heading type="h5" text={Texts.ASK_NOT_REGISTERED_ANSWER} />
           </TouchableOpacity>
         </View>

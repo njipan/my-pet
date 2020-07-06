@@ -1,36 +1,43 @@
 import React from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import {Mixins, Colors} from '@style';
 import {Heading, Icons} from '@component';
 
 const HomePet = ({onAddPress = () => {}}) => {
   return (
-    <View style={styles.container}>
-      <Heading
-        type="h4"
-        text="Belum Ada Hewan Peliharaan"
-        color={Colors.BLACK87}
-      />
+    <View>
+      <LinearGradient
+        style={styles.container}
+        start={{x: 0, y: 0}}
+        end={{x: 0, y: 1}}
+        colors={['#ffffff', '#fff0c8']}>
+        <Heading
+          type="h4"
+          text="Belum Ada Hewan Peliharaan"
+          color={Colors.BLACK87}
+        />
 
-      <TouchableOpacity style={styles.addPetWrapper}>
-        <View style={styles.addPetInnerWrapper}>
-          <View>
-            <Icons.VetServiceIcon size="large" />
+        <TouchableOpacity style={styles.addPetWrapper}>
+          <View style={styles.addPetInnerWrapper}>
+            <View>
+              <Icons.VetServiceIcon size="large" />
+            </View>
+            <View style={{flex: 1, marginLeft: 16, marginRight: 10}}>
+              <Heading
+                type="h5"
+                text="Tambah Hewan Peliharaan"
+                color={Colors.BLACK87}
+              />
+            </View>
+            <View>
+              <TouchableOpacity onPress={onAddPress}>
+                <Icons.AddIcon size="large" />
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={{flex: 1, marginLeft: 16, marginRight: 10}}>
-            <Heading
-              type="h5"
-              text="Tambah Hewan Peliharaan"
-              color={Colors.BLACK87}
-            />
-          </View>
-          <View>
-            <TouchableOpacity onPress={onAddPress}>
-              <Icons.AddIcon size="large" />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </LinearGradient>
     </View>
   );
 };
@@ -45,7 +52,7 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#fff',
     ...Mixins.padding(12, 16),
-    ...Mixins.boxShadow(Colors.LIGHT_GREY),
+    elevation: 0,
     borderRadius: 10,
   },
   addPetInnerWrapper: {

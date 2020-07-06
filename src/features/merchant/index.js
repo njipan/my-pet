@@ -21,7 +21,7 @@ const Pesanan = () => {
 
 const OrderTopNavigator = createMaterialTopTabNavigator(
   {
-    Pesanan: {
+    [Screens.ORDER_MERCHANT]: {
       screen: Pesanan,
       navigationOptions: {
         title: 'Terbaru(1)',

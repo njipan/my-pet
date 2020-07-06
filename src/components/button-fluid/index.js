@@ -4,7 +4,15 @@ import {Colors, Mixins, Typography} from '@style';
 import {Types} from '@constant';
 import {StyleSheet, TouchableHighlight, Text, View} from 'react-native';
 
-const ButtonFluid = ({onPress = () => {}, type = 'large', ...props}) => {
+const ButtonFluid = ({
+  onPress = () => {},
+  type = 'large',
+  textColor = Colors.WHITE,
+  backgroundColor = Colors.PRIMARY,
+  styleText = {},
+  underlayColor = null,
+  ...props
+}) => {
   const fontSize =
     {
       small: Typography.FONT_SIZE_12,
@@ -14,10 +22,13 @@ const ButtonFluid = ({onPress = () => {}, type = 'large', ...props}) => {
   return (
     <TouchableHighlight
       onPress={onPress}
-      overlayColor={Colors.WHITE}
+      underlayColor={underlayColor || Colors.WHITE}
       style={styles.outer}>
-      <View style={[styles.container]}>
-        <Text style={{...styles.text, fontSize}}>{props.text}</Text>
+      <View style={{...styles.container, backgroundColor}}>
+        <Text
+          style={{...styles.text, fontSize, color: textColor, ...styleText}}>
+          {props.text}
+        </Text>
       </View>
     </TouchableHighlight>
   );

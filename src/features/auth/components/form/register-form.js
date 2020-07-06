@@ -10,8 +10,19 @@ import {
 import {Screens, Texts} from '@constant';
 import {Colors, Typography} from '@style';
 
-const RegisterForm = ({navigations, ...props}) => {
-  const rootStyleInput = {marginBottom: 10};
+const RegisterForm = ({
+  navigations,
+  onFullNameChange = () => {},
+  onEmailChange = () => {},
+  onPhoneNumberChange = () => {},
+  onPasswordChange = () => {},
+  onConfirmPasswordChange = () => {},
+  onSubmit = () => {},
+  type = null,
+  errorMessages = {},
+  ...props
+}) => {
+  const rootStyleInput = {};
   return (
     <>
       <View
@@ -19,7 +30,10 @@ const RegisterForm = ({navigations, ...props}) => {
           width: '100%',
           marginBottom: 20,
         }}>
-        <Heading text=" Daftar Sebagai Customer" type="h2" />
+        <Heading
+          text={`Daftar Sebagai ${type == 1 ? 'Customer' : 'Veterinarian'}`}
+          type="h2"
+        />
       </View>
       <View
         style={{
@@ -29,26 +43,36 @@ const RegisterForm = ({navigations, ...props}) => {
           label="Nama Lengkap"
           icon={<Icons.UserFormIcon />}
           style={rootStyleInput}
+          onChangeText={onFullNameChange}
+          error={errorMessages.fullName || false}
         />
         <TextInput
           label="Email"
           icon={<Icons.MailOutlineFormIcon />}
           style={rootStyleInput}
+          onChangeText={onEmailChange}
+          error={errorMessages.email || false}
         />
         <TextInput
           label="Nomor Handphone"
           icon={<Icons.PhoneFormIcon />}
           style={rootStyleInput}
+          onChangeText={onPhoneNumberChange}
+          error={errorMessages.phoneNumber || false}
         />
         <PasswordInput
           label="Kata Sandi"
           icon={<Icons.KeyFormIcon />}
           style={rootStyleInput}
+          onChangeText={onPasswordChange}
+          error={errorMessages.password || false}
         />
         <PasswordInput
           label="Ulangi Kata Sandi"
           icon={<Icons.KeyFormIcon />}
           style={rootStyleInput}
+          onChangeText={onConfirmPasswordChange}
+          error={errorMessages.confirmPassword || false}
         />
         <View
           style={{
@@ -56,7 +80,7 @@ const RegisterForm = ({navigations, ...props}) => {
             marginTop: 10,
             marginBottom: 10,
           }}>
-          <ButtonFluid text="Daftar" />
+          <ButtonFluid text="Daftar" onPress={onSubmit} />
         </View>
         <View
           style={{

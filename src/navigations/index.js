@@ -1,6 +1,8 @@
+import React from 'react';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {Navigators} from './../constants';
 import {Auth, Customer, Merchant} from './../features';
+import GlobalNavigation from './../utils/navigation';
 
 const RootNavigator = createSwitchNavigator(
   {
@@ -13,4 +15,16 @@ const RootNavigator = createSwitchNavigator(
   },
 );
 
-export default createAppContainer(RootNavigator);
+const AppContainer = createAppContainer(RootNavigator);
+
+export default class Navigator extends React.Component {
+  render() {
+    return (
+      <AppContainer
+        ref={(navigatorRef) => {
+          GlobalNavigation.setTopLevelNavigator(navigatorRef);
+        }}
+      />
+    );
+  }
+}

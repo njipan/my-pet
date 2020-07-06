@@ -4,5 +4,6 @@ import PasswordInput from './password-input';
 import TextInput from './text-input';
 import BoxButton from './box-button';
 import * as Icons from './icons';
+export {default as Dropdown} from './dropdown';
 
 export {ButtonFluid, BoxButton, Icons, Heading, PasswordInput, TextInput};

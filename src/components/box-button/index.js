@@ -11,22 +11,23 @@ const BoxButton = ({
   focusBackgroundColor = 'rgba(0, 95, 190, 0.1)',
   focusBorderColor = Colors.GREY,
   styleText = {},
+  styleRoot = {},
 }) => {
   const backgroundColor = focus ? focusBackgroundColor : null;
   const color = focus ? focusBorderColor : null;
   const borderWidth = focus ? 3 : 2;
+  const style = {
+    backgroundColor: backgroundColor || 'transparent',
+    borderColor: color || Colors.LIGHT_GREY,
+    borderWidth,
+    ...Mixins.padding(4, 0, 16, 0),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+  };
   return (
     <TouchableOpacity onPress={onPress}>
-      <View
-        style={{
-          backgroundColor: backgroundColor || 'transparent',
-          borderColor: color || Colors.LIGHT_GREY,
-          borderWidth,
-          ...Mixins.padding(4, 0, 16, 0),
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderRadius: 8,
-        }}>
+      <View style={{...style, ...styleRoot}}>
         {icon}
         <Text style={{...Typography.FONT_REGULAR, ...styleText}}>{text}</Text>
       </View>

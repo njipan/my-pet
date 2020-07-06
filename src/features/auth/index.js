@@ -1,3 +1,5 @@
+import React from 'react';
+import {View, Text, TouchableOpacity} from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
 
 import {Screens} from './../../constants';
@@ -37,7 +39,25 @@ const RouteConfigs = {
   [Screens.FORGOT_PASSWORD_SCREEN]: ForgotPasswordScreen,
 };
 
+const MyModal = ({navigation}) => {
+  return (
+    <View style={{backgroundColor: 'transparent'}}>
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Text>Close Modal</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
 export const Navigator = createStackNavigator(
-  RouteConfigs,
-  AuthNavigatorConfig,
+  {
+    AuthStackNavigator: createStackNavigator(RouteConfigs, AuthNavigatorConfig),
+    MyModal,
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+    initialRouteName: 'AuthStackNavigator',
+    cardStyle: {opacity: 1, backgroundColor: '#0c0d0e7d'},
+  },
 );

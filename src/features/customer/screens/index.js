@@ -7,6 +7,7 @@ import EventNotificationScreen from './event-notification';
 import CreatePetScreen from './pet-create';
 import VetServiceScreen from './vet-service';
 import VetServiceDetailScreen from './vet-service-detail';
+import * as Pet from './pet';
 
 export {
   HomeScreen,
@@ -16,6 +17,7 @@ export {
   PromoNotificationScreen,
   EventNotificationScreen,
   CreatePetScreen,
+  Pet,
   VetServiceScreen,
   VetServiceDetailScreen,
 };

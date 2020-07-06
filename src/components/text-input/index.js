@@ -70,19 +70,21 @@ const TextInput = ({
           marginTop: 16,
           ...style,
         }}>
-        <View
-          style={{
-            ...styles.containerLabel,
-            backgroundColor,
-          }}>
-          <Text
+        {label != '' && (
+          <View
             style={{
-              fontSize: Typography.FONT_SIZE_16,
-              color: labelColor,
+              ...styles.containerLabel,
+              backgroundColor,
             }}>
-            {label}
-          </Text>
-        </View>
+            <Text
+              style={{
+                fontSize: Typography.FONT_SIZE_16,
+                color: labelColor,
+              }}>
+              {label}
+            </Text>
+          </View>
+        )}
         {React.isValidElement(props.icon) && (
           <View
             style={{
@@ -119,10 +121,9 @@ const TextInput = ({
       {errorMessage !== false && (
         <View
           style={{
-            paddingLeft: 6,
+            paddingLeft: 2,
             width: '100%',
             flexWrap: 'wrap',
-            marginBottom: 12,
           }}>
           <LabelError text={errorMessage} />
         </View>
