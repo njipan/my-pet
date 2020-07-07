@@ -1,5 +1,11 @@
 import React, {useEffect} from 'react';
-import {View, ScrollView, Text, StyleSheet} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  ScrollView,
+  Text,
+  StyleSheet,
+} from 'react-native';
 import HomePet from './../../components/home-pet';
 import {Screens} from '@constant';
 

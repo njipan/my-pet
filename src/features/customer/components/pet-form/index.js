@@ -9,6 +9,7 @@ import {
   Icons,
   ButtonFluid,
   Dropdown,
+  PicturePicker,
 } from '@component';
 
 const PetFormFirst = ({
@@ -119,6 +120,11 @@ const PetFormSecond = ({
         color={Colors.REGULAR}
         styleText={{fontFamily: 'sans-serif-light', marginBottom: 10}}
       />
+      <PicturePicker
+        title="Tambah Foto"
+        description="(Maks 5MB)"
+        onChange={onPictureChange}
+      />
       <View
         style={{
           flex: 1,
@@ -159,7 +165,12 @@ const PetFormSecond = ({
   );
 };
 
-const PetForm = ({name, ...props}) => {
+const PetForm = ({
+  data = {},
+  errorMessages = {},
+  onSubmit = () => {},
+  ...props
+}) => {
   const [indexForm, setIndexForm] = React.useState(1);
   return (
     <View style={styles.container}>
@@ -183,7 +194,7 @@ const PetForm = ({name, ...props}) => {
             />
           )}
           {indexForm == 2 && (
-            <ButtonFluid text="Simpan" onPress={() => alert('SAVING')} />
+            <ButtonFluid text="Simpan" onPress={() => onSubmit()} />
           )}
         </View>
         <View

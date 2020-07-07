@@ -11,6 +11,8 @@ const ButtonFluid = ({
   backgroundColor = Colors.PRIMARY,
   styleText = {},
   underlayColor = null,
+  styleContainer = {},
+  fullWidth = true,
   ...props
 }) => {
   const fontSize =
@@ -20,23 +22,24 @@ const ButtonFluid = ({
     }[props.type || 'large'] || Typography.FONT_SIZE_REGULAR;
 
   return (
-    <TouchableHighlight
-      onPress={onPress}
-      underlayColor={underlayColor || Colors.WHITE}
-      style={styles.outer}>
-      <View style={{...styles.container, backgroundColor}}>
-        <Text
-          style={{...styles.text, fontSize, color: textColor, ...styleText}}>
-          {props.text}
-        </Text>
-      </View>
-    </TouchableHighlight>
+    <View style={{alignSelf: fullWidth ? 'auto' : 'flex-start'}}>
+      <TouchableHighlight
+        onPress={onPress}
+        underlayColor={underlayColor || Colors.WHITE}
+        style={styles.outer}>
+        <View style={{...styles.container, backgroundColor, ...styleContainer}}>
+          <Text
+            style={{...styles.text, fontSize, color: textColor, ...styleText}}>
+            {props.text}
+          </Text>
+        </View>
+      </TouchableHighlight>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   outer: {
-    width: '100%',
     borderRadius: 6,
     ...Mixins.margin(5, 0),
   },

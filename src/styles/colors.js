@@ -24,3 +24,5 @@ export const BLACK54 = '#737373';
 export const BLACK60 = '#9AA3AA';
 export const BLACK87 = '#212220';
 export const REGULAR = '#333';
+
+export const MODAL = '#00000029';
