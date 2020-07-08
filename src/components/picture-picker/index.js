@@ -16,6 +16,42 @@ const PicturePicker = ({
   onChange = () => {},
   backgroundColor = Colors.BLACK10,
 }) => {
+  const isValueExist = (pictureValue) => {
+    if (!pictureValue) {
+      return (
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          {React.isValidElement(icon) ? (
+            icon
+          ) : (
+            <Image source={require('@asset/icons/add_a_photo.png')} />
+          )}
+          <View style={{marginVertical: 6}} />
+          <Text style={{color: Colors.BLACK54, fontSize: 16}}>
+            {title || ''}
+          </Text>
+          <Text style={{color: Colors.BLACK54}}>{description || ''}</Text>
+        </View>
+      );
+    }
+    return (
+      <View style={{alignItems: 'center'}}>
+        <Image
+          source={pictureValue}
+          style={{width: 100, height: 100, resizeMode: 'cover'}}
+        />
+        <Text
+          style={{
+            marginTop: 4,
+            color: Colors.BLACK54,
+            fontSize: 16,
+            textDecorationLine: 'underline',
+          }}>
+          Ubah Foto
+        </Text>
+      </View>
+    );
+  };
+
   return (
     <View
       style={{
@@ -23,36 +59,16 @@ const PicturePicker = ({
         backgroundColor,
         borderStyle: !value ? 'dashed' : 'solid',
       }}>
-      {!value && (
-        <>
-          <TouchableWithoutFeedback onPress={onChange}>
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
-              {React.isValidElement(icon) ? (
-                icon
-              ) : (
-                <Image source={require('@asset/icons/add_a_photo.png')} />
-              )}
-              <View style={{marginVertical: 6}} />
-              <Text style={{color: Colors.BLACK54, fontSize: 16}}>
-                {title || ''}
-              </Text>
-              <Text style={{color: Colors.BLACK54}}>{description || ''}</Text>
-            </View>
-          </TouchableWithoutFeedback>
-        </>
-      )}
-      {value && (
-        <>
-          <Image source={{uri: value}} />
-        </>
-      )}
+      <TouchableWithoutFeedback onPress={onChange}>
+        {isValueExist(value)}
+      </TouchableWithoutFeedback>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    height: 140,
+    height: 160,
     borderColor: Colors.BLACK54,
     borderWidth: 2,
     width: '100%',

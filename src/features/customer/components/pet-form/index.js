@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
+import {View, TouchableOpacity, StyleSheet, ScrollView} from 'react-native';
 import {Animal} from '@constant';
 import {Colors, Mixins} from '@style';
 import {
@@ -11,21 +11,27 @@ import {
   Dropdown,
   PicturePicker,
 } from '@component';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const PetFormFirst = ({
   type = 0,
   name,
-  race,
-  gender,
+  breed,
+  sex,
   weight,
   errorMessages = {},
-  onTypePress = () => {},
+  onTypeChange = () => {},
   onNameChange = () => {},
-  onRaceChange = () => {},
-  onGenderChange = () => {},
+  onBreedChange = () => {},
+  onSexChange = () => {},
   onWeightChange = () => {},
   ...props
 }) => {
+  const sexs = [
+    {label: 'Pilih salah satu', value: ''},
+    {label: 'Laki-Laki', value: 'MALE'},
+    {label: 'Perempuan', value: 'FEMALE'},
+  ];
   return (
     <View style={{flex: 1}}>
       <Heading
@@ -50,7 +56,7 @@ const PetFormFirst = ({
             icon={<Icons.CatIcon focus={type === Animal.CAT} />}
             focus={type == Animal.CAT}
             onPress={() => {
-              onTypePress(Animal.CAT);
+              onTypeChange(Animal.CAT);
             }}
           />
         </View>
@@ -64,7 +70,7 @@ const PetFormFirst = ({
             icon={<Icons.DogIcon focus={type === Animal.DOG} />}
             focus={type == Animal.DOG}
             onPress={() => {
-              onTypePress(Animal.DOG);
+              onTypeChange(Animal.DOG);
             }}
           />
         </View>
@@ -77,17 +83,27 @@ const PetFormFirst = ({
           label="Nama Hewan Peliharaan"
           onChangeText={onNameChange}
           error={errorMessages.name || false}
+          value={name || ''}
         />
         <TextInput
           label="Ras (Optional)"
-          onChangeText={onRaceChange}
-          error={errorMessages.race || false}
+          onChangeText={onBreedChange}
+          error={errorMessages.breed || false}
+          value={breed || ''}
         />
-        <Dropdown label="Jenis Kelamin" />
+        <Dropdown
+          label="Jenis Kelamin"
+          data={sexs}
+          value={sex}
+          onValueChange={onSexChange}
+          error={errorMessages.sex}
+        />
         <TextInput
+          keyboardType="numeric"
           label="Berat Badan (Optional)"
           onChangeText={onWeightChange}
           error={errorMessages.weight || false}
+          value={weight || ''}
         />
       </View>
     </View>
@@ -96,14 +112,14 @@ const PetFormFirst = ({
 
 const PetFormSecond = ({
   picture,
-  birthDate,
+  dateOfBirth,
   age,
   petType,
   bodyColor,
   eyeColor,
   microschipId,
   onPictureChange = () => {},
-  onBirthDateChange = () => {},
+  onDateOfBirthChange = () => {},
   onAgeChange = () => {},
   onPetTypeChange = () => {},
   onBodyColorChange = () => {},
@@ -112,6 +128,7 @@ const PetFormSecond = ({
   errorMessages = {},
   ...props
 }) => {
+  const [showDayOfBirth, setShowDayOfBirth] = React.useState(false);
   return (
     <View style={{flex: 1}}>
       <Heading
@@ -120,20 +137,38 @@ const PetFormSecond = ({
         color={Colors.REGULAR}
         styleText={{fontFamily: 'sans-serif-light', marginBottom: 10}}
       />
+      {showDayOfBirth && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          mode="date"
+          value={new Date()}
+          is24Hour={true}
+          display="default"
+          onChange={(e) => {
+            if (e.type === 'dismissed') setShowDayOfBirth(false);
+            onDateOfBirthChange(e.nativeEvent.timestamp || null);
+            setShowDayOfBirth(false);
+          }}
+        />
+      )}
       <PicturePicker
         title="Tambah Foto"
         description="(Maks 5MB)"
         onChange={onPictureChange}
+        value={picture}
       />
       <View
         style={{
           flex: 1,
         }}>
-        <TextInput
-          label="Tanggal Lahir"
-          onChangeText={onBirthDateChange}
-          error={errorMessages.birthDate || false}
-        />
+        <TouchableOpacity onPress={() => setShowDayOfBirth(true)}>
+          <TextInput
+            label="Tanggal Lahir"
+            error={errorMessages.dateOfBirth || false}
+            value={dateOfBirth}
+            editable={false}
+          />
+        </TouchableOpacity>
         <TextInput
           label="Usia"
           onChangeText={onAgeChange}
@@ -167,33 +202,32 @@ const PetFormSecond = ({
 
 const PetForm = ({
   data = {},
+  step = 1,
+  onNext = () => {},
+  onPrevious = () => {},
   errorMessages = {},
   onSubmit = () => {},
   ...props
 }) => {
-  const [indexForm, setIndexForm] = React.useState(1);
   return (
     <View style={styles.container}>
       <ScrollView style={styles.formWrapper}>
-        {indexForm % 2 == 1 && <PetFormFirst {...props} />}
-        {indexForm % 2 == 0 && <PetFormSecond {...props} />}
+        {step % 2 == 1 && <PetFormFirst {...{...props, data, errorMessages}} />}
+        {step % 2 == 0 && (
+          <PetFormSecond {...{...props, data, errorMessages}} />
+        )}
         <View style={{width: '100%', height: 28}} />
       </ScrollView>
       <View style={styles.navigator}>
-        <Heading type="h5" text={`${indexForm} of 2`} color={Colors.REGULAR} />
+        <Heading type="h5" text={`${step} of 2`} color={Colors.REGULAR} />
         <View
           style={{
             position: 'absolute',
             top: 12,
             right: 20,
           }}>
-          {indexForm != 2 && (
-            <ButtonFluid
-              text="Lanjut"
-              onPress={() => setIndexForm(indexForm + 1)}
-            />
-          )}
-          {indexForm == 2 && (
+          {step != 2 && <ButtonFluid text="Lanjut" onPress={() => onNext()} />}
+          {step == 2 && (
             <ButtonFluid text="Simpan" onPress={() => onSubmit()} />
           )}
         </View>
@@ -203,13 +237,13 @@ const PetForm = ({
             top: 12,
             left: 20,
           }}>
-          {indexForm % 2 == 0 && (
+          {step % 2 == 0 && (
             <ButtonFluid
               text="Kembali"
               backgroundColor="transparent"
               textColor={Colors.PRIMARY}
               styleText={{fontFamily: 'sans-serif-medium'}}
-              onPress={() => setIndexForm(indexForm - 1)}
+              onPress={() => onPrevious()}
               underlayColor="#ffffff00"
             />
           )}

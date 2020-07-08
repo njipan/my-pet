@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import LabelError from './../label-error';
 import {Colors, Mixins, Typography} from '@style';
 import RNPickerSelect from 'react-native-picker-select';
 

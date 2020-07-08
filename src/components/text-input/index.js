@@ -10,7 +10,6 @@ import {
 
 import {Colors, Mixins, Typography} from './../../styles';
 import LabelError from './../label-error';
-import Key from './../../assets/icons/form/key.png';
 
 const Icon = (props) => {
   const icon = props.icon || PasswordShow;
@@ -48,12 +47,13 @@ const TextInput = ({
     }
   }, null);
 
-  const onFocus = () => {
+  const onFocus = (e) => {
     if (errorMessage === false) {
       setOuterColor(Colors.BLUE);
       return;
     }
     setOuterColor(tempBorderColor);
+    if (typeof props.onFocus == 'function') props.onFocus(e);
   };
 
   const onBlur = () => {
