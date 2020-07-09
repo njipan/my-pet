@@ -13,9 +13,8 @@ const defaultOptions = {
 const authAxios = axios.create(defaultOptions);
 authAxios.interceptors.request.use(
   async (config) => {
-    const accessToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjciLCJlbWFpbCI6InBuamlrcm5hQGdtYWlsLmNvbSIsImlhdCI6MTU5MzYxNDk1OSwiZXhwIjoxNTkzNzAxMzU5fQ.kotrhxx22W7dmYWSOBUgBMpkxf9cdI_kwlGj0TkCXG0`;
-    const token = AsyncStorage.getItem('_token') || accessToken;
-    config.headers.Authorization = accessToken ? `Bearer ${token}` : '';
+    const token = await AsyncStorage.getItem('_token');
+    config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (error) => Promise.reject(error),
@@ -24,10 +23,9 @@ authAxios.interceptors.request.use(
 authAxios.interceptors.response.use(
   (response) => response,
   (error) => {
-    const {
-      config,
-      response: {status},
-    } = error;
+    console.log(error);
+    const status = error.response.status;
+
     if (status === 401) {
       alert('Autentikasi gagal!');
       Navigation.navigate(Screens.LOGIN_SCREEN);

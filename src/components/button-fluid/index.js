@@ -13,6 +13,7 @@ const ButtonFluid = ({
   underlayColor = null,
   styleContainer = {},
   fullWidth = true,
+  styleRoot = {},
   ...props
 }) => {
   const fontSize =
@@ -22,7 +23,8 @@ const ButtonFluid = ({
     }[props.type || 'large'] || Typography.FONT_SIZE_REGULAR;
 
   return (
-    <View style={{alignSelf: fullWidth ? 'auto' : 'flex-start'}}>
+    <View
+      style={{...{alignSelf: fullWidth ? 'auto' : 'flex-start'}, ...styleRoot}}>
       <TouchableHighlight
         onPress={onPress}
         underlayColor={underlayColor || Colors.WHITE}

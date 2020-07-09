@@ -129,6 +129,12 @@ const PetFormSecond = ({
   ...props
 }) => {
   const [showDayOfBirth, setShowDayOfBirth] = React.useState(false);
+  const eyes = [
+    {label: 'Merah', value: 'red'},
+    {label: 'Green', value: 'green'},
+    {label: 'Biru', value: 'blue'},
+  ];
+
   return (
     <View style={{flex: 1}}>
       <Heading
@@ -145,9 +151,8 @@ const PetFormSecond = ({
           is24Hour={true}
           display="default"
           onChange={(e) => {
-            if (e.type === 'dismissed') setShowDayOfBirth(false);
-            onDateOfBirthChange(e.nativeEvent.timestamp || null);
             setShowDayOfBirth(false);
+            onDateOfBirthChange(e.nativeEvent.timestamp || null);
           }}
         />
       )}
@@ -156,44 +161,43 @@ const PetFormSecond = ({
         description="(Maks 5MB)"
         onChange={onPictureChange}
         value={picture}
+        loading={props.isPictureUploading}
       />
       <View
         style={{
           flex: 1,
         }}>
-        <TouchableOpacity onPress={() => setShowDayOfBirth(true)}>
+        <TouchableOpacity
+          underlayColor="transparent"
+          onPress={() => setShowDayOfBirth(true)}>
           <TextInput
             label="Tanggal Lahir"
             error={errorMessages.dateOfBirth || false}
             value={dateOfBirth}
             editable={false}
+            changeBorder={false}
           />
         </TouchableOpacity>
-        <TextInput
-          label="Usia"
-          onChangeText={onAgeChange}
-          error={errorMessages.age || false}
-        />
-        <TextInput
-          label="Jenis Peliharaan"
-          onChangeText={onPetTypeChange}
-          error={errorMessages.petType || false}
-        />
+        <TextInput label="Usia" editable={false} value={age} />
         <TextInput
           label="Warna Badan"
           onChangeText={onBodyColorChange}
           error={errorMessages.bodyColor || false}
+          value={bodyColor}
         />
         <Dropdown
           label="Warna Mata"
+          data={eyes}
           placeholder={{label: 'Warna Mata', value: null}}
           error={errorMessages.eyeColor || false}
           onValueChange={onEyeColorChange}
+          value={eyeColor}
         />
         <TextInput
           label="Microschip ID"
           onChangeText={onMicroschipIdChange}
           error={errorMessages.microschipId || false}
+          value={microschipId}
         />
       </View>
     </View>
@@ -212,9 +216,11 @@ const PetForm = ({
   return (
     <View style={styles.container}>
       <ScrollView style={styles.formWrapper}>
-        {step % 2 == 1 && <PetFormFirst {...{...props, data, errorMessages}} />}
+        {step % 2 == 1 && (
+          <PetFormFirst {...props} errorMessages={errorMessages} {...data} />
+        )}
         {step % 2 == 0 && (
-          <PetFormSecond {...{...props, data, errorMessages}} />
+          <PetFormSecond {...props} errorMessages={errorMessages} {...data} />
         )}
         <View style={{width: '100%', height: 28}} />
       </ScrollView>

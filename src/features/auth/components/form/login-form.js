@@ -107,7 +107,11 @@ const LoginForm = ({
             flexDirection: 'row',
             justifyContent: 'flex-end',
           }}>
-          <ButtonFluid text="Masuk" onPress={() => onSubmit()} />
+          <ButtonFluid
+            styleRoot={{width: '100%'}}
+            text="Masuk"
+            onPress={() => onSubmit()}
+          />
         </View>
         <View
           style={{

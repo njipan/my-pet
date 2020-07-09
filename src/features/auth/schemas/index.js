@@ -1,3 +1,1 @@
-import LoginValidator from './login';
-
-export {LoginValidator};
+export {default as LoginSchema} from './login-schema';

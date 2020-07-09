@@ -35,29 +35,31 @@ const TextInput = ({
   placeholder = '',
   style = {},
   onChangeText = (text) => {},
+  changeBorder = true,
+  editable = true,
   ...props
 }) => {
   const errorMessage = error;
-  const tempBorderColor = errorMessage !== false ? Colors.DANGER : borderColor;
-  const [outerColor, setOuterColor] = useState(tempBorderColor);
+  const isBorder = (c) => (!error ? c : editable ? Colors.DANGER : c);
+  const [outerColor, setOuterColor] = useState(isBorder(Colors.LIGHT_GREY));
 
   useEffect(() => {
-    if (errorMessage !== false) {
+    if (errorMessage !== false && editable) {
       setOuterColor(Colors.DANGER);
     }
-  }, null);
+  }, []);
 
   const onFocus = (e) => {
-    if (errorMessage === false) {
+    if (!errorMessage) {
       setOuterColor(Colors.BLUE);
       return;
     }
-    setOuterColor(tempBorderColor);
+    setOuterColor(Colors.DANGER);
     if (typeof props.onFocus == 'function') props.onFocus(e);
   };
 
   const onBlur = () => {
-    setOuterColor(tempBorderColor);
+    setOuterColor(isBorder(Colors.LIGHT_GREY));
   };
 
   return (
@@ -65,7 +67,7 @@ const TextInput = ({
       <View
         style={{
           ...styles.container,
-          borderColor: outerColor,
+          borderColor: isBorder(outerColor),
           position: 'relative',
           marginTop: 16,
           ...style,
@@ -106,6 +108,7 @@ const TextInput = ({
           onFocus={onFocus}
           onBlur={onBlur}
           onChangeText={(text) => onChangeText(text)}
+          editable={editable}
           {...props}
         />
         {errorMessage !== false && (

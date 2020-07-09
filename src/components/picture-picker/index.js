@@ -5,6 +5,7 @@ import {
   StyleSheet,
   View,
   Text,
+  ActivityIndicator,
 } from 'react-native';
 import {Colors} from '@style';
 
@@ -15,6 +16,7 @@ const PicturePicker = ({
   icon = null,
   onChange = () => {},
   backgroundColor = Colors.BLACK10,
+  loading = false,
 }) => {
   const isValueExist = (pictureValue) => {
     if (!pictureValue) {
@@ -46,7 +48,10 @@ const PicturePicker = ({
             fontSize: 16,
             textDecorationLine: 'underline',
           }}>
-          Ubah Foto
+          {loading ? 'Uploading ...' : 'Ubah Foto'}
+          {loading ? (
+            <ActivityIndicator size="small" color={Colors.GREY} />
+          ) : null}
         </Text>
       </View>
     );
@@ -59,8 +64,16 @@ const PicturePicker = ({
         backgroundColor,
         borderStyle: !value ? 'dashed' : 'solid',
       }}>
-      <TouchableWithoutFeedback onPress={onChange}>
-        {isValueExist(value)}
+      <TouchableWithoutFeedback onPress={() => (loading ? null : onChange())}>
+        {loading ? (
+          <View>
+            <ActivityIndicator size="large" color={Colors.GREY} />
+            <View style={{marginVertical: 4}} />
+            <Text style={{color: Colors.GREY}}>Sedang diunggah ...</Text>
+          </View>
+        ) : (
+          isValueExist(value)
+        )}
       </TouchableWithoutFeedback>
     </View>
   );

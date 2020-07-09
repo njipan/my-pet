@@ -6,8 +6,10 @@ import {Heading} from './../../../../components';
 import {ScrollView} from 'react-native-gesture-handler';
 import LoginForm from './../../components/form/login-form';
 import {AuthService} from '@service';
-import validate, {validator} from '@util/validate';
+import {validate, singleValidate, validator} from '@util/validate';
 import {Screens} from '@constant';
+import {LoginSchema} from './../../schemas';
+import * as Modal from '@util/modal';
 
 const SignInIcon = () => {
   return (
@@ -30,23 +32,20 @@ const LoginScreen = ({navigation, ...props}) => {
   const onTypePress = (type = 0) => {
     setData({...data, type});
   };
-  const onEmailChange = async (text) => {
-    try {
-      setData({...data, email: text});
-      const message = await validate(text, [
-        [validator.isEmpty, 'Email harus diisi!', true],
-        [validator.isEmail, 'Email tidak valid!'],
-      ]);
-      setErrorMessages({...errorMessages, email: message || ''});
-    } catch (e) {}
+  const onEmailChange = (value) => {
+    setErrorMessages({
+      ...errorMessages,
+      email: singleValidate(value, LoginSchema.email),
+    });
+    setData({...data, email: value});
   };
-  const onPasswordChange = async (text) => {
-    setData({...data, password: text});
-    const message = await validate(text, [
-      [validator.isEmpty, 'Password harus diisi!', true],
-      [(text) => text.length >= 6, 'Minimum 6 karakter!'],
-    ]);
-    setErrorMessages({...errorMessages, password: message || ''});
+
+  const onPasswordChange = (value) => {
+    setErrorMessages({
+      ...errorMessages,
+      password: singleValidate(value, LoginSchema.password),
+    });
+    setData({...data, password: value});
   };
   const onRegister = () => {
     if (data.type !== 1 && data.type !== 2) {
@@ -60,15 +59,15 @@ const LoginScreen = ({navigation, ...props}) => {
       ToastAndroid.show('Tipe harus dipilih!', ToastAndroid.LONG);
       return null;
     }
-
+    Modal.confirm({isLoading: true, onCallback: (res, hide) => hide()});
     AuthService.login(data)
       .then(async (response) => {
-        ToastAndroid.show('Berhasil!', ToastAndroid.LONG);
         await AuthService.setToken(response.data.data.token || '');
         if (data.type == 2) navigation.navigate(Screens.ORDER_MERCHANT);
         else {
           navigation.navigate(Screens.HOME_CUSTOMER);
         }
+        ToastAndroid.show('Berhasil!', ToastAndroid.LONG);
       })
       .catch((error) => {
         ToastAndroid.show(

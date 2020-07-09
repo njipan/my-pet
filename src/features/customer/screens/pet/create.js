@@ -1,11 +1,15 @@
 import React from 'react';
 import {ToastAndroid, View, StyleSheet} from 'react-native';
-import PetForm from './../../components/pet-form';
-import * as Modal from '@util/modal';
 import ImagePicker from 'react-native-image-picker';
-import {PetSchema} from './../../schemas';
-import {validate, singleValidate} from '@util/validate';
 import moment from 'moment';
+
+import PetForm from './../../components/pet-form';
+import {PetSchema} from './../../schemas';
+
+import * as Modal from '@util/modal';
+import {validate, singleValidate} from '@util/validate';
+import {PetService, PictureService} from '@service';
+import {Screens} from '@constant';
 
 const initData = {
   name: null,
@@ -22,24 +26,23 @@ const initData = {
 };
 
 const CreateScreen = ({navigation, ...props}) => {
-  const [step, setStep] = React.useState(2);
+  const [step, setStep] = React.useState(1);
   const [data, setData] = React.useState(initData);
   const [errorMessages, setErrorMessages] = React.useState({...initData});
-
-  const onSave = (res, hide, navigation) => {
-    navigation.goBack();
-    if (res == true) {
-      Modal.confirm({isLoading: true, onCallback: (res, hide) => hide()});
-      setTimeout(() => {
-        navigation.goBack(null);
-      }, 500);
-    }
-  };
+  const [isUploading, setUploading] = React.useState(false);
 
   const onNext = () => {
     validate(data, PetSchema).then((result) => {
       setErrorMessages(result);
-      if (Object.values(result).find((item) => item != null)) return;
+      const errorsFirstPage = {
+        type: result.type,
+        name: result.name,
+        breed: result.breed,
+        sex: result.sex,
+        weight: result.weight,
+      };
+
+      if (Object.values(errorsFirstPage).find((item) => item != null)) return;
       if (data.type != 1 && data.type != 2) {
         ToastAndroid.show(
           'Jenis peliharaan harus dipilih!',
@@ -96,47 +99,128 @@ const CreateScreen = ({navigation, ...props}) => {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        const source = {uri: response.uri};
-        setData({...data, picture: source});
+        setUploading(true);
+        PictureService.upload(response)
+          .then((res) => {
+            setData({
+              ...data,
+              picture: {uri: response.uri},
+              pictureId: res.data.data.id,
+            });
+          })
+          .catch((e) => {
+            setData({...data, pictureId: null});
+            ToastAndroid.show('Gagal upload foto', ToastAndroid.LONG);
+            console.log(e.response.data);
+          })
+          .finally(() => setUploading(false));
       }
     });
   };
 
   const onDateOfBirthChange = (value) => {
-    let message = 'Tanggal lahir tidak boleh kosong';
+    let message = 'Tanggal lahir tidak boleh kosong!';
     if (!value) {
       setData({...data, dateOfBirth: null});
     } else {
-      setData({...data, dateOfBirth: moment(value).format('DD-MM-YYYY')});
-      message = null;
+      const date = moment(new Date(value));
+      const dateString = date.format('DD-MM-YYYY');
+      message = singleValidate(dateString, PetSchema.dateOfBirth);
+      if (message == null) {
+        setData({
+          ...data,
+          dateOfBirth: dateString,
+          age: date
+            .locale('id')
+            .fromNow()
+            .replace('ago', '')
+            .replace('a ', '')
+            .replace('in ', ''),
+        });
+      }
     }
     setErrorMessages({
-      ...data,
+      ...errorMessages,
       dateOfBirth: message,
     });
   };
 
-  const onAgeChange = (value) => {
+  const onBodyColorChange = (value) => {
     setErrorMessages({
       ...errorMessages,
-      age: singleValidate(value, PetSchema.sex),
+      bodyColor: singleValidate(value, PetSchema.bodyColor),
     });
-    setData({...data, age: value});
+    setData({...data, bodyColor: value});
+  };
+
+  const onEyeColorChange = (value) => {
+    setErrorMessages({
+      ...errorMessages,
+      eyeColor: singleValidate(value, PetSchema.eyeColor),
+    });
+    setData({...data, eyeColor: value});
+  };
+
+  const onMicroschipIdChange = (value) => {
+    setErrorMessages({
+      ...errorMessages,
+      microschipId: singleValidate(value, PetSchema.microschipId),
+    });
+    setData({...data, microschipId: value});
   };
 
   const onPrevious = () => {
     setStep(step - 1);
   };
 
-  const onSubmit = () => {
-    console.log(data);
-    // Modal.confirm({
-    //   title: 'Konfirmasi',
-    //   description: 'Apakah anda yakin ingin menambahkan hewan peliharaan?',
-    //   textConfirm: 'Ya, Tambahkan',
-    //   textCancel: 'Tidak',
-    //   onCallback: onSave,
-    // });
+  const onSave = (res, hide) => {
+    navigation.goBack(null);
+    if (res == true) {
+      Modal.confirm({isLoading: true, onCallback: (res, hide) => hide()});
+
+      PetService.create({
+        name: data.name,
+        type: data.type,
+        breed: data.breed,
+        sex: data.sex,
+        weight: data.weight,
+        picture_id: 3,
+        date_of_birth: data.dateOfBirth,
+        body_color: data.bodyColor,
+        eye_color: data.eyeColor,
+        microchip_id: data.microschipId,
+      })
+        .then((res) => {
+          ToastAndroid.show('Berhasil ditambahkan!', ToastAndroid.LONG);
+          navigation.navigate(Screens.HOME_CUSTOMER);
+        })
+        .catch((err) => {
+          navigation.goBack(null);
+          ToastAndroid.show(`Ooops, terdapat masalah!`, ToastAndroid.LONG);
+        });
+    }
+  };
+
+  const onSubmit = async () => {
+    try {
+      const result = await validate(data, PetSchema);
+      setErrorMessages(result);
+      if (result.pictureId) {
+        ToastAndroid.show(errorMessages.pictureId, ToastAndroid.SHORT);
+        return;
+      }
+      if (Object.values(result).find((item) => item != null)) return;
+
+      Modal.confirm({
+        title: 'Konfirmasi',
+        description: 'Apakah anda yakin ingin menambahkan hewan peliharaan?',
+        textConfirm: 'Ya, Tambahkan',
+        textCancel: 'Tidak',
+        onCallback: onSave,
+      });
+    } catch (error) {
+      ToastAndroid.show('Ooops..., Terjadi Kesalahan', ToastAndroid.LONG);
+    }
   };
   return (
     <View style={styles.container}>
@@ -154,7 +238,10 @@ const CreateScreen = ({navigation, ...props}) => {
           onWeightChange,
           onPictureChange,
           onDateOfBirthChange,
-          onAgeChange,
+          onBodyColorChange,
+          onEyeColorChange,
+          onMicroschipIdChange,
+          isPictureUploading: isUploading,
         }}
         {...data}
       />

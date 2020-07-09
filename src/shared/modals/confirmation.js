@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {StyleSheet, TouchableWithoutFeedback, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Text,
+  View,
+} from 'react-native';
 import {Heading, ButtonFluid} from '@component';
 import {Colors} from '@style';
 import Card from './components/card';
@@ -28,9 +34,20 @@ const Confirmation = ({navigation, ...props}) => {
         <View style={styles.overlay} />
       </TouchableWithoutFeedback>
       {isLoading && (
-        <Card>
-          <Heading type="h4" text="Silahkan tunggu .." />
-        </Card>
+        <View style={{alignItems: 'center', justifyContent: 'center'}}>
+          <Card
+            styleRoot={{
+              width: 60,
+              height: 60,
+              padding: 0,
+              borderRadius: 200,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: 20,
+            }}>
+            <ActivityIndicator size="large" color={Colors.GREY} />
+          </Card>
+        </View>
       )}
       {!isLoading && (
         <Card>
