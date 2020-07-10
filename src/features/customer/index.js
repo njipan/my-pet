@@ -127,6 +127,7 @@ export const Navigator = createStackNavigator({
       },
     },
   },
+  [Screens.DETAIL_PET_CUSTOMER]: CustomerScreens.Pet.DetailScreen,
   [Screens.EDIT_PET_CUSTOMER]: {
     screen: CustomerScreens.Pet.CreateScreen,
     navigationOptions: {

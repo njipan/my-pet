@@ -12,13 +12,18 @@ const HomeScreen = ({navigation, ...props}) => {
       .then((response) => {
         setPets(response.data.data);
       })
-      .catch(() => {});
-  }, null);
+      .catch((err) => {
+        setPets([]);
+      });
+  }, []);
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
         <HomePet
+          onCardPress={() =>
+            navigation.navigate(Screens.DETAIL_PET_CUSTOMER, {id: 4})
+          }
           onAddPress={() => {
             navigation.navigate(Screens.ADD_PET_CUSTOMER);
           }}

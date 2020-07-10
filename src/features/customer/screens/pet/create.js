@@ -111,7 +111,6 @@ const CreateScreen = ({navigation, ...props}) => {
           .catch((e) => {
             setData({...data, pictureId: null});
             ToastAndroid.show('Gagal upload foto', ToastAndroid.LONG);
-            console.log(e.response.data);
           })
           .finally(() => setUploading(false));
       }

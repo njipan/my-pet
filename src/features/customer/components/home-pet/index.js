@@ -15,7 +15,51 @@ import {Mixins, Colors} from '@style';
 import {Heading, Badge, Icons} from '@component';
 import PetItemCard from './../pet-item-card';
 
-const HomePet = ({onAddPress = () => {}, data = [], ...props}) => {
+const AddPetCard = () => {
+  return (
+    <View
+      style={{
+        borderRadius: 12,
+        backgroundColor: 'white',
+        padding: 12,
+        width: 120,
+        height: 160,
+      }}>
+      <View
+        style={{
+          borderRadius: 8,
+          height: '100%',
+          width: '100%',
+          borderStyle: 'dashed',
+          borderWidth: 2,
+          borderColor: Colors.LIGHT_GREY,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Text
+          style={{
+            color: Colors.PRIMARY,
+            fontSize: 16,
+            fontFamily: 'sans-serif-medium',
+            marginBottom: 8,
+          }}>
+          Tambah
+        </Text>
+        <Image
+          source={require('@asset/icons/add.png')}
+          style={{width: 28, height: 28}}
+        />
+      </View>
+    </View>
+  );
+};
+
+const HomePet = ({
+  onAddPress = () => {},
+  onCardPress = () => {},
+  data = [],
+  ...props
+}) => {
   const deviceWidth = useWindowDimensions().width;
   return (
     <View>
@@ -35,27 +79,32 @@ const HomePet = ({onAddPress = () => {}, data = [], ...props}) => {
             color={Colors.BLACK87}
           />
         </View>
-        {Array.isArray(data) && data.length > 0 ? (
+        {data && data.length > 0 ? (
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             style={{paddingVertical: 16}}>
             <View style={{marginHorizontal: 8}} />
-            <TouchableHighlight
-              style={{marginRight: 16, width: deviceWidth * 0.85}}
-              onPress={() => {}}
-              underlayColor="transparent">
-              <PetItemCard />
-            </TouchableHighlight>
+            {data.map((pet) => {
+              return (
+                <TouchableHighlight
+                  key={pet.id}
+                  style={{marginRight: 16, width: deviceWidth * 0.85}}
+                  onPress={() => onCardPress(pet.id)}
+                  underlayColor="transparent">
+                  <PetItemCard />
+                </TouchableHighlight>
+              );
+            })}
             <TouchableHighlight
               style={{marginRight: 16}}
-              onPress={() => {}}
+              onPress={() => onAddPress()}
               underlayColor="transparent">
-              <PetItemCard />
+              <AddPetCard />
             </TouchableHighlight>
           </ScrollView>
         ) : (
-          <View style={{marginHorizontal: 16}}>
+          <View style={{marginHorizontal: 16, paddingBottom: 16}}>
             <TouchableOpacity style={styles.addPetWrapper}>
               <View style={styles.addPetInnerWrapper}>
                 <View>

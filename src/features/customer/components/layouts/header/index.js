@@ -26,7 +26,16 @@ const HeaderCustomer = ({navigation}) => {
           style={{width: 40, height: 40, marginRight: 10}}
           source={require('./../../../../../assets/logos/LogoPrimary.png')}
         />
-        <Text style={Typography.FONT_HEADER_TITLE}>MyPet</Text>
+        <Text
+          style={{
+            color: Colors.PRIMARY,
+            fontFamily: 'sans-serif-medium',
+            fontWeight: '500',
+            letterSpacing: 0.4,
+            fontSize: 18,
+          }}>
+          MyPet
+        </Text>
       </View>
       <View
         style={{

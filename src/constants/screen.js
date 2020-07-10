@@ -20,5 +20,6 @@ export const PROFILE_CUSTOMER = 'PROFILE_CUSTOMER';
 
 export const HOME_NOTIFICATION = 'Home_Notification';
 
+export const DETAIL_PET_CUSTOMER = 'Detail_Pet_Customer';
 export const ADD_PET_CUSTOMER = 'Add_Pet_Customer';
 export const EDIT_PET_CUSTOMER = 'Edit_Pet_Customer';
