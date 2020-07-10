@@ -4,6 +4,7 @@ import Menu, {MenuItem} from 'react-native-material-menu';
 import {Colors, Mixins} from '@style';
 import {Screens} from '@constant';
 import * as Modal from '@util/modal';
+import {PetService} from '@service';
 
 const RightMenu = ({id = null, navigation}) => {
   const [menuRef, setMenuRef] = React.useState(null);
@@ -44,7 +45,24 @@ const RightMenu = ({id = null, navigation}) => {
   );
 };
 
-const DetailScreen = () => {
+const DetailScreen = ({navigation, ...props}) => {
+  const id = navigation.state.params.id || null;
+
+  const [pet, setPet] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    setLoading(true);
+    PetService.get(id)
+      .then((response) => {
+        setPet(response.data);
+      })
+      .catch((e) => {
+        console.log(e.response.data);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <View>
       <Text> PET DETAIL </Text>

@@ -6,7 +6,7 @@ import {Heading} from './../../../../components';
 import {ScrollView} from 'react-native-gesture-handler';
 import LoginForm from './../../components/form/login-form';
 import {AuthService} from '@service';
-import {validate, singleValidate, validator} from '@util/validate';
+import {validate, singleValidate, isObjectValuesNull} from '@util/validate';
 import {Screens} from '@constant';
 import {LoginSchema} from './../../schemas';
 import * as Modal from '@util/modal';
@@ -57,9 +57,9 @@ const LoginScreen = ({navigation, ...props}) => {
   const onSubmit = () => {
     if (data.type !== 1 && data.type !== 2) {
       ToastAndroid.show('Tipe harus dipilih!', ToastAndroid.LONG);
-      return null;
+      return;
     }
-    Modal.confirm({isLoading: true, onCallback: (res, hide) => hide()});
+    Modal.confirm({isLoading: true});
     AuthService.login(data)
       .then(async (response) => {
         await AuthService.setToken(response.data.data.token || '');
@@ -70,6 +70,7 @@ const LoginScreen = ({navigation, ...props}) => {
         ToastAndroid.show('Berhasil!', ToastAndroid.LONG);
       })
       .catch((error) => {
+        navigation.goBack(null);
         ToastAndroid.show(
           'Gagal, periksa kembali email dan password!',
           ToastAndroid.LONG,

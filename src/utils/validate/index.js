@@ -28,5 +28,9 @@ const singleValidate = (value, schema) => {
   return null;
 };
 
+export const isObjectValuesNull = (data = {}) => {
+  return Object.values(data).find((item) => item != null) == undefined;
+};
+
 export default validate;
 export {validator, singleValidate, validate};

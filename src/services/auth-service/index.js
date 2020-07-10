@@ -12,22 +12,10 @@ export const login = ({email, password, type}) => {
 export const setToken = (token) => {
   return AsyncStorage.setItem('_token', token);
 };
-export const register = ({
-  fullName,
-  email,
-  phoneNumber,
-  password,
-  type = 1,
-}) => {
+export const register = (data) => {
   return generalAxios({
     method: 'post',
     url: Apis.REGISTER,
-    data: {
-      full_name: fullName,
-      email,
-      phone: phoneNumber,
-      password,
-      type,
-    },
+    data,
   });
 };

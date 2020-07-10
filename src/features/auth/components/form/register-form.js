@@ -54,11 +54,12 @@ const RegisterForm = ({
           error={errorMessages.email || false}
         />
         <TextInput
+          keyboardType="numeric"
           label="Nomor Handphone"
           icon={<Icons.PhoneFormIcon />}
           style={rootStyleInput}
           onChangeText={onPhoneNumberChange}
-          error={errorMessages.phoneNumber || false}
+          error={errorMessages.phone || false}
         />
         <PasswordInput
           label="Kata Sandi"
