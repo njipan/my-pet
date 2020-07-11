@@ -1,21 +1,7 @@
-import React from 'react';
-import {View, Text, Button} from 'react-native';
-import {Icons} from '@component';
+import {createStackNavigator} from 'react-navigation-stack';
 import {Screens} from '@constant';
+import ProfileSummary from './summary';
 
-const ProfileScreen = ({navigation}) => {
-  return (
-    <View>
-      <Icons.ProfileTabBarIcon focused={false} />
-      <Text>ProfilXe</Text>
-      <Button
-        title="Go to Home"
-        onPress={() => {
-          navigation.navigate(Screens.ORDER_MERCHANT);
-        }}
-      />
-    </View>
-  );
-};
-
-export default ProfileScreen;
+export default createStackNavigator({
+  [Screens.PROFILE_SUMMARY_CUSTOMER]: ProfileSummary,
+});

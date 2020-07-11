@@ -15,7 +15,12 @@ import {Mixins, Colors} from '@style';
 import {Heading, Badge, Icons} from '@component';
 import PetItemCard from './../pet-item-card';
 
-const AddPetCard = () => {
+export const AddPetCard = ({
+  styleRoot = {},
+  styleContainer = {},
+  styleText = {},
+  text = '',
+}) => {
   return (
     <View
       style={{
@@ -24,6 +29,7 @@ const AddPetCard = () => {
         padding: 12,
         width: 120,
         height: 160,
+        ...styleRoot,
       }}>
       <View
         style={{
@@ -35,6 +41,7 @@ const AddPetCard = () => {
           borderColor: Colors.LIGHT_GREY,
           justifyContent: 'center',
           alignItems: 'center',
+          ...styleContainer,
         }}>
         <Text
           style={{
@@ -42,8 +49,9 @@ const AddPetCard = () => {
             fontSize: 16,
             fontFamily: 'sans-serif-medium',
             marginBottom: 8,
+            ...styleText,
           }}>
-          Tambah
+          {text || `Tambah`}
         </Text>
         <Image
           source={require('@asset/icons/add.png')}

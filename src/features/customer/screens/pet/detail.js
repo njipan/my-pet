@@ -1,10 +1,12 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, ScrollView} from 'react-native';
 import Menu, {MenuItem} from 'react-native-material-menu';
 import {Colors, Mixins} from '@style';
 import {Screens} from '@constant';
 import * as Modal from '@util/modal';
 import {PetService} from '@service';
+
+import PetDetail from './../../components/pet-detail';
 
 const RightMenu = ({id = null, navigation}) => {
   const [menuRef, setMenuRef] = React.useState(null);
@@ -55,7 +57,7 @@ const DetailScreen = ({navigation, ...props}) => {
     setLoading(true);
     PetService.get(id)
       .then((response) => {
-        setPet(response.data);
+        setPet(response.data.data);
       })
       .catch((e) => {
         console.log(e.response.data);
@@ -64,9 +66,9 @@ const DetailScreen = ({navigation, ...props}) => {
   }, []);
 
   return (
-    <View>
-      <Text> PET DETAIL </Text>
-    </View>
+    <ScrollView style={{backgroundColor: Colors.BLACK10}}>
+      <PetDetail data={pet} />
+    </ScrollView>
   );
 };
 

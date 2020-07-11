@@ -16,7 +16,11 @@ export const VET_SERVICE_CUSTOMER = 'VET_SERVICE_CUSTOMER';
 export const VET_SERVICE_DETAIL_CUSTOMER = 'VET_SERVICE_DETAIL_CUSTOMER';
 
 export const ORDER_CUSTOMER = 'ORDER_CUSTOMER';
+
 export const PROFILE_CUSTOMER = 'PROFILE_CUSTOMER';
+export const PROFILE_SUMMARY_CUSTOMER = 'Profile_Summary_Customer';
+export const PROFILE_DETAIL_CUSTOMER = 'Profile_Detail_Customer';
+export const PROFILE_EDIT_CUSTOMER = 'Profile_Edit_Customer';
 
 export const HOME_NOTIFICATION = 'Home_Notification';
 

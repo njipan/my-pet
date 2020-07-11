@@ -2,8 +2,8 @@ import {scaleFont} from './mixins';
 import * as Colors from './colors';
 
 // FONT FAMILY
-export const FONT_FAMILY_REGULAR = 'OpenSans-Regular';
-export const FONT_FAMILY_BOLD = 'OpenSans-Bold';
+export const FONT_FAMILY_REGULAR = 'sans-serif-normal';
+export const FONT_FAMILY_BOLD = 'sans-serif-medium';
 
 // FONT WEIGHT
 export const FONT_WEIGHT_REGULAR = '400';
@@ -52,4 +52,26 @@ export const FONT_HEADER_TITLE = {
   fontSize: FONT_SIZE_H5,
   color: Colors.PRIMARY,
   fontWeight: FONT_WEIGHT_REGULAR,
+};
+
+export const CLICKABLE_TEXT = {
+  fontFamily: FONT_FAMILY_BOLD,
+  fontSize: 16,
+  color: Colors.BLUE,
+};
+
+export const heading = (type, color = null, style = {}) => {
+  const rules = {
+    h3: {
+      fontSize: 20,
+      color: color || Colors.BLACK,
+      fontWeight: '700',
+    },
+    h4: {
+      fontSize: 16,
+      color: color || Colors.BLACK,
+      fontWeight: '700',
+    },
+  };
+  return {...(rules[type] || {}), fontFamily: FONT_FAMILY_BOLD, ...style};
 };

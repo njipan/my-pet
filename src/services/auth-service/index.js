@@ -9,13 +9,19 @@ export const login = ({email, password, type}) => {
     type,
   });
 };
+
 export const setToken = (token) => {
   return AsyncStorage.setItem('_token', token);
 };
+
 export const register = (data) => {
   return generalAxios({
     method: 'post',
     url: Apis.REGISTER,
     data,
   });
+};
+
+export const logout = () => {
+  return AsyncStorage.setItem('_token', null);
 };

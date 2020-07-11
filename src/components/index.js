@@ -7,5 +7,6 @@ import * as Icons from './icons';
 export {default as Dropdown} from './dropdown';
 export {default as PicturePicker} from './picture-picker';
 export {default as Badge} from './badge';
+export {default as ProfileSetting} from './profile-setting';
 
 export {ButtonFluid, BoxButton, Icons, Heading, PasswordInput, TextInput};

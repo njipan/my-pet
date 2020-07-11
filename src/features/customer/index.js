@@ -6,10 +6,11 @@ import {
 } from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
 import HeaderCustomer from './components/layouts/header';
-import {Screens} from '@constant';
+import {Screens, Navigators} from '@constant';
 import {Icons} from '@component';
 import * as CustomerScreens from './screens';
 import BottomTabBar from './components/layouts/bottom-tab';
+import ProfileSummaryScreen from './screens/profile/summary';
 
 const Pesanan = () => {
   return (
@@ -81,8 +82,8 @@ const CustomerTabBottomNavigator = createBottomTabNavigator(
         };
       },
     },
-    [Screens.PROFILE_CUSTOMER]: {
-      screen: CustomerScreens.ProfileScreen,
+    [Screens.PROFILE_SUMMARY_CUSTOMER]: {
+      screen: ProfileSummaryScreen,
       navigationOptions: {
         title: 'Profil',
         tabBarIcon: Icons.ProfileTabBarIcon,
@@ -103,9 +104,15 @@ const CustomerTabBottomNavigator = createBottomTabNavigator(
 export const Navigator = createStackNavigator({
   CustomerTabBottomNavigator: {
     screen: CustomerTabBottomNavigator,
-    navigationOptions: (props) => ({
-      header: <HeaderCustomer {...props} />,
-    }),
+    navigationOptions: ({navigation, ...props}) => {
+      const isHidden =
+        navigation.state.routes[navigation.state.index].routeName ==
+        Screens.PROFILE_SUMMARY_CUSTOMER;
+
+      return {
+        header: isHidden ? null : <HeaderCustomer {...props} />,
+      };
+    },
   },
   [Screens.HOME_NOTIFICATION]: {
     screen: NotificationTopNavigator,
