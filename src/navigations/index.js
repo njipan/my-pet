@@ -18,7 +18,7 @@ const RootNavigator = createStackNavigator(
     mode: 'modal',
     headerMode: 'none',
     cardStyle: {opacity: 1, backgroundColor: Colors.MODAL},
-    initialRouteName: Navigators.CUSTOMER_NAVIGATOR,
+    initialRouteName: Navigators.AUTH_NAVIGATOR,
   },
 );
 

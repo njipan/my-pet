@@ -39,15 +39,15 @@ const HeaderCustomer = ({navigation}) => {
       </View>
       <View
         style={{
-          width: 28,
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'flex-end',
+          paddingHorizontal: 4,
         }}>
         <TouchableOpacity
           onPress={() => navigation.navigate(Screens.HOME_NOTIFICATION)}>
           <Image
-            style={{width: 28, height: 28}}
+            style={{width: 20, height: 20}}
             source={require('./../../../../../assets/icons/notification.png')}
           />
         </TouchableOpacity>

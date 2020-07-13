@@ -43,11 +43,13 @@ const ProfileInfo = (props) => {
           justifyContent: 'center',
         }}>
         <Text
+          numberOfLines={2}
           style={{
             ...Typography.heading('h3'),
             fontFamily: 'sans-serif-normal',
             marginBottom: 2,
             ...titleStyle,
+            fontSize: 18,
           }}>
           {title}
         </Text>
@@ -58,6 +60,7 @@ const ProfileInfo = (props) => {
               ...Typography.CLICKABLE_TEXT,
               ...textStyles(),
               ...textStyle,
+              fontSize: 14,
             }}>
             {text}
           </Text>

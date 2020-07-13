@@ -10,8 +10,28 @@ export const login = ({email, password, type}) => {
   });
 };
 
+export const getToken = () => {
+  return AsyncStorage.getItem('_token');
+};
+
+export const setType = (type) => {
+  return AsyncStorage.setItem('_type', type);
+};
+
+export const getType = () => {
+  return AsyncStorage.getItem('_type');
+};
+
 export const setToken = (token) => {
   return AsyncStorage.setItem('_token', token);
+};
+
+export const check = (token) => {
+  return generalAxios.get(Apis.CHECK_TOKEN, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
 
 export const register = (data) => {
@@ -23,5 +43,5 @@ export const register = (data) => {
 };
 
 export const logout = () => {
-  return AsyncStorage.setItem('_token', null);
+  return AsyncStorage.removeItem('_token');
 };

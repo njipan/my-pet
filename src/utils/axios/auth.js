@@ -26,7 +26,7 @@ authAxios.interceptors.response.use(
     console.log(error);
     const status = error.response.status;
 
-    if (status === 401) {
+    if (status === 401 || status === 403) {
       alert('Autentikasi gagal!');
       Navigation.navigate(Screens.LOGIN_SCREEN);
     }

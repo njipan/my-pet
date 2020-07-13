@@ -4,7 +4,7 @@ import moment from 'moment';
 const schema = {
   email: {
     required: true,
-    messageRequired: 'Nama tidak boleh kosong!',
+    messageRequired: 'Email tidak boleh kosong!',
     validators: [
       {
         handler: validator.isEmail,
@@ -13,21 +13,12 @@ const schema = {
     ],
   },
   password: {
-    required: false,
+    required: true,
     messageRequired: 'Password tidak boleh kosong!',
     validators: [
       {
         handler: (text) => text.length >= 6,
         message: 'Password tidak valid!',
-      },
-    ],
-  },
-  type: {
-    messageRequired: 'Tipe peliharaan harus dipilih!',
-    validators: [
-      {
-        handler: (text) => type == 1 || type == 2,
-        message: 'Tipe yang dipilih tidak valid!',
       },
     ],
   },

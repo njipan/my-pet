@@ -14,7 +14,7 @@ import {
 const CustomerIcon = () => {
   return (
     <Image
-      style={{width: 64, height: 64}}
+      style={{width: 48, height: 48, marginTop: 6}}
       source={require('./../../../../assets/icons/users/customer.png')}
     />
   );
@@ -23,7 +23,13 @@ const CustomerIcon = () => {
 const VeterinarianIcon = () => {
   return (
     <Image
-      style={{width: 64, height: 64, marginLeft: 12}}
+      style={{
+        width: 36,
+        height: 36,
+        marginLeft: 12,
+        marginTop: 6,
+        marginBottom: 12,
+      }}
       source={require('./../../../../assets/icons/users/veterinarian.png')}
     />
   );

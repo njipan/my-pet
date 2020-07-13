@@ -13,6 +13,7 @@ import MiniStar from './mini-star';
 import MiniPhone from './mini-phone';
 export {default as CatIcon} from './cat-icon';
 export {default as DogIcon} from './dog-icon';
+export {default as MoreVertIcon} from './more-vert';
 
 export {
   MailOutlineFormIcon,

@@ -60,17 +60,8 @@ const RegisterScreen = ({navigation}) => {
     });
   };
 
-  const onSubmit = async () => {
-    if (isObjectValuesNull({...data})) {
-      ToastAndroid.show(
-        'Oops..\nLengkapi form yang tersedia',
-        ToastAndroid.LONG,
-      );
-      return;
-    }
-
+  const onSave = async (navigation) => {
     try {
-      Modal.confirm({isLoading: true});
       const response = await AuthService.register({
         full_name: data.fullName,
         email: data.email,
@@ -81,12 +72,28 @@ const RegisterScreen = ({navigation}) => {
       ToastAndroid.show('Daftar berhasil!', ToastAndroid.LONG);
       navigation.navigate(Screens.LOGIN_SCREEN);
     } catch (err) {
-      console.log(err.response.data);
-      navigation.goBack(null);
+      console.log(err);
       let message = 'Oops..\nLengkapi form yang tersedia';
       if (err.response.status == 422) message = 'Pengguna telah terdaftar!';
       ToastAndroid.show(message, ToastAndroid.LONG);
     }
+    navigation.goBack();
+  };
+
+  const onSubmit = async () => {
+    try {
+      const messages = await validate(data, RegisterSchema);
+      setErrorMessages({...messages});
+      if (isObjectValuesNull(messages)) {
+        ToastAndroid.show(
+          'Oops..\nLengkapi form yang tersedia',
+          ToastAndroid.LONG,
+        );
+        return;
+      }
+
+      Modal.confirm({isLoading: true, onLoad: onSave});
+    } catch (err) {}
   };
 
   return (

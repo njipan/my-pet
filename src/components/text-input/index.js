@@ -111,7 +111,7 @@ const TextInput = ({
           editable={editable}
           {...props}
         />
-        {errorMessage !== false && (
+        {errorMessage && (
           <View
             style={{
               justifyContent: 'center',

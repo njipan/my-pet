@@ -19,7 +19,12 @@ const Confirmation = ({navigation, ...props}) => {
     textCancel = '',
     onCallback = (result) => {},
     isLoading = false,
+    onLoad = () => {},
   } = navigation.state.params;
+
+  React.useEffect(() => {
+    if (typeof onLoad == 'function') onLoad(navigation);
+  }, []);
 
   const callback = (value) => {
     onCallback(value, navigation.goBack, navigation);

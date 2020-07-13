@@ -1,12 +1,39 @@
 import React, {useState, useEffect} from 'react';
+import {NavigationActions, StackActions} from 'react-navigation';
+
 import {StyleSheet, Image, View, Easing, Animated} from 'react-native';
 import {Colors} from './../../../styles';
 import LogoImagePrimary from './../../../assets/logos/LogoPrimary_2x.png';
 import LogoTextLight from './../../../assets/logos/LogoTextLight_2x.png';
 import Loading from './../../../assets/icons/loading.png';
+import {AuthService} from '@service';
+import {Screens, Navigators, UserType} from '@constant';
 
 const SplashScreen = ({navigation}) => {
   const [spinAnim, setSpinAnim] = useState(new Animated.Value(0));
+
+  const checkToken = async () => {
+    let screen = Navigators.AUTH_NAVIGATOR;
+    try {
+      const token = await AuthService.getToken();
+      if (!token) throw Error(null);
+      await AuthService.check(token);
+      const type = await AuthService.getType();
+      if (type == UserType.CUSTOMER) screen = Navigators.CUSTOMER_NAVIGATOR;
+      else if (type == UserType.MERCHANT)
+        screen = Navigators.MERCHANT_NAVIGATOR;
+
+      navigation.dispatch(
+        StackActions.reset({
+          index: 0,
+          key: null,
+          actions: [NavigationActions.navigate({routeName: screen})],
+        }),
+      );
+    } catch (err) {
+      navigation.navigate(Screens.LOGIN_SCREEN);
+    }
+  };
 
   useEffect(() => {
     Animated.loop(
@@ -18,9 +45,7 @@ const SplashScreen = ({navigation}) => {
       }),
     ).start();
 
-    setTimeout(() => {
-      navigation.navigate('Login');
-    }, 3000);
+    checkToken();
   }, []);
 
   const spin = spinAnim.interpolate({

@@ -2,7 +2,8 @@ import {scaleFont} from './mixins';
 import * as Colors from './colors';
 
 // FONT FAMILY
-export const FONT_FAMILY_REGULAR = 'sans-serif-normal';
+export const FONT_FAMILY_REGULAR = 'sans-serif-light';
+export const FONT_FAMILY_MEDIUM = 'sans-serif-normal';
 export const FONT_FAMILY_BOLD = 'sans-serif-medium';
 
 // FONT WEIGHT

@@ -41,7 +41,7 @@ const RegisterForm = ({
         }}>
         <TextInput
           label="Nama Lengkap"
-          icon={<Icons.UserFormIcon />}
+          icon={<Icons.UserFormIcon size="small" />}
           style={rootStyleInput}
           onChangeText={onFullNameChange}
           error={errorMessages.fullName || false}

@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {NavigationActions, StackActions} from 'react-navigation';
 import {StyleSheet, Image, View, Text, ToastAndroid} from 'react-native';
 import {Colors, Mixins, Typography} from './../../../../styles';
 import {Texts} from './../../../../constants';
@@ -7,7 +8,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import LoginForm from './../../components/form/login-form';
 import {AuthService} from '@service';
 import {validate, singleValidate, isObjectValuesNull} from '@util/validate';
-import {Screens} from '@constant';
+import {Screens, Navigators} from '@constant';
 import {LoginSchema} from './../../schemas';
 import * as Modal from '@util/modal';
 
@@ -54,28 +55,42 @@ const LoginScreen = ({navigation, ...props}) => {
     }
     navigation.navigate(Screens.REGISTER_SCREEN, {type: data.type});
   };
-  const onSubmit = () => {
+
+  const doLogin = async (navigation) => {
+    try {
+      const response = await AuthService.login(data);
+      await AuthService.setToken(response.data.data.token);
+      await AuthService.setType(`${data.type}`);
+      const navigationName = Navigators.CUSTOMER_NAVIGATOR;
+      if (data.type == 2) navigationName = Navigators.MERCHANT_NAVIGATOR;
+
+      navigation.dispatch(
+        StackActions.reset({
+          index: 0,
+          key: null,
+          actions: [NavigationActions.navigate({routeName: navigationName})],
+        }),
+      );
+    } catch (err) {
+      ToastAndroid.show(
+        'Gagal, periksa kembali email dan password!',
+        ToastAndroid.LONG,
+      );
+    }
+    navigation.goBack();
+  };
+
+  const onSubmit = async () => {
     if (data.type !== 1 && data.type !== 2) {
       ToastAndroid.show('Tipe harus dipilih!', ToastAndroid.LONG);
       return;
     }
-    Modal.confirm({isLoading: true});
-    AuthService.login(data)
-      .then(async (response) => {
-        await AuthService.setToken(response.data.data.token || '');
-        if (data.type == 2) navigation.navigate(Screens.ORDER_MERCHANT);
-        else {
-          navigation.navigate(Screens.HOME_CUSTOMER);
-        }
-        ToastAndroid.show('Berhasil!', ToastAndroid.LONG);
-      })
-      .catch((error) => {
-        navigation.goBack(null);
-        ToastAndroid.show(
-          'Gagal, periksa kembali email dan password!',
-          ToastAndroid.LONG,
-        );
-      });
+    try {
+      const errs = await validate(data, LoginSchema);
+      setErrorMessages({...errs});
+      if (!isObjectValuesNull(errs)) return;
+    } catch (err) {}
+    Modal.confirm({isLoading: true, onLoad: doLogin});
   };
 
   return (

@@ -1,7 +1,8 @@
 import React from 'react';
 import {View, TouchableOpacity, Text} from 'react-native';
-
-import {Heading, Icons, ButtonFluid} from '@component';
+import Heading from '@component/heading';
+import * as Icons from '@component/icons';
+import ButtonFluid from '@component/button-fluid';
 import {Colors, Mixins, Typography} from '@style';
 
 export const SettingItem = (props) => {

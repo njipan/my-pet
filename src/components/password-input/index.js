@@ -44,25 +44,31 @@ const PasswordInput = ({
   ...props
 }) => {
   const errorMessage = error;
-  const tempBorderColor = errorMessage !== false ? Colors.DANGER : borderColor;
-  const [outerColor, setOuterColor] = useState(tempBorderColor);
+  const [isFocus, setFocus] = useState(false);
+  const isBorder = (c) =>
+    !error ? (isFocus ? Colors.BLUE : c) : Colors.DANGER;
+
   const [isSecure, setIsSecure] = useState(secure);
+  const [outerColor, setOuterColor] = useState(isBorder(Colors.LIGHT_GREY));
+
   const paddingRight = !toggle ? 0 : 10;
 
   useEffect(() => {
     if (errorMessage !== false) setOuterColor(Colors.DANGER);
-  }, null);
+  }, [isFocus]);
 
   const onFocus = () => {
-    if (errorMessage === false) {
+    setFocus(true);
+    if (!errorMessage) {
       setOuterColor(Colors.BLUE);
       return;
     }
-    setOuterColor(tempBorderColor);
+    setOuterColor(Colors.DANGER);
   };
 
-  const onBlur = () => {
-    setOuterColor(tempBorderColor);
+  const onBlur = async () => {
+    setFocus(false);
+    setOuterColor(error ? Colors.DANGER : Colors.LIGHT_GREY);
   };
 
   const toggleSecure = () => {
@@ -75,7 +81,7 @@ const PasswordInput = ({
       <View
         style={{
           ...styles.container,
-          borderColor: outerColor,
+          borderColor: isBorder(outerColor),
           position: 'relative',
           marginTop: 16,
           ...style,
