@@ -50,9 +50,9 @@ export const FONT_SCREEN_DESCRIPTION = {
 };
 
 export const FONT_HEADER_TITLE = {
-  fontSize: FONT_SIZE_H5,
-  color: Colors.PRIMARY,
-  fontWeight: FONT_WEIGHT_REGULAR,
+  fontSize: 18,
+  fontFamily: FONT_FAMILY_BOLD,
+  color: Colors.REGULAR,
 };
 
 export const CLICKABLE_TEXT = {

@@ -22,9 +22,11 @@ const schema = {
       },
     ],
   },
-  placeOfBirth: {
+  birthDate: {
     required: false,
-    messageRequired: 'Tempat Lahir tidak boleh kosong',
+  },
+  birthPlace: {
+    required: false,
   },
   sex: {
     required: false,

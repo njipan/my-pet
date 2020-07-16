@@ -11,11 +11,23 @@ const defaultOptions = {
 const generalAxios = axios.create(defaultOptions);
 generalAxios.interceptors.request.use(
   function (config) {
-    console.log(config);
     return config;
   },
   function (error) {
     // Do something with request error
+    return Promise.reject(error);
+  },
+);
+
+generalAxios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.log(error);
+    const status = error.response.status;
+    if (status.toString()[0] == '5') {
+      alert('Terjadi Kesalahan!\nSilahkan coba beberapa saat lagi!');
+      return;
+    }
     return Promise.reject(error);
   },
 );

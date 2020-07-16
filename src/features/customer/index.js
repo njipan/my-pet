@@ -101,61 +101,56 @@ const CustomerTabBottomNavigator = createBottomTabNavigator(
   },
 );
 
-export const Navigator = createStackNavigator(
-  {
-    CustomerTabBottomNavigator: {
-      screen: CustomerTabBottomNavigator,
-      navigationOptions: ({navigation, ...props}) => {
-        const isHidden =
-          navigation.state.routes[navigation.state.index].routeName ==
-          Screens.PROFILE_SUMMARY_CUSTOMER;
+export const Navigator = createStackNavigator({
+  CustomerTabBottomNavigator: {
+    screen: CustomerTabBottomNavigator,
+    navigationOptions: ({navigation, ...props}) => {
+      const isHidden =
+        navigation.state.routes[navigation.state.index].routeName ==
+        Screens.PROFILE_SUMMARY_CUSTOMER;
 
-        return {
-          header: isHidden ? null : <HeaderCustomer {...props} />,
-        };
-      },
+      return {
+        header: isHidden ? null : <HeaderCustomer {...props} />,
+      };
     },
-    [Screens.HOME_NOTIFICATION]: {
-      screen: NotificationTopNavigator,
-      navigationOptions: {
-        title: 'Notification',
-        headerStyle: {
-          elevation: 0,
-          shadowOpacity: 0,
-          borderBottomWidth: 0,
-        },
-      },
-    },
-    [Screens.ADD_PET_CUSTOMER]: {
-      screen: CustomerScreens.Pet.CreateScreen,
-      navigationOptions: {
-        title: 'Tambah Peliharaan',
-        headerTitleStyle: {
-          fontFamily: 'sans-serif-medium',
-        },
-      },
-    },
-    [Screens.DETAIL_PET_CUSTOMER]: CustomerScreens.Pet.DetailScreen,
-    [Screens.EDIT_PET_CUSTOMER]: {
-      screen: CustomerScreens.Pet.CreateScreen,
-      navigationOptions: {
-        title: 'Ubah Peliharaan',
-        headerTitleStyle: {
-          fontFamily: 'sans-serif-medium',
-        },
-      },
-    },
-    [Screens.VET_SERVICE_DETAIL_CUSTOMER]: {
-      screen: CustomerScreens.VetServiceDetailScreen,
-      navigationOptions: (props) => {
-        return {
-          title: props.navigation.state.params.title,
-        };
-      },
-    },
-    ...ProfileNavigator,
   },
-  // {
-  //   initialRouteName: Screens.PROFILE_EDIT_CUSTOMER,
-  // },
-);
+  [Screens.HOME_NOTIFICATION]: {
+    screen: NotificationTopNavigator,
+    navigationOptions: {
+      title: 'Notification',
+      headerStyle: {
+        elevation: 0,
+        shadowOpacity: 0,
+        borderBottomWidth: 0,
+      },
+    },
+  },
+  [Screens.ADD_PET_CUSTOMER]: {
+    screen: CustomerScreens.Pet.CreateScreen,
+    navigationOptions: {
+      title: 'Tambah Peliharaan',
+      headerTitleStyle: {
+        fontFamily: 'sans-serif-medium',
+      },
+    },
+  },
+  [Screens.DETAIL_PET_CUSTOMER]: CustomerScreens.Pet.DetailScreen,
+  [Screens.EDIT_PET_CUSTOMER]: {
+    screen: CustomerScreens.Pet.CreateScreen,
+    navigationOptions: {
+      title: 'Ubah Peliharaan',
+      headerTitleStyle: {
+        fontFamily: 'sans-serif-medium',
+      },
+    },
+  },
+  [Screens.VET_SERVICE_DETAIL_CUSTOMER]: {
+    screen: CustomerScreens.VetServiceDetailScreen,
+    navigationOptions: (props) => {
+      return {
+        title: props.navigation.state.params.title,
+      };
+    },
+  },
+  ...ProfileNavigator,
+});

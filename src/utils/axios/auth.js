@@ -30,6 +30,10 @@ authAxios.interceptors.response.use(
       alert('Autentikasi gagal!');
       Navigation.navigate(Screens.LOGIN_SCREEN);
     }
+    if (status.toString()[0] == '5') {
+      alert('Terjadi Kesalahan!\nSilahkan coba beberapa saat lagi!');
+      return;
+    }
     return Promise.reject(error);
   },
 );

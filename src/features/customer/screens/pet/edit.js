@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 
-const UpdateScreen = ({navigation, ...props}) => {
+const EditScreen = ({navigation, ...props}) => {
   const id = navigation.state.params.id || null;
 
   const [pet, setPet] = React.useState({});
@@ -25,4 +25,4 @@ const UpdateScreen = ({navigation, ...props}) => {
   );
 };
 
-export default UpdateScreen;
+export default EditScreen;

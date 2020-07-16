@@ -7,14 +7,21 @@ import {PetService} from '@service';
 const HomeScreen = ({navigation, ...props}) => {
   const [pets, setPets] = React.useState([]);
 
+  const getMyPets = async () => {
+    try {
+      const response = await PetService.all();
+      setPets(response);
+    } catch (err) {
+      setPets([]);
+    }
+  };
+
+  const load = async () => {
+    await getMyPets();
+  };
+
   React.useEffect(() => {
-    PetService.all()
-      .then((response) => {
-        setPets(response.data.data);
-      })
-      .catch((err) => {
-        setPets([]);
-      });
+    load();
   }, []);
 
   return (

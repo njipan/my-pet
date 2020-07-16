@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import {
   RefreshControl,
   TouchableOpacity,
@@ -7,13 +8,13 @@ import {
   ToastAndroid,
 } from 'react-native';
 import {StackActions, NavigationActions} from 'react-navigation';
-import {Screens, Navigators} from '@constant';
+import {Sex, Screens, Navigators} from '@constant';
 import {Colors, Mixins} from '@style';
 import {Heading, ProfileSetting} from '@component';
 import ProfileInfo from './../../components/profile-info';
 import PetItemCard from './../../components/pet-item-card';
 import {AddPetCard} from './../../components/home-pet';
-import {AuthService, CustomerService} from '@service';
+import {AuthService, CustomerService, PetService} from '@service';
 import * as Modal from '@util/modal';
 import {encodeFromBuffer} from '@util/file';
 
@@ -58,11 +59,11 @@ const MyPet = ({pets = [], onAddPet = () => {}}) => {
 
 const ProfileSummaryScreen = ({navigation}) => {
   const [me, setMe] = React.useState({});
+  const [pets, setPets] = React.useState([]);
   const [picture, setPicture] = React.useState(null);
   const [refreshing, setRefreshing] = React.useState(true);
 
   const getMe = async () => {
-    setRefreshing(true);
     try {
       const response = await CustomerService.getMe();
       setMe(response.data.data.user);
@@ -74,11 +75,23 @@ const ProfileSummaryScreen = ({navigation}) => {
       console.log(err);
       ToastAndroid.show('Oopss, Terjadi Kesalahan', ToastAndroid.LONG);
     }
+  };
+
+  const getPets = async () => {
+    try {
+      const response = await PetService.all();
+      setPets(response);
+    } catch (err) {}
+  };
+
+  const load = async () => {
+    setRefreshing(true);
+    await Promise.all([getMe(), getPets()]);
     setRefreshing(false);
   };
 
   React.useEffect(() => {
-    getMe();
+    load();
   }, []);
 
   const onLogout = () => {
@@ -102,13 +115,14 @@ const ProfileSummaryScreen = ({navigation}) => {
   };
   const onTNC = () => {};
   const onFAQ = () => {};
-  const onChangePassword = () => {};
+  const onChangePassword = () =>
+    navigation.navigate(Screens.CHANGE_PASSWORD_SCREEN);
   return (
     <View>
       <ScrollView
         style={{backgroundColor: Colors.BLACK10}}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={() => getMe()} />
+          <RefreshControl refreshing={refreshing} onRefresh={() => load()} />
         }>
         <View
           style={{
@@ -120,7 +134,13 @@ const ProfileSummaryScreen = ({navigation}) => {
           <ProfileInfo
             onTextPress={() =>
               navigation.navigate(Screens.PROFILE_DETAIL_CUSTOMER, {
-                me,
+                me: {
+                  ...me,
+                  birth_date: moment(me.birth_date, 'DD-MM-YYYY').format(
+                    'MMMM DD, YYYY',
+                  ),
+                  sex: Sex.translateHuman(me.sex),
+                },
                 picture,
               })
             }

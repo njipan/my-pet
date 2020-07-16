@@ -23,6 +23,7 @@ const ProfileEditForm = (props) => {
     onNameChange,
     onEmailChange,
     onPhoneChange,
+    onBirthDateChange,
     onPlaceChange,
     onSexChange,
     onSubmit,
@@ -92,6 +93,7 @@ const ProfileEditForm = (props) => {
           error={errorMessages.email}
           value={data.email}
         />
+
         <TextInput
           keyboardType="numeric"
           label="Nomor Telepon"
@@ -99,11 +101,19 @@ const ProfileEditForm = (props) => {
           error={errorMessages.phone}
           value={data.phone}
         />
+        <TouchableOpacity onPress={onBirthDateChange}>
+          <TextInput
+            editable={false}
+            label="Tanggal Lahir"
+            error={errorMessages.birthDate}
+            value={data.birthDate}
+          />
+        </TouchableOpacity>
         <TextInput
           label="Tempat Lahir"
           onChangeText={onPlaceChange}
-          error={errorMessages.placeOfBirth}
-          value={data.placeOfBirth}
+          error={errorMessages.birthPlace}
+          value={data.birthPlace}
         />
         <Dropdown
           value={data.sex}
@@ -112,9 +122,6 @@ const ProfileEditForm = (props) => {
           label="Jenis Kelamin"
           onValueChange={onSexChange}
         />
-        <View style={{marginVertical: 10}}>
-          <ButtonFluid text="Simpan" onPress={onSubmit} />
-        </View>
       </View>
     </View>
   );

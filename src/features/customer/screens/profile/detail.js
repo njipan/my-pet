@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import {ScrollView, View, Text, Image} from 'react-native';
 
 import {Mixins, Colors, Typography} from '@style';
@@ -47,9 +48,9 @@ const ProfileDetailScreen = ({navigation, ...props}) => {
         </Text>
         <PersonalInfoItem label="Email" text={me.email} />
         <PersonalInfoItem label="Nomor Telepon" text={me.phone} />
-        <PersonalInfoItem label="Tanggal Lahir" text={me.email} />
-        <PersonalInfoItem label="Tempat Lahir" text={me.email} />
-        <PersonalInfoItem label="Jenis Kelamin" text={me.email} />
+        <PersonalInfoItem label="Tanggal Lahir" text={me.birth_date} />
+        <PersonalInfoItem label="Tempat Lahir" text={me.birth_place} />
+        <PersonalInfoItem label="Jenis Kelamin" text={me.sex} />
       </View>
     </ScrollView>
   );
@@ -68,9 +69,7 @@ ProfileDetailScreen.navigationOptions = ({navigation}) => {
 
   return {
     title: 'Detail Profil',
-    headerTitleStyle: {
-      fontFamily: Typography.FONT_FAMILY_BOLD,
-    },
+    headerTitleStyle: Typography.FONT_HEADER_TITLE,
     headerRight: (
       <RightMenu
         icon={<Icons.MoreVertIcon size="small" />}

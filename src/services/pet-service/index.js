@@ -9,8 +9,9 @@ export const get = (id) => {
   return authAxios.get(`${Apis.PET_ALL}/${id}`);
 };
 
-export const all = (config = {}) => {
-  return authAxios.get(`${Apis.PET_ALL}`);
+export const all = async (config = {}) => {
+  const response = await authAxios.get(`${Apis.PET_ALL}`);
+  return response.data.data.pets;
 };
 
 export const update = (id, data) => {

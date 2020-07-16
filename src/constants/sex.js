@@ -11,3 +11,7 @@ export const getIcon = (value) => {
 export const translate = (value) => {
   return value == MALE ? `Jantan` : 'Betina';
 };
+
+export const translateHuman = (value) => {
+  return value == MALE ? `Laki-Laki` : value == FEMALE ? 'Perempuan' : null;
+};

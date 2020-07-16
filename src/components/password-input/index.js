@@ -94,7 +94,7 @@ const PasswordInput = ({
           <Text
             style={{
               fontSize: Typography.FONT_SIZE_16,
-              color: labelColor,
+              color: isBorder(outerColor),
             }}>
             {label}
           </Text>

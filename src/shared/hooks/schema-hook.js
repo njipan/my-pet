@@ -13,11 +13,15 @@ const useSchema = (initData = {}, initMessages = {}, schema = {}) => {
 
   return {
     data,
+    getData: () => data,
     messages,
     setData,
     setMessages,
     setFormAndValidate,
-    setValueAndValidate: (key) => (value) => setFormAndValidate(key, value),
+    setValueAndValidate: (key, fn) => (value) => {
+      setFormAndValidate(key, value);
+      fn(key, value, data);
+    },
   };
 };
 
