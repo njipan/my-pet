@@ -74,5 +74,5 @@ export const heading = (type, color = null, style = {}) => {
       fontWeight: '700',
     },
   };
-  return {...(rules[type] || {}), fontFamily: FONT_FAMILY_BOLD, ...style};
+  return {...(rules[type] || {}), fontFamily: FONT_FAMILY_REGULAR, ...style};
 };

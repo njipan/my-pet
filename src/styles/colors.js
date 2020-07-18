@@ -26,3 +26,6 @@ export const BLACK87 = '#212220';
 export const REGULAR = '#333';
 
 export const MODAL = '#00000029';
+
+export const REFRESH_CONTROL_PRIMARY = [SECONDARY, BLACK10];
+export const REFRESH_CONTROL_SECONDARY = [PRIMARY, LIGHT_GREY];

@@ -38,4 +38,8 @@ const styles = StyleSheet.create({
   },
 });
 
+VetServiceDetailScreen.navigationOptions = {
+  title: 'XXX',
+};
+
 export default VetServiceDetailScreen;

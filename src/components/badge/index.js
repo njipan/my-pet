@@ -16,11 +16,13 @@ const Badge = ({
         ...styles.root,
         ...styleRoot,
       }}>
-      {React.isValidElement(renderIcon) ? (
-        renderIcon
-      ) : icon ? (
-        <Image source={icon} style={{...styles.image, ...styleIcon}} />
-      ) : null}
+      <View style={{justifyContent: 'center'}}>
+        {React.isValidElement(renderIcon) ? (
+          renderIcon
+        ) : icon ? (
+          <Image source={icon} style={{...styles.image, ...styleIcon}} />
+        ) : null}
+      </View>
       <Text style={{...styles.text, ...styleText}}>{text}</Text>
     </View>
   );

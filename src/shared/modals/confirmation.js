@@ -13,13 +13,14 @@ import Card from './components/card';
 const Confirmation = ({navigation, ...props}) => {
   const {
     onClose = () => {},
-    title = '',
+    title = 'Konfirmasi',
     description = '',
     textConfirm = '',
     textCancel = '',
     onCallback = (result) => {},
     isLoading = false,
     onLoad = () => {},
+    reverse = false,
   } = navigation.state.params;
 
   React.useEffect(() => {
@@ -70,13 +71,13 @@ const Confirmation = ({navigation, ...props}) => {
           </View>
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: reverse ? 'row-reverse' : 'row',
               width: '100%',
-              justifyContent: 'flex-end',
-              marginTop: 10,
+              justifyContent: reverse ? 'flex-start' : 'flex-end',
+              marginTop: 4,
             }}>
             <ButtonFluid
-              text={textCancel || ''}
+              text={reverse ? textConfirm : textCancel || ''}
               type="small"
               styleContainer={{
                 paddingTop: 6,
@@ -90,13 +91,13 @@ const Confirmation = ({navigation, ...props}) => {
                 fontWeight: 'bold',
               }}
               onPress={() => {
-                callback(false);
+                callback(reverse ? true : false);
               }}
             />
             <View style={{marginHorizontal: 4}}></View>
             {textConfirm != '' && (
               <ButtonFluid
-                text={textConfirm || ''}
+                text={reverse ? textCancel : textConfirm}
                 type="small"
                 fullWidth={false}
                 styleContainer={{
@@ -111,7 +112,7 @@ const Confirmation = ({navigation, ...props}) => {
                   fontWeight: 'bold',
                 }}
                 onPress={() => {
-                  callback(true);
+                  callback(reverse ? false : true);
                 }}
               />
             )}

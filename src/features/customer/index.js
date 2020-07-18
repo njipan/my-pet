@@ -5,12 +5,14 @@ import {
   createMaterialTopTabNavigator,
 } from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
-import HeaderCustomer from './components/layouts/header';
 import {Screens, Navigators} from '@constant';
 import {Icons} from '@component';
+import {Box, Typography} from '@style';
 import * as CustomerScreens from './screens';
 import BottomTabBar from './components/layouts/bottom-tab';
 import ProfileNavigator, {ProfileSummaryScreen} from './screens/profile';
+import {VetStackNavigator, VetServiceDetailScreen} from './screens/vet';
+import {HomeStackNavigator} from './screens/home';
 
 const Pesanan = () => {
   return (
@@ -55,8 +57,8 @@ const NotificationTopNavigator = createMaterialTopTabNavigator(
 
 const CustomerTabBottomNavigator = createBottomTabNavigator(
   {
-    [Screens.HOME_CUSTOMER]: {
-      screen: CustomerScreens.HomeScreen,
+    HomeStackNavigator: {
+      screen: HomeStackNavigator,
       navigationOptions: (props) => {
         return {
           tabBarIcon: Icons.HomeTabBarIcon,
@@ -64,8 +66,8 @@ const CustomerTabBottomNavigator = createBottomTabNavigator(
         };
       },
     },
-    [Screens.VET_SERVICE_CUSTOMER]: {
-      screen: CustomerScreens.VetServiceScreen,
+    VetStackNavigator: {
+      screen: VetStackNavigator,
       navigationOptions: (props) => {
         return {
           tabBarIcon: Icons.VetServiceTabBarIcon,
@@ -105,12 +107,16 @@ export const Navigator = createStackNavigator({
   CustomerTabBottomNavigator: {
     screen: CustomerTabBottomNavigator,
     navigationOptions: ({navigation, ...props}) => {
-      const isHidden =
-        navigation.state.routes[navigation.state.index].routeName ==
-        Screens.PROFILE_SUMMARY_CUSTOMER;
-
+      const hideHeader = ['CustomerTabBottomNavigator'].includes(
+        navigation.state.routeName,
+      );
+      const opt = {
+        headerTitleStyle: Typography.FONT_HEADER_TITLE,
+        headerStyle: Box.NO_SHADOW,
+      };
+      if (hideHeader) opt.header = null;
       return {
-        header: isHidden ? null : <HeaderCustomer {...props} />,
+        ...opt,
       };
     },
   },
@@ -145,10 +151,11 @@ export const Navigator = createStackNavigator({
     },
   },
   [Screens.VET_SERVICE_DETAIL_CUSTOMER]: {
-    screen: CustomerScreens.VetServiceDetailScreen,
+    screen: VetServiceDetailScreen,
     navigationOptions: (props) => {
       return {
-        title: props.navigation.state.params.title,
+        title:
+          props.navigation.getParam('data', {}).full_name || 'Veterinarian',
       };
     },
   },

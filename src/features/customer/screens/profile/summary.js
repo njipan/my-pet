@@ -72,7 +72,6 @@ const ProfileSummaryScreen = ({navigation}) => {
       const uri = await encodeFromBuffer(bufferPicture);
       setPicture({...picture, uri: `data:image/jpeg;base64,${uri}`});
     } catch (err) {
-      console.log(err);
       ToastAndroid.show('Oopss, Terjadi Kesalahan', ToastAndroid.LONG);
     }
   };
@@ -95,23 +94,37 @@ const ProfileSummaryScreen = ({navigation}) => {
   }, []);
 
   const onLogout = () => {
-    Modal.confirm({isLoading: true});
-    AuthService.logout()
-      .then(() => {})
-      .catch(() => {})
-      .finally(() => {
-        navigation.dispatch(
-          StackActions.reset({
-            index: 0,
-            key: null,
-            actions: [
-              NavigationActions.navigate({
-                routeName: Navigators.AUTH_NAVIGATOR,
+    Modal.confirm({
+      description: 'Apakah kamu yakin ingin keluar dari MyPet?',
+      textConfirm: 'Ya',
+      textCancel: 'Tidak',
+      reverse: true,
+      onCallback: (result, hide) => {
+        hide();
+        if (!result) return;
+
+        Modal.confirm({
+          isLoading: true,
+          onLoad: async () => {
+            try {
+              await AuthService.logout();
+            } catch (err) {}
+            navigation.dispatch(
+              StackActions.reset({
+                index: 0,
+                key: null,
+                actions: [
+                  NavigationActions.navigate({
+                    routeName: Navigators.AUTH_NAVIGATOR,
+                  }),
+                ],
               }),
-            ],
-          }),
-        );
-      });
+            );
+          },
+        });
+      },
+    });
+    return;
   };
   const onTNC = () => {};
   const onFAQ = () => {};

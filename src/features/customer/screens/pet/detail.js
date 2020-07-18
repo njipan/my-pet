@@ -60,7 +60,7 @@ const DetailScreen = ({navigation, ...props}) => {
         setPet(response.data.data);
       })
       .catch((e) => {
-        console.log(e.response.data);
+        console.log();
       })
       .finally(() => setLoading(false));
   }, []);

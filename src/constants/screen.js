@@ -14,6 +14,7 @@ export const PROFILE_MERCHANT = 'Profile_Merchant';
 
 export const HOME_CUSTOMER = 'Home_Customer';
 export const VET_SERVICE_CUSTOMER = 'VET_SERVICE_CUSTOMER';
+export const VET_SERVICE_LIST_CUSTOMER = 'Vet_Service_Customer';
 export const VET_SERVICE_DETAIL_CUSTOMER = 'VET_SERVICE_DETAIL_CUSTOMER';
 
 export const ORDER_CUSTOMER = 'ORDER_CUSTOMER';

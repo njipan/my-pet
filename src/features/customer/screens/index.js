@@ -8,6 +8,7 @@ import CreatePetScreen from './pet-create';
 import VetServiceScreen from './vet-service';
 import VetServiceDetailScreen from './vet-service-detail';
 import * as Pet from './pet';
+import * as Vet from './vet';
 
 export {
   HomeScreen,
@@ -18,6 +19,7 @@ export {
   EventNotificationScreen,
   CreatePetScreen,
   Pet,
+  Vet,
   VetServiceScreen,
   VetServiceDetailScreen,
 };

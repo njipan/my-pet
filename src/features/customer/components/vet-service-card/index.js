@@ -4,7 +4,7 @@ import {
   Image,
   Text,
   View,
-  TouchableOpacity,
+  TouchableHighlight,
   StyleSheet,
 } from 'react-native';
 import {Heading, Icons} from '@component';
@@ -19,7 +19,10 @@ const VetServiceCard = ({
   pictureUrl = null,
 }) => {
   return (
-    <TouchableOpacity onPress={() => onPress()} style={styles.container}>
+    <TouchableHighlight
+      onPress={() => onPress()}
+      style={styles.container}
+      underlayColor="#ffffff0">
       <View style={styles.card}>
         <View>
           <Image
@@ -64,7 +67,7 @@ const VetServiceCard = ({
           </View>
         </View>
       </View>
-    </TouchableOpacity>
+    </TouchableHighlight>
   );
 };
 

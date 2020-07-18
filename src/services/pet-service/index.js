@@ -5,8 +5,9 @@ export const create = (data) => {
   return authAxios.post(Apis.PET_CREATE, data);
 };
 
-export const get = (id) => {
-  return authAxios.get(`${Apis.PET_ALL}/${id}`);
+export const get = async (id) => {
+  const response = authAxios.get(`${Apis.PET_ALL}/${id}`);
+  return response.data.data;
 };
 
 export const all = async (config = {}) => {

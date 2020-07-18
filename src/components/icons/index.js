@@ -14,6 +14,8 @@ import MiniPhone from './mini-phone';
 export {default as CatIcon} from './cat-icon';
 export {default as DogIcon} from './dog-icon';
 export {default as MoreVertIcon} from './more-vert';
+export {default as StarIcon} from './star-icon';
+export {default as PhoneLarge} from './phone-icon';
 
 export {
   MailOutlineFormIcon,
