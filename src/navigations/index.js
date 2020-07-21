@@ -13,6 +13,7 @@ const RootNavigator = createStackNavigator(
     [Navigators.MERCHANT_NAVIGATOR]: Merchant.Navigator,
     [Navigators.CUSTOMER_NAVIGATOR]: Customer.Navigator,
     [Modal.Type.CONFIRMATION]: Modal.Confirmation,
+    [Modal.Type.SELECT]: Modal.Select,
   },
   {
     mode: 'modal',

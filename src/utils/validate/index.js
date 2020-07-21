@@ -9,6 +9,8 @@ const validate = async (body, schema) => {
 };
 
 const singleValidate = (value, schema) => {
+  if (!schema) return null;
+
   const isRequired =
     typeof schema.required == 'undefined' ? true : schema.required;
   if (isRequired == true && validator.isEmpty(value || '')) {

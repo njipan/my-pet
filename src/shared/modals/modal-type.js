@@ -1,1 +1,2 @@
 export const CONFIRMATION = 'CONFIRMATION_MODAL';
+export const SELECT = 'SELECT_MODAL';

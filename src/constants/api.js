@@ -3,10 +3,15 @@ export const url = (uri) => `${BASE_URL}${uri}`;
 export const SIGN_IN = '/users/login';
 export const REGISTER = '/users/register';
 export const CHECK_TOKEN = '/users/profile';
+export const CHECK_TOKEN_MERCHANT = '/users/profile/merchant';
+export const UPDATE_PASSWORD = '/users/profile/password';
 
 export const PROFILE_CUSTOMER = '/users/profile';
 export const UPDATE_CUSTOMER = '/users/profile';
 export const UPDATE_PASSWORD_CUSTOMER = '/users/profile/password';
+
+export const PROFILE_MERCHANT = '/users/profile/merchant';
+export const UPDATE_MERCHANT = '/users/profile';
 
 export const VET_SERVICE_ALL = `/merchants`;
 

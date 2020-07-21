@@ -1,5 +1,5 @@
 import generalAxios from '@util/axios';
-import {Apis} from '@constant';
+import {Apis, UserType} from '@constant';
 import AsyncStorage from '@react-native-community/async-storage';
 
 export const login = ({email, password, type}) => {
@@ -26,12 +26,15 @@ export const setToken = (token) => {
   return AsyncStorage.setItem('_token', token);
 };
 
-export const check = (token) => {
-  return generalAxios.get(Apis.CHECK_TOKEN, {
-    headers: {
-      Authorization: `Bearer ${token}`,
+export const check = (token, type) => {
+  return generalAxios.get(
+    type == UserType.MERCHANT ? Apis.CHECK_TOKEN_MERCHANT : CHECK_TOKEN,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     },
-  });
+  );
 };
 
 export const register = (data) => {

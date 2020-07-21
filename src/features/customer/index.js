@@ -141,15 +141,7 @@ export const Navigator = createStackNavigator({
     },
   },
   [Screens.DETAIL_PET_CUSTOMER]: CustomerScreens.Pet.DetailScreen,
-  [Screens.EDIT_PET_CUSTOMER]: {
-    screen: CustomerScreens.Pet.CreateScreen,
-    navigationOptions: {
-      title: 'Ubah Peliharaan',
-      headerTitleStyle: {
-        fontFamily: 'sans-serif-medium',
-      },
-    },
-  },
+  [Screens.EDIT_PET_CUSTOMER]: CustomerScreens.Pet.EditScreen,
   [Screens.VET_SERVICE_DETAIL_CUSTOMER]: {
     screen: VetServiceDetailScreen,
     navigationOptions: (props) => {

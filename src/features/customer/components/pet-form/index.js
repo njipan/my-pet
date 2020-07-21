@@ -12,6 +12,7 @@ import {
   PicturePicker,
 } from '@component';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {Sex} from '@constant';
 
 const PetFormFirst = ({
   type = 0,
@@ -29,8 +30,8 @@ const PetFormFirst = ({
 }) => {
   const sexs = [
     {label: 'Pilih salah satu', value: ''},
-    {label: 'Laki-Laki', value: 'MALE'},
-    {label: 'Perempuan', value: 'FEMALE'},
+    {label: Sex.translate(Sex.MALE), value: Sex.MALE},
+    {label: Sex.translate(Sex.FEMALE), value: Sex.FEMALE},
   ];
   return (
     <View style={{flex: 1}}>
@@ -103,7 +104,7 @@ const PetFormFirst = ({
           label="Berat Badan (Optional)"
           onChangeText={onWeightChange}
           error={errorMessages.weight || false}
-          value={weight || ''}
+          value={`${weight}` || ''}
         />
       </View>
     </View>

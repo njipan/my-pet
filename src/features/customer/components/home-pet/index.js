@@ -11,7 +11,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {Mixins, Colors} from '@style';
+import {Mixins, Colors, Typography} from '@style';
 import {Heading, Badge, Icons} from '@component';
 import PetItemCard from './../pet-item-card';
 
@@ -65,6 +65,7 @@ export const AddPetCard = ({
 const HomePet = ({
   onAddPress = () => {},
   onCardPress = () => {},
+  onCardEditPress = () => {},
   data = [],
   ...props
 }) => {
@@ -77,15 +78,16 @@ const HomePet = ({
         end={{x: 0, y: 1}}
         colors={['#ffffff', '#fff0c8']}>
         <View style={{marginHorizontal: 16}}>
-          <Heading
-            type="h4"
-            text={
-              !Array.isArray(data) || data.length < 1
-                ? `Belum Ada Hewan Peliharaan`
-                : `Hewan Peliharaan`
-            }
-            color={Colors.BLACK87}
-          />
+          <Text
+            style={{
+              ...Typography.heading('h3'),
+              fontSize: 18,
+              color: Colors.BLACK87,
+            }}>
+            {!Array.isArray(data) || data.length < 1
+              ? `Belum Ada Hewan Peliharaan`
+              : `Hewan Peliharaan`}
+          </Text>
         </View>
         {data && data.length > 0 ? (
           <ScrollView
@@ -93,14 +95,17 @@ const HomePet = ({
             showsHorizontalScrollIndicator={false}
             style={{paddingVertical: 16}}>
             <View style={{marginHorizontal: 8}} />
-            {data.map((pet) => {
+            {data.map((pet, idx) => {
               return (
                 <TouchableHighlight
                   key={pet.id}
                   style={{marginRight: 16, width: deviceWidth * 0.85}}
                   onPress={() => onCardPress(pet.id)}
                   underlayColor="transparent">
-                  <PetItemCard />
+                  <PetItemCard
+                    data={{...pet, dateOfBirth: pet.date_of_birth}}
+                    {...props}
+                  />
                 </TouchableHighlight>
               );
             })}

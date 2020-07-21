@@ -3,14 +3,17 @@ import {
   StyleSheet,
   useWindowDimensions,
   View,
-  ScrollView,
   Text,
   Image,
+  ActivityIndicator,
 } from 'react-native';
-import {Badge} from '@component';
+import moment from 'moment';
+import 'moment/locale/id';
+
+import {Badge, Icons} from '@component';
 import {Sex} from '@constant';
 import {Colors, Mixins, Typography} from '@style';
-import moment from 'moment';
+import {parseDateFromNow} from '@util/moment';
 
 export const InfoItem = (props) => {
   const {label = '', text = ''} = props;
@@ -38,7 +41,7 @@ export const PetHistoryItem = ({title = '', text = '', image = null}) => {
         paddingBottom: 6,
         marginBottom: 12,
       }}>
-      <Image source={image} style={{width: 40, height: 40}} />
+      <Icons.MedicinePrimaryIcon size={32} />
       <View
         style={{
           flex: 1,
@@ -72,14 +75,28 @@ const PetDetail = ({data, ...props}) => {
   const deviceHeight = useWindowDimensions().height;
   return (
     <View>
-      <Image
-        style={{
-          width: '100%',
-          height: deviceHeight * 0.35,
-          backgroundColor: 'black',
-          resizeMode: 'cover',
-        }}
-      />
+      {data.pictureLoading ? (
+        <View
+          style={{
+            width: '100%',
+            height: deviceHeight * 0.35,
+            backgroundColor: 'black',
+            justifyContent: 'center',
+          }}>
+          <ActivityIndicator color={Colors.LIGHT_GREY} />
+        </View>
+      ) : (
+        <Image
+          style={{
+            width: '100%',
+            height: deviceHeight * 0.35,
+            backgroundColor: 'black',
+            resizeMode: 'cover',
+          }}
+          source={data.picture}
+        />
+      )}
+
       <View
         style={{padding: 16, backgroundColor: Colors.WHITE, marginBottom: 10}}>
         <Text
@@ -92,13 +109,15 @@ const PetDetail = ({data, ...props}) => {
           {data.name || ''}
         </Text>
         <Text style={styles.textDetail}>Ras: {data.breed || ''}</Text>
-        <Text style={styles.textDetail}>Usia: 6 Bulan</Text>
+        <Text style={styles.textDetail}>
+          Usia: {parseDateFromNow(data.date_of_birth)}
+        </Text>
         <View style={{flexDirection: 'row', marginTop: 6}}>
           <Badge icon={Sex.getIcon(data.sex)} text={Sex.translate(data.sex)} />
           <View style={{marginHorizontal: 2}} />
           <Badge
             icon={require('@asset/icons/weight.png')}
-            text={data.weight || `0 Kg`}
+            text={`${data.weight || 0} Kg`}
           />
         </View>
       </View>
@@ -117,7 +136,7 @@ const PetDetail = ({data, ...props}) => {
         </View>
       </View>
 
-      <View style={styles.section}>
+      <View style={{...styles.section, marginBottom: 0}}>
         <Text style={styles.textHeading}>Riwayat Kesehatan</Text>
         <View>
           <PetHistoryItem
@@ -136,6 +155,7 @@ const styles = StyleSheet.create({
     fontFamily: Typography.FONT_FAMILY_BOLD,
     fontSize: Typography.FONT_SIZE_14,
     color: Colors.GREY,
+    textTransform: 'capitalize',
   },
   textHeading: {
     ...Typography.heading('h4'),
@@ -156,6 +176,7 @@ const styles = StyleSheet.create({
     fontFamily: Typography.FONT_FAMILY_BOLD,
     fontSize: 14,
     color: Colors.BLACK,
+    textTransform: 'capitalize',
   },
 });
 

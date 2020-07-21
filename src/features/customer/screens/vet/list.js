@@ -28,7 +28,9 @@ const VetServiceListScreen = ({navigation, ...props}) => {
     try {
       const vets = await VetService.getAll({});
       setVets(vets);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const refresh = async () => {

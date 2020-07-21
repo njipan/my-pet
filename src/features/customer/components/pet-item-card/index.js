@@ -1,19 +1,69 @@
 import React from 'react';
-import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {
+  ActivityIndicator,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import moment from 'moment';
+import 'moment/locale/id';
+
 import {Heading, Badge} from '@component';
-import {Colors} from '@style';
+import {PetService} from '@service';
+import {Colors, Typography} from '@style';
+import {Screens, Sex} from '@constant';
+import {encodeFromBuffer} from '@util/file';
+import {parseDateFromNow} from '@util/moment';
 
 const PetDetailInfo = ({label = '', value = ''}) => {
   return (
     <View style={{flexDirection: 'row'}}>
-      <Text>{label}</Text>
-      <Text style={{color: Colors.PRIMARY, fontWeight: '700'}}>{value}</Text>
+      <Text style={{color: Colors.LIGHT_GREY}}>{label}</Text>
+      <Text
+        style={{
+          color: Colors.PRIMARY,
+          fontWeight: '700',
+          fontFamily: Typography.FONT_FAMILY_REGULAR,
+        }}>
+        {value}
+      </Text>
     </View>
   );
 };
 
-const PetItemCard = (data = {}, onPress = () => {}, onEditPress = () => {}) => {
+const PetItemCard = ({
+  data = {},
+  onPress = () => {},
+  onEditPress = () => {},
+  ...props
+}) => {
   const heightCard = 160;
+  const getAge = (date = null) => {
+    const parseDate = moment(date, 'DD-MM-YYYY');
+    return parseDate.isValid() ? parseDate.locale('id').fromNow(true) : '-';
+  };
+
+  const [picture, setPicture] = React.useState(null);
+  const [pictureLoading, setPictureLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    getPicture();
+  }, []);
+
+  const getPicture = async () => {
+    try {
+      const response = await PetService.get(data.id);
+      if (response.pictures.file.data) {
+        const uri = await encodeFromBuffer(response.pictures.file.data);
+        setPicture({uri: `data:image/jpeg;base64,${uri}`});
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    setPictureLoading(false);
+  };
+
   return (
     <View
       style={{
@@ -24,17 +74,29 @@ const PetItemCard = (data = {}, onPress = () => {}, onEditPress = () => {}) => {
         elevation: 3,
         padding: 14,
         flexDirection: 'row',
+        marginTop: 4,
+        marginBottom: 4,
       }}>
-      <View>
-        <Image
-          style={{
-            width: heightCard - 28,
-            height: heightCard - 28,
-            backgroundColor: 'white',
-            borderRadius: 10,
-            resizeMode: 'cover',
-          }}
-        />
+      <View
+        style={{
+          width: heightCard - 28,
+          height: heightCard - 28,
+          backgroundColor: 'white',
+          justifyContent: 'center',
+        }}>
+        {pictureLoading ? (
+          <ActivityIndicator color={Colors.LIGHT_GREY} />
+        ) : (
+          <Image
+            style={{
+              width: heightCard - 28,
+              height: heightCard - 28,
+              borderRadius: 10,
+              resizeMode: 'cover',
+            }}
+            source={picture}
+          />
+        )}
       </View>
       <View
         style={{
@@ -54,7 +116,7 @@ const PetItemCard = (data = {}, onPress = () => {}, onEditPress = () => {}) => {
           }}>
           <Image
             style={{width: 32, height: 32}}
-            source={require('./../../../../assets/icons/animal/cat.png')}
+            source={require('@asset/icons/animal/cat.png')}
           />
           <View
             style={{
@@ -65,7 +127,7 @@ const PetItemCard = (data = {}, onPress = () => {}, onEditPress = () => {}) => {
             }}>
             <Heading
               type="h4"
-              text="Milo sdaf dsafdsa"
+              text={data.name || ''}
               numberOfLines={1}
               ellipsizeMode="tail"
               styleText={{
@@ -75,16 +137,28 @@ const PetItemCard = (data = {}, onPress = () => {}, onEditPress = () => {}) => {
               }}
             />
           </View>
-          <TouchableOpacity onPress={() => onEditPress()}>
-            <Image
-              style={{width: 22, height: 22}}
-              source={require('./../../../../assets/icons/pencil-grey.png')}
-            />
-          </TouchableOpacity>
+          {pictureLoading ? null : (
+            <TouchableOpacity
+              onPress={() =>
+                props.navigation.navigate(Screens.EDIT_PET_CUSTOMER, {
+                  data,
+                  picture,
+                  savedState: props.navigation.state,
+                })
+              }>
+              <Image
+                style={{width: 22, height: 22}}
+                source={require('@asset/icons/pencil-grey.png')}
+              />
+            </TouchableOpacity>
+          )}
         </View>
         <View style={{backgroundColor: 'white ', flex: 1, paddingVertical: 8}}>
-          <PetDetailInfo label="Ras : " value="Munchkin" />
-          <PetDetailInfo label="Usia : " value="6 Bulan" />
+          <PetDetailInfo label="Ras : " value={data.breed || '-'} />
+          <PetDetailInfo
+            label="Usia : "
+            value={parseDateFromNow(data.dateOfBirth)}
+          />
         </View>
         <View
           style={{
@@ -92,9 +166,15 @@ const PetItemCard = (data = {}, onPress = () => {}, onEditPress = () => {}) => {
             height: 32,
             flexDirection: 'row',
           }}>
-          <Badge icon={require('@asset/icons/sex/male.png')} text={`Jantan`} />
+          <Badge
+            icon={data.sex ? Sex.getIcon(data.sex) : null}
+            text={Sex.translate(data.sex) || '-'}
+          />
           <View style={{marginHorizontal: 4}} />
-          <Badge icon={require('@asset/icons/weight.png')} text={`30 Kg`} />
+          <Badge
+            icon={require('@asset/icons/weight.png')}
+            text={`${data.weight || 0} Kg`}
+          />
         </View>
       </View>
     </View>

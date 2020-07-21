@@ -1,5 +1,11 @@
 import React from 'react';
-import {View, RefreshControl, ScrollView, StyleSheet} from 'react-native';
+import {
+  View,
+  StatusBar,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+} from 'react-native';
 import HomePet from './../../components/home-pet';
 import {Screens} from '@constant';
 import {Colors} from '@style';
@@ -40,14 +46,20 @@ const HomeScreen = ({navigation, ...props}) => {
         />
       }>
       <View>
+        <StatusBar backgroundColor="white" barStyle="dark-content" />
         <HomePet
-          onCardPress={() =>
-            navigation.navigate(Screens.DETAIL_PET_CUSTOMER, {id: 4})
-          }
+          onCardPress={(id) => {
+            navigation.navigate(Screens.DETAIL_PET_CUSTOMER, {
+              id,
+              backTo: navigation.state,
+              reload: getMyPets,
+            });
+          }}
           onAddPress={() => {
             navigation.navigate(Screens.ADD_PET_CUSTOMER);
           }}
           data={pets}
+          navigation={navigation}
         />
         <View style={{height: 1000, backgroundColor: 'white'}}></View>
       </View>

@@ -46,7 +46,7 @@ const ProfileSetting = (props) => {
       <Heading
         type="h4"
         text="Pengaturan Profil"
-        color={Colors.BLACK87}
+        color={Colors.BLACK80}
         styleText={{
           fontFamily: 'sans-serif-normal',
           fontSize: 18,

@@ -13,6 +13,7 @@ import {
 
 const AuthNavigatorConfig = {
   initialRouteName: Screens.SPLASH_SCREEN,
+  mode: 'card',
 };
 
 const RouteConfigs = {

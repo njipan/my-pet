@@ -1,6 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import {NavigationActions, StackActions} from 'react-navigation';
-import {StyleSheet, Image, View, Text, ToastAndroid} from 'react-native';
+import {
+  StatusBar,
+  StyleSheet,
+  Image,
+  View,
+  Text,
+  ToastAndroid,
+} from 'react-native';
 import {Colors, Mixins, Typography} from './../../../../styles';
 import {Texts} from './../../../../constants';
 import {Heading} from './../../../../components';
@@ -61,7 +68,7 @@ const LoginScreen = ({navigation, ...props}) => {
       const response = await AuthService.login(data);
       await AuthService.setToken(response.data.data.token);
       await AuthService.setType(`${data.type}`);
-      const navigationName = Navigators.CUSTOMER_NAVIGATOR;
+      let navigationName = Navigators.CUSTOMER_NAVIGATOR;
       if (data.type == 2) navigationName = Navigators.MERCHANT_NAVIGATOR;
 
       navigation.dispatch(
@@ -72,6 +79,7 @@ const LoginScreen = ({navigation, ...props}) => {
         }),
       );
     } catch (err) {
+      console.log(err);
       ToastAndroid.show(
         'Gagal, periksa kembali email dan password!',
         ToastAndroid.LONG,
@@ -95,6 +103,7 @@ const LoginScreen = ({navigation, ...props}) => {
 
   return (
     <View style={{...styles.container, width: '100%'}}>
+      <StatusBar backgroundColor="white" barStyle="dark-content" />
       <ScrollView
         style={{
           width: '100%',

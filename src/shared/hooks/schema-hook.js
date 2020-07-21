@@ -6,7 +6,7 @@ const useSchema = (initData = {}, initMessages = {}, schema = {}) => {
   const [messages, setMessages] = React.useState(initMessages);
 
   const setFormAndValidate = (key, value) => {
-    const message = singleValidate(value, schema[key]);
+    const message = singleValidate(value, schema[key] || null);
     setMessages({...messages, [key]: message});
     setData({...data, [key]: value});
   };
@@ -20,9 +20,9 @@ const useSchema = (initData = {}, initMessages = {}, schema = {}) => {
     setFormAndValidate,
     setValueAndValidate: (key, fn) => (value) => {
       setFormAndValidate(key, value);
-      fn(key, value, data);
+      if (fn) fn(key, value, data);
     },
   };
 };
-
+export {useSchema};
 export default useSchema;

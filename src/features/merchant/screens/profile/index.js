@@ -1,21 +1,15 @@
-import React from 'react';
-import {View, Text, Button} from 'react-native';
-import {Icons} from '@component';
+import {createStackNavigator} from 'react-navigation-stack';
 import {Screens} from '@constant';
 
-const ProfileScreen = ({navigation}) => {
-  return (
-    <View>
-      <Icons.ProfileTabBarIcon focused={false} />
-      <Text>ProfilXe</Text>
-      <Button
-        title="Go to Home"
-        onPress={() => {
-          navigation.navigate(Screens.ORDER_MERCHANT);
-        }}
-      />
-    </View>
-  );
-};
+import ProfileDetailScreen from './detail';
+import ProfileEditScreen from './edit';
 
-export default ProfileScreen;
+const MerchantProfileStackNavigator = createStackNavigator({
+  [Screens.PROFILE_DETAIL_MERCHANT]: ProfileDetailScreen,
+});
+
+export default MerchantProfileStackNavigator;
+
+export const MerchantProfileNavigator = {
+  [Screens.PROFILE_EDIT_MERCHANT]: ProfileEditScreen,
+};

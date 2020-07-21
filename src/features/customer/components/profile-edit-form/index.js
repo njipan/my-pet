@@ -6,15 +6,10 @@ import {
   Text,
   Image,
 } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
-import {
-  Dropdown,
-  ButtonFluid,
-  Icons,
-  TextInput,
-  PicturePicker,
-} from '@component';
-import {Colors, Mixins, Typography} from '@style';
+import {Dropdown, TextInput} from '@component';
+import {Colors, Typography} from '@style';
 import {Sex} from '@constant';
 
 const ProfileEditForm = (props) => {
@@ -31,6 +26,8 @@ const ProfileEditForm = (props) => {
     data = {},
     isUploadingPicture = false,
   } = props;
+
+  const [showDatePicker, setShowDatePicker] = React.useState(false);
 
   const sexData = [
     {label: 'Laki-Laki', value: Sex.MALE},
@@ -55,6 +52,19 @@ const ProfileEditForm = (props) => {
 
   return (
     <View>
+      {showDatePicker && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          mode="date"
+          value={new Date()}
+          is24Hour={true}
+          display="default"
+          onChange={(e) => {
+            setShowDatePicker(false);
+            onBirthDateChange(e.nativeEvent.timestamp || null);
+          }}
+        />
+      )}
       <TouchableOpacity
         style={{backgroundColor: Colors.BLACK10, height: 200}}
         onPress={onPictureChange}>
@@ -101,7 +111,7 @@ const ProfileEditForm = (props) => {
           error={errorMessages.phone}
           value={data.phone}
         />
-        <TouchableOpacity onPress={onBirthDateChange}>
+        <TouchableOpacity onPress={() => setShowDatePicker(true)}>
           <TextInput
             editable={false}
             label="Tanggal Lahir"

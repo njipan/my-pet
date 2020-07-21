@@ -1,7 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import {NavigationActions, StackActions} from 'react-navigation';
 
-import {StyleSheet, Image, View, Easing, Animated} from 'react-native';
+import {
+  StatusBar,
+  StyleSheet,
+  Image,
+  View,
+  Easing,
+  Animated,
+} from 'react-native';
 import {Colors} from './../../../styles';
 import LogoImagePrimary from './../../../assets/logos/LogoPrimary_2x.png';
 import LogoTextLight from './../../../assets/logos/LogoTextLight_2x.png';
@@ -17,8 +24,9 @@ const SplashScreen = ({navigation}) => {
     try {
       const token = await AuthService.getToken();
       if (!token) throw Error(null);
-      await AuthService.check(token);
       const type = await AuthService.getType();
+      await AuthService.check(token, type);
+
       if (type == UserType.CUSTOMER) screen = Navigators.CUSTOMER_NAVIGATOR;
       else if (type == UserType.MERCHANT)
         screen = Navigators.MERCHANT_NAVIGATOR;
@@ -55,6 +63,10 @@ const SplashScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar
+        backgroundColor={Colors.SPLASH_SCREEN}
+        barStyle="light-content"
+      />
       <View style={styles.logoContainer}>
         <Image source={LogoImagePrimary} style={styles.logo} />
         <Image source={LogoTextLight} style={styles.text} />

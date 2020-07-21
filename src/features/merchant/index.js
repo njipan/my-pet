@@ -10,6 +10,10 @@ import {Icons} from '@component';
 import * as MerchantScreens from './screens';
 import BottomTabBar from './components/layouts/bottom-tab';
 import {Text, View} from 'react-native';
+import MerchantProfileStackNavigator, {
+  MerchantProfileNavigator,
+} from './screens/profile';
+import {ChangePasswordScreen} from '@shared/screens';
 
 const Pesanan = () => {
   return (
@@ -63,16 +67,7 @@ const OrderStackNavigator = createStackNavigator({
   },
 });
 
-const ProfileStackNavigator = createStackNavigator({
-  [Screens.PROFILE_MERCHANT]: {
-    screen: MerchantScreens.ProfileScreen,
-    navigationOptions: {
-      title: '',
-    },
-  },
-});
-
-export const Navigator = createBottomTabNavigator(
+export const MerchantBottomTabNavigator = createBottomTabNavigator(
   {
     OrderStackNavigator: {
       screen: OrderStackNavigator,
@@ -81,8 +76,8 @@ export const Navigator = createBottomTabNavigator(
         title: 'Pesanan',
       },
     },
-    ProfileStackNavigator: {
-      screen: ProfileStackNavigator,
+    MerchantProfileStackNavigator: {
+      screen: MerchantProfileStackNavigator,
       navigationOptions: {
         tabBarIcon: Icons.ProfileTabBarIcon,
         title: 'Profil',
@@ -100,8 +95,15 @@ export const Navigator = createBottomTabNavigator(
   },
 );
 
-// export const Navigator = createStackNavigator({
-//   MerchantBottomTabNavigator: {
-//     screen: MerchantBottomTabNavigator,
-//   },
-// });
+export const Navigator = createStackNavigator({
+  MerchantBottomTabNavigator: {
+    screen: MerchantBottomTabNavigator,
+    navigationOptions: () => {
+      return {
+        header: null,
+      };
+    },
+  },
+  ...MerchantProfileNavigator,
+  [Screens.CHANGE_PASSWORD_MERCHANT]: ChangePasswordScreen,
+});

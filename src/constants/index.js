@@ -6,5 +6,6 @@ import * as Apis from './api';
 import * as Animal from './animal';
 import * as Sex from './sex';
 import * as UserType from './user-type';
+import * as Time from './time';
 
-export {Animal, Apis, Sex, Navigators, Screens, Texts, Types, UserType};
+export {Animal, Apis, Sex, Navigators, Screens, Texts, Time, Types, UserType};

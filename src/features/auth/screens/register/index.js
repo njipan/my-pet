@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, ToastAndroid, Text} from 'react-native';
+import {StatusBar, View, ToastAndroid, Text} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Screens} from '@constant';
 import RegisterForm from './../../components/form/register-form';
@@ -84,7 +84,7 @@ const RegisterScreen = ({navigation}) => {
     try {
       const messages = await validate(data, RegisterSchema);
       setErrorMessages({...messages});
-      if (isObjectValuesNull(messages)) {
+      if (!isObjectValuesNull(messages)) {
         ToastAndroid.show(
           'Oops..\nLengkapi form yang tersedia',
           ToastAndroid.LONG,
@@ -98,6 +98,7 @@ const RegisterScreen = ({navigation}) => {
 
   return (
     <ScrollView>
+      <StatusBar backgroundColor="white" barStyle="dark-content" />
       <View
         style={{
           justifyContent: 'center',

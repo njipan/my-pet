@@ -8,6 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
+import moment from 'moment';
 
 import {CustomerService, PictureService} from '@service';
 import {useSchema} from '@shared/hooks';
@@ -97,6 +98,12 @@ const ProfileEditScreen = ({navigation, ...props}) => {
     getMe();
   }, []);
 
+  const onBirthDateChange = (timestamp) => {
+    const date = moment(new Date(timestamp));
+    const dateString = date.isValid() ? date.format('DD-MM-YYYY') : null;
+    return setValueAndValidate('birthDate', injectParams)(dateString);
+  };
+
   const onPictureChange = () => {
     const options = {
       title: 'Pilih Foto',
@@ -114,6 +121,7 @@ const ProfileEditScreen = ({navigation, ...props}) => {
         const {id} = res.data.data;
         setPicture({uri: response.uri});
         setData({...data, pictureId: id});
+        setValueAndValidate('pictureId', injectParams)(id);
       } catch (err) {
         ToastAndroid.show('Gagal upload foto', ToastAndroid.LONG);
       }
@@ -136,7 +144,7 @@ const ProfileEditScreen = ({navigation, ...props}) => {
           onNameChange: setValueAndValidate('name', injectParams),
           onEmailChange: setValueAndValidate('email', injectParams),
           onPhoneChange: setValueAndValidate('phone', injectParams),
-          onBirthDateChange: () => alert('BIRTH DATE PRESSED'),
+          onBirthDateChange,
           onPlaceChange: setValueAndValidate('birthPlace', injectParams),
           onSexChange: setValueAndValidate('sex', injectParams),
           isUploadingPicture: isUploading,

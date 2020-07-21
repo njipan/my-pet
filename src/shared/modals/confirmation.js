@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import {Heading, ButtonFluid} from '@component';
-import {Colors} from '@style';
+import {Colors, Typography} from '@style';
 import Card from './components/card';
 
 const Confirmation = ({navigation, ...props}) => {
@@ -25,7 +25,7 @@ const Confirmation = ({navigation, ...props}) => {
 
   React.useEffect(() => {
     if (typeof onLoad == 'function') onLoad(navigation);
-  }, []);
+  }, [isLoading]);
 
   const callback = (value) => {
     onCallback(value, navigation.goBack, navigation);
@@ -56,8 +56,16 @@ const Confirmation = ({navigation, ...props}) => {
         </View>
       )}
       {!isLoading && (
-        <Card>
-          <Heading type="h4" text={title || ''} />
+        <Card styleRoot={{padding: 20, borderRadius: 16}}>
+          <Text
+            style={{
+              fontFamily: Typography.FONT_FAMILY_REGULAR,
+              fontWeight: '700',
+              color: Colors.REGULAR,
+              fontSize: 18,
+            }}>
+            {title || ''}
+          </Text>
           <View style={{marginVertical: 10}}>
             <Text
               style={{
@@ -86,9 +94,9 @@ const Confirmation = ({navigation, ...props}) => {
               }}
               textColor={Colors.PRIMARY}
               styleText={{
+                fontFamily: Typography.FONT_FAMILY_REGULAR,
+                fontWeight: '700',
                 fontSize: 16,
-                fontFamily: 'sans-serif-normal',
-                fontWeight: 'bold',
               }}
               onPress={() => {
                 callback(reverse ? true : false);
@@ -107,9 +115,9 @@ const Confirmation = ({navigation, ...props}) => {
                   paddingRight: 16,
                 }}
                 styleText={{
+                  fontFamily: Typography.FONT_FAMILY_REGULAR,
+                  fontWeight: '700',
                   fontSize: 16,
-                  fontFamily: 'sans-serif-normal',
-                  fontWeight: 'bold',
                 }}
                 onPress={() => {
                   callback(reverse ? false : true);

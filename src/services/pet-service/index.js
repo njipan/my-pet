@@ -6,7 +6,7 @@ export const create = (data) => {
 };
 
 export const get = async (id) => {
-  const response = authAxios.get(`${Apis.PET_ALL}/${id}`);
+  const response = await authAxios.get(`${Apis.PET_ALL}/${id}`);
   return response.data.data;
 };
 
@@ -17,4 +17,8 @@ export const all = async (config = {}) => {
 
 export const update = (id, data) => {
   return authAxios.put(Apis.PET_UPDATE, {...data, id});
+};
+
+export const remove = (id) => {
+  return authAxios.delete(Apis.PET_DELETE, {data: {id}});
 };

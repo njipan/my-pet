@@ -10,7 +10,14 @@ export const HOME_MERCHANT = 'Home_Merchant';
 export const ORDER_MERCHANT = 'Order_Merchant';
 export const ORDER_COMING_MERCHANT = 'Order_Coming_Merchant';
 export const ORDER_ON_PROGRESS_MERCHANT = 'Order_On_Progress_Merchant';
+
 export const PROFILE_MERCHANT = 'Profile_Merchant';
+export const PROFILE_DETAIL_MERCHANT = 'Profile_Detail_Merchant';
+export const PROFILE_EDIT_MERCHANT = 'Profile_Edit_Merchant';
+
+export const CHANGE_PASSWORD_MERCHANT = 'Change_Password_Merchant';
+
+// ------------------------------------------------
 
 export const HOME_CUSTOMER = 'Home_Customer';
 export const VET_SERVICE_CUSTOMER = 'VET_SERVICE_CUSTOMER';

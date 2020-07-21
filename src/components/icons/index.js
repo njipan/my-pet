@@ -16,6 +16,7 @@ export {default as DogIcon} from './dog-icon';
 export {default as MoreVertIcon} from './more-vert';
 export {default as StarIcon} from './star-icon';
 export {default as PhoneLarge} from './phone-icon';
+export {default as MedicinePrimaryIcon} from './medicine-primary-icon';
 
 export {
   MailOutlineFormIcon,
