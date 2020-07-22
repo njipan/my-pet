@@ -5,10 +5,11 @@ const useSchema = (initData = {}, initMessages = {}, schema = {}) => {
   const [data, setData] = React.useState(initData);
   const [messages, setMessages] = React.useState(initMessages);
 
-  const setFormAndValidate = (key, value) => {
+  const setFormAndValidate = (key, value, fn) => {
     const message = singleValidate(value, schema[key] || null);
     setMessages({...messages, [key]: message});
     setData({...data, [key]: value});
+    if (fn) fn(key, value, data);
   };
 
   return {
@@ -19,8 +20,7 @@ const useSchema = (initData = {}, initMessages = {}, schema = {}) => {
     setMessages,
     setFormAndValidate,
     setValueAndValidate: (key, fn) => (value) => {
-      setFormAndValidate(key, value);
-      if (fn) fn(key, value, data);
+      setFormAndValidate(key, value, fn);
     },
   };
 };

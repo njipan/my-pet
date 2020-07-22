@@ -4,6 +4,7 @@ import * as MerchantService from './merchant-service';
 import * as VetService from './vet-service';
 import * as PictureService from './picture-service';
 import * as PetService from './pet-service';
+import * as TreatmentService from './treatment-service';
 
 export {
   AuthService,
@@ -11,5 +12,6 @@ export {
   CustomerService,
   PetService,
   PictureService,
+  TreatmentService,
   VetService,
 };

@@ -13,6 +13,7 @@ import {Text, View} from 'react-native';
 import MerchantProfileStackNavigator, {
   MerchantProfileNavigator,
 } from './screens/profile';
+import {MerchantTreatmentNavigator} from './screens/treatment';
 import {ChangePasswordScreen} from '@shared/screens';
 
 const Pesanan = () => {
@@ -105,5 +106,6 @@ export const Navigator = createStackNavigator({
     },
   },
   ...MerchantProfileNavigator,
+  ...MerchantTreatmentNavigator,
   [Screens.CHANGE_PASSWORD_MERCHANT]: ChangePasswordScreen,
 });

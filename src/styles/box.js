@@ -28,7 +28,8 @@ export const LABEL_TITLE = {
 };
 
 export const LABEL_VALUE = {
-  fontFamily: Typography.FONT_FAMILY_BOLD,
+  fontFamily: Typography.FONT_FAMILY_MEDIUM,
+  fontWeight: '400',
   fontSize: 14,
   color: Colors.BLACK87,
   textTransform: 'capitalize',

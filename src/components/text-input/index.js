@@ -102,6 +102,7 @@ const TextInput = ({
             ...styles.text,
             backgroundColor,
             color: textColor,
+            ...(props.styleText || {}),
           }}
           placeholder={placeholder}
           placeholderTextColor="grey"

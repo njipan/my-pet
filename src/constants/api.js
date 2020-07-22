@@ -13,11 +13,15 @@ export const UPDATE_PASSWORD_CUSTOMER = '/users/profile/password';
 export const PROFILE_MERCHANT = '/users/profile/merchant';
 export const UPDATE_MERCHANT = '/users/profile';
 
-export const VET_SERVICE_ALL = `/merchants`;
-
 export const PET_ALL = `/pets`;
 export const PET_CREATE = `/pets/add`;
 export const PET_UPDATE = `/pets/update`;
 export const PET_DELETE = `/pets/delete`;
+
+export const TREATMENT_CREATE = '/users/profile/merchant/treatment';
+export const TREATMENT_UPDATE = '/users/profile/merchant/treatment';
+export const TREATMENT_DELETE = '/users/profile/merchant/treatment';
+
+export const VET_SERVICE_ALL = `/merchants`;
 
 export const UPLOAD_PICTURE = `/pictures`;

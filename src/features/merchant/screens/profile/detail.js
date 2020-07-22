@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, View} from 'react-native';
+import {RefreshControl, ScrollView, View} from 'react-native';
 import {StackActions, NavigationActions} from 'react-navigation';
 
 import {RightMenu, Icons, ProfileSetting} from '@component';
@@ -13,6 +13,7 @@ import ProfileDetail from './../../components/profile-detail';
 
 const ProfileDetailScreen = ({navigation, ...props}) => {
   const [data, setData] = React.useState({});
+  const [refreshing, setRefreshing] = React.useState(true);
 
   const getMerchant = async () => {
     try {
@@ -30,14 +31,20 @@ const ProfileDetailScreen = ({navigation, ...props}) => {
         operationalHour: response.merchant.operational_hour,
         facility: response.merchant.facility,
         picture: picture,
+        services: response.merchantServices || [],
       };
       setData(body);
     } catch (err) {}
+    setRefreshing(false);
   };
 
   React.useEffect(() => {
     getMerchant();
-    navigation.setParams({reload: getMerchant});
+    navigation.setParams({
+      reload: () => {
+        getMerchant();
+      },
+    });
   }, []);
 
   const onLogoutProcess = async () => {
@@ -77,6 +84,26 @@ const ProfileDetailScreen = ({navigation, ...props}) => {
     });
     return;
   };
+  const onEditPress = (value) => {
+    navigation.navigate(Screens.TREATMENT_EDIT_MERCHANT, {
+      data: value,
+      savedState: navigation.state,
+      reload: () => {
+        setRefreshing(true);
+        getMerchant();
+      },
+    });
+  };
+
+  const onAddPress = () => {
+    navigation.navigate(Screens.TREATMENT_CREATE_MERCHANT, {
+      savedState: navigation.state,
+      reload: () => {
+        setRefreshing(true);
+        getMerchant();
+      },
+    });
+  };
 
   const onTNC = () => {};
   const onFAQ = () => {};
@@ -84,8 +111,12 @@ const ProfileDetailScreen = ({navigation, ...props}) => {
     navigation.navigate(Screens.CHANGE_PASSWORD_MERCHANT, {});
 
   return (
-    <ScrollView>
-      <ProfileDetail data={data} />
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={getMerchant} />
+      }>
+      <ProfileDetail {...{onAddPress, onEditPress, data}} />
       <View style={{backgroundColor: Colors.WHITE, padding: 16}}>
         <ProfileSetting {...{onLogout, onTNC, onFAQ, onChangePassword}} />
       </View>
@@ -98,6 +129,7 @@ ProfileDetailScreen.navigationOptions = ({navigation, ...props}) => {
     {
       label: 'Preview Akun',
       onPress: (ref) => {
+        navigation.navigate(Screens.PROFILE_PREVIEW_MERCHANT);
         ref.hide();
       },
     },

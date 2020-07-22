@@ -6,6 +6,7 @@ export const FORGOT_PASSWORD_SCREEN = 'Forgot_Password';
 export const CHANGE_PASSWORD_SCREEN = 'Change_Password';
 export const VERIFY_CODE_SCREEN = 'Verify_Code';
 
+export const CHANGE_PASSWORD_MERCHANT = 'Change_Password_Merchant';
 export const HOME_MERCHANT = 'Home_Merchant';
 export const ORDER_MERCHANT = 'Order_Merchant';
 export const ORDER_COMING_MERCHANT = 'Order_Coming_Merchant';
@@ -14,8 +15,10 @@ export const ORDER_ON_PROGRESS_MERCHANT = 'Order_On_Progress_Merchant';
 export const PROFILE_MERCHANT = 'Profile_Merchant';
 export const PROFILE_DETAIL_MERCHANT = 'Profile_Detail_Merchant';
 export const PROFILE_EDIT_MERCHANT = 'Profile_Edit_Merchant';
+export const PROFILE_PREVIEW_MERCHANT = 'Profile_Preview_Merchant';
 
-export const CHANGE_PASSWORD_MERCHANT = 'Change_Password_Merchant';
+export const TREATMENT_CREATE_MERCHANT = 'Treatment_Create_Merchant';
+export const TREATMENT_EDIT_MERCHANT = 'Treatment_Edit_Merchant';
 
 // ------------------------------------------------
 

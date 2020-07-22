@@ -92,7 +92,6 @@ const EditScreen = ({navigation, ...props}) => {
     } else {
       const date = moment(new Date(value));
       const dateString = date.format('DD-MM-YYYY');
-      console.log(date);
       message = singleValidate(dateString, PetSchema.dateOfBirth);
 
       if (message == null) {
