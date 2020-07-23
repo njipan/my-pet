@@ -39,6 +39,7 @@ const SplashScreen = ({navigation}) => {
         }),
       );
     } catch (err) {
+      console.log(err);
       navigation.navigate(Screens.LOGIN_SCREEN);
     }
   };

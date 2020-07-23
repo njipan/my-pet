@@ -37,19 +37,24 @@ const TextInput = ({
   onChangeText = (text) => {},
   changeBorder = true,
   editable = true,
+  value = null,
   ...props
 }) => {
   const errorMessage = error;
-  const isBorder = (c) => (!error ? c : editable ? Colors.DANGER : c);
+  const isBorder = (c) => (!error ? c : !editable ? Colors.DANGER : c);
   const [outerColor, setOuterColor] = useState(isBorder(Colors.LIGHT_GREY));
+  const [focus, setFocus] = useState(false);
 
   useEffect(() => {
-    if (errorMessage !== false && editable) {
+    if (errorMessage !== false && errorMessage != null) {
       setOuterColor(Colors.DANGER);
+      return;
     }
+    setOuterColor(isBorder(borderColor));
   }, []);
 
   const onFocus = (e) => {
+    setFocus(true);
     if (!errorMessage) {
       setOuterColor(Colors.BLUE);
       return;
@@ -59,6 +64,7 @@ const TextInput = ({
   };
 
   const onBlur = () => {
+    setFocus(false);
     setOuterColor(isBorder(Colors.LIGHT_GREY));
   };
 
@@ -110,6 +116,7 @@ const TextInput = ({
           onBlur={onBlur}
           onChangeText={(text) => onChangeText(text)}
           editable={editable}
+          value={value}
           {...props}
         />
         {errorMessage && (

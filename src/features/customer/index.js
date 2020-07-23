@@ -13,6 +13,7 @@ import BottomTabBar from './components/layouts/bottom-tab';
 import ProfileNavigator, {ProfileSummaryScreen} from './screens/profile';
 import {VetStackNavigator, VetServiceDetailScreen} from './screens/vet';
 import {HomeStackNavigator} from './screens/home';
+import OrderBookingNavigator from './screens/book';
 
 const Pesanan = () => {
   return (
@@ -152,4 +153,5 @@ export const Navigator = createStackNavigator({
     },
   },
   ...ProfileNavigator,
+  ...OrderBookingNavigator,
 });

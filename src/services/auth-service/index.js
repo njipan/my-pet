@@ -28,7 +28,7 @@ export const setToken = (token) => {
 
 export const check = (token, type) => {
   return generalAxios.get(
-    type == UserType.MERCHANT ? Apis.CHECK_TOKEN_MERCHANT : CHECK_TOKEN,
+    type == UserType.MERCHANT ? Apis.CHECK_TOKEN_MERCHANT : Apis.CHECK_TOKEN,
     {
       headers: {
         Authorization: `Bearer ${token}`,

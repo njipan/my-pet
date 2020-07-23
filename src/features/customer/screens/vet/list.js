@@ -46,6 +46,7 @@ const VetServiceListScreen = ({navigation, ...props}) => {
 
   useEffect(() => {
     refresh();
+    navigation.navigate(Screens.ORDER_BOOKING_DETAIL_CUSTOMER);
   }, []);
 
   return (

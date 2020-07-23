@@ -20,7 +20,8 @@ const VetServiceDetailScreen = ({navigation, ...props}) => {
   const deviceHeight = useWindowDimensions().height;
 
   const onBooking = () => {
-    alert('Fitur ini belum tersedia.');
+    navigation.navigate(Screens.ORDER_BOOKING_DETAIL_CUSTOMER);
+    // alert('Fitur ini belum tersedia.');
   };
 
   return (

@@ -28,6 +28,11 @@ export const VET_SERVICE_LIST_CUSTOMER = 'Vet_Service_Customer';
 export const VET_SERVICE_DETAIL_CUSTOMER = 'VET_SERVICE_DETAIL_CUSTOMER';
 
 export const ORDER_CUSTOMER = 'ORDER_CUSTOMER';
+export const ORDER_BOOKING_DETAIL_CUSTOMER = 'Order_Booking_Detail_Customer';
+export const ORDER_BOOKING_CHOOSE_PET_CUSTOMER =
+  'Order_Booking_Choose_Pet_Customer';
+export const ORDER_BOOKING_CHOOSE_TREATMENT_CUSTOMER =
+  'Order_Booking_Choose_Treatment_Customer';
 
 export const PROFILE_CUSTOMER = 'PROFILE_CUSTOMER';
 export const PROFILE_SUMMARY_CUSTOMER = 'Profile_Summary_Customer';
