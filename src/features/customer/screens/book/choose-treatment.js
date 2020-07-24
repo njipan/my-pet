@@ -1,24 +1,66 @@
 import React from 'react';
-import {TouchableOpacity, Image, ScrollView, Text, View} from 'react-native';
+import {
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Image,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
+import 'intl';
+import 'intl/locale-data/jsonp/id';
 
-import {ButtonFluid, TextInput} from '@component';
+import {ButtonFluid, TreatmentCard} from '@component';
 import {Screens} from '@constant';
 import {PetService} from '@service';
 import {Box, Colors, Typography} from '@style';
 
 const ChooseTreatementScreen = ({navigation, ...props}) => {
   const createData = navigation.getParam('createData', {});
-  console.log(createData);
+  const merchant = navigation.getParam('merchant', {id: 1});
   const [data, setData] = React.useState(navigation.getParam('data', {}));
+  const [merchants, setMerchants] = React.useState({});
+  const [selectedMerchants, setSelectedMerchants] = React.useState({});
 
-  React.useEffect(() => {}, []);
+  const dummyServices = [
+    {
+      id: 1,
+      name: 'Suntik Vaksin',
+      price: '20000',
+      description: 'sadf dsaf asfdsa f',
+    },
+    {
+      id: 11,
+      name: 'Suntik Rabies',
+      price: '1000',
+      description: 'sadf dsaf asfdsa f',
+    },
+    {
+      id: 12,
+      name: 'Suntik Vitamin',
+      price: '21000',
+      description: 'sadf dsaf asfdsa f',
+    },
+  ];
 
-  const onPetPress = (value) => {
-    if (!value) return;
-    setData({id: value});
+  React.useEffect(() => {
+    setMerchants(
+      dummyServices.reduce((res, item) => {
+        return {...res, [`${item.id}`]: item};
+      }, {}),
+    );
+  }, []);
+
+  const onTreatmentSelect = (value) => {
+    const temp = selectedMerchants;
+    if (!selectedMerchants[`${value.id}`] == false) delete temp[`${value.id}`];
+    else temp[`${value.id}`] = value;
+    setSelectedMerchants({...temp});
   };
 
-  const onAddToCard = () => {};
+  const onAddToCard = () => {
+    console.log(selectedMerchants);
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -34,6 +76,33 @@ const ChooseTreatementScreen = ({navigation, ...props}) => {
               }}>
               {createData.name}
             </Text>
+            <View>
+              {Object.keys(merchants).length > 0 &&
+                Object.values(merchants).map((item, key) => (
+                  <TouchableWithoutFeedback
+                    onPress={() => onTreatmentSelect(item)}
+                    underlayColor="white">
+                    <View style={{backgroundColor: 'white'}}>
+                      <TreatmentCard
+                        key={key}
+                        name={item.name}
+                        price={`Rp${new Intl.NumberFormat(['id']).format(
+                          item.price || 0,
+                        )}`}
+                        description={item.description}
+                        icon={
+                          selectedMerchants[`${item.id}`] ? (
+                            <Image
+                              style={{width: 26, height: 26}}
+                              source={require('@asset/icons/order/success/normal.png')}
+                            />
+                          ) : null
+                        }
+                      />
+                    </View>
+                  </TouchableWithoutFeedback>
+                ))}
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -79,6 +148,7 @@ const ChooseTreatementScreen = ({navigation, ...props}) => {
               }}
               styleRoot={{width: '85%'}}
               fullWidth={false}
+              onPress={onAddToCard}
             />
           </View>
         </View>

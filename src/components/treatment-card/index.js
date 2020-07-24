@@ -19,10 +19,10 @@ const TreatmentCard = (props) => {
         flexDirection: 'row',
         ...Mixins.padding(16),
         marginBottom: 14,
-        ...styleRoot,
         alignItems: 'center',
+        ...styleRoot,
       }}>
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor: 'white'}}>
         <Text style={{...styles.text}}>{name}</Text>
         <Text
           style={{
