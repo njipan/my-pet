@@ -14,6 +14,7 @@ const ButtonFluid = ({
   styleContainer = {},
   fullWidth = true,
   styleRoot = {},
+  iconLeft = null,
   ...props
 }) => {
   const fontSize =
@@ -29,7 +30,13 @@ const ButtonFluid = ({
         onPress={onPress}
         underlayColor={underlayColor || Colors.WHITE}
         style={styles.outer}>
-        <View style={{...styles.container, backgroundColor, ...styleContainer}}>
+        <View
+          style={{
+            ...styles.container,
+            backgroundColor,
+            ...styleContainer,
+          }}>
+          {iconLeft}
           <Text
             style={{...styles.text, fontSize, color: textColor, ...styleText}}>
             {props.text}

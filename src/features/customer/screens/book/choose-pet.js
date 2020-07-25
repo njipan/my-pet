@@ -72,7 +72,7 @@ const ChoosePetScreen = ({navigation, ...props}) => {
     setData({...data, id: value.value, name: value.label});
   };
 
-  const onAddTreatment = () => {
+  const onNext = () => {
     if (!data.id) {
       ToastAndroid.show('Pilih hewan peliharaan!', ToastAndroid.LONG);
       return;
@@ -82,8 +82,6 @@ const ChoosePetScreen = ({navigation, ...props}) => {
       createData: data,
     });
   };
-
-  const onNext = () => {};
 
   return (
     <View style={{flex: 1}}>
@@ -142,7 +140,6 @@ const ChoosePetScreen = ({navigation, ...props}) => {
           paddingHorizontal: 20,
           paddingBottom: 16,
         }}>
-        <ButtonFluid text="Tambah Perawatan Hewan" onPress={onAddTreatment} />
         <ButtonFluid text="Selanjutnya" onPress={onNext} />
       </View>
     </View>

@@ -59,14 +59,15 @@ const ChooseTreatementScreen = ({navigation, ...props}) => {
   };
 
   const onAddToCard = () => {
+    navigation.navigate(Screens.ORDER_BOOKING_CHECKOUT_CUSTOMER);
     console.log(selectedMerchants);
   };
 
   return (
-    <View style={{flex: 1}}>
-      <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
+      <View style={{flex: 1, backgroundColor: 'white'}}>
         <ScrollView>
-          <View style={{padding: 16}}>
+          <View style={{padding: 16, backgroundColor: 'white'}}>
             <Text
               style={{
                 fontFamily: Typography.FONT_FAMILY_REGULAR,
@@ -76,7 +77,7 @@ const ChooseTreatementScreen = ({navigation, ...props}) => {
               }}>
               {createData.name}
             </Text>
-            <View>
+            <View style={{backgroundColor: 'white'}}>
               {Object.keys(merchants).length > 0 &&
                 Object.values(merchants).map((item, key) => (
                   <TouchableWithoutFeedback
@@ -84,7 +85,6 @@ const ChooseTreatementScreen = ({navigation, ...props}) => {
                     underlayColor="white">
                     <View style={{backgroundColor: 'white'}}>
                       <TreatmentCard
-                        key={key}
                         name={item.name}
                         price={`Rp${new Intl.NumberFormat(['id']).format(
                           item.price || 0,

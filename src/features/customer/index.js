@@ -14,6 +14,7 @@ import ProfileNavigator, {ProfileSummaryScreen} from './screens/profile';
 import {VetStackNavigator, VetServiceDetailScreen} from './screens/vet';
 import {HomeStackNavigator} from './screens/home';
 import OrderBookingNavigator from './screens/book';
+import CustomerOrderNavigator from './screens/order';
 
 const Pesanan = () => {
   return (
@@ -77,7 +78,7 @@ const CustomerTabBottomNavigator = createBottomTabNavigator(
       },
     },
     [Screens.ORDER_CUSTOMER]: {
-      screen: Pesanan,
+      screen: CustomerOrderNavigator,
       navigationOptions: (props) => {
         return {
           tabBarIcon: Icons.OrderTabBarIcon,

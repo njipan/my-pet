@@ -8,7 +8,6 @@ import {
   ForgotPasswordScreen,
   SplashScreen,
   RegisterScreen,
-  GeneralNavigator,
 } from './screens';
 
 const AuthNavigatorConfig = {

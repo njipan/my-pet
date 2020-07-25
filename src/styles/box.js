@@ -43,3 +43,9 @@ export const CONTAINER_CARD = {
   elevation: 2,
   ...Mixins.padding(12),
 };
+
+export const CONTAINER_ACTION_BOTTOM = {
+  height: 72,
+  justifyContent: 'center',
+  paddingHorizontal: 20,
+};

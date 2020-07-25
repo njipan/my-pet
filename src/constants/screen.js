@@ -27,12 +27,20 @@ export const VET_SERVICE_CUSTOMER = 'VET_SERVICE_CUSTOMER';
 export const VET_SERVICE_LIST_CUSTOMER = 'Vet_Service_Customer';
 export const VET_SERVICE_DETAIL_CUSTOMER = 'VET_SERVICE_DETAIL_CUSTOMER';
 
-export const ORDER_CUSTOMER = 'ORDER_CUSTOMER';
 export const ORDER_BOOKING_DETAIL_CUSTOMER = 'Order_Booking_Detail_Customer';
 export const ORDER_BOOKING_CHOOSE_PET_CUSTOMER =
   'Order_Booking_Choose_Pet_Customer';
 export const ORDER_BOOKING_CHOOSE_TREATMENT_CUSTOMER =
   'Order_Booking_Choose_Treatment_Customer';
+export const ORDER_BOOKING_CHECKOUT_CUSTOMER =
+  'Order_Booking_Checkout_Customer';
+export const ORDER_BOOKING_CHECKOUT_SUCCESS_CUSTOMER =
+  'Order_Booking_Checkout_Success_Customer';
+
+export const ORDER_CUSTOMER = 'ORDER_CUSTOMER';
+export const ORDER_DETAIL_CUSTOMER = 'Order_Detail_Customer';
+export const ORDER_ON_PROGRESS_CUSTOMER = 'Order_On_Progress_Customer';
+export const ORDER_HISTORY_CUSTOMER = 'Order_History_Customer';
 
 export const PROFILE_CUSTOMER = 'PROFILE_CUSTOMER';
 export const PROFILE_SUMMARY_CUSTOMER = 'Profile_Summary_Customer';
