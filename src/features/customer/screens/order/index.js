@@ -5,6 +5,7 @@ import TopTabHeader from '@component/header/top-tab';
 
 import ProgressScreen from './progress';
 import HistoryScreen from './history';
+import HistoryDetailScreen from './history-detail';
 
 import {Screens} from '@constant';
 import {Typography} from '@style';
@@ -30,6 +31,8 @@ CustomerOrderTopTabNavigator.navigationOptions = {
     elevation: 0,
   },
 };
+
+export {ProgressScreen, HistoryScreen, HistoryDetailScreen};
 
 export default createStackNavigator({
   CustomerOrderTopTabNavigator,

@@ -2,10 +2,11 @@ import React from 'react';
 import {Text, View} from 'react-native';
 
 import Label from './../label';
+import RateStar from './../rate-star';
 import {Colors, Typography} from '@style';
 
 const OrderInfo = (props) => {
-  const {name = null, booking = null, date = null} = props;
+  const {name = null, booking = null, date = null, starValue = 0} = props;
   return (
     <View>
       <View
@@ -34,6 +35,11 @@ const OrderInfo = (props) => {
           Booking ID : {booking}
         </Text>
       </View>
+      {starValue ? (
+        <View style={{marginVertical: 14}}>
+          <RateStar value={starValue} />
+        </View>
+      ) : null}
       <Label
         styleText={{textTransform: 'none'}}
         title="Tanggal/Waktu"

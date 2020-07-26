@@ -14,7 +14,7 @@ import ProfileNavigator, {ProfileSummaryScreen} from './screens/profile';
 import {VetStackNavigator, VetServiceDetailScreen} from './screens/vet';
 import {HomeStackNavigator} from './screens/home';
 import OrderBookingNavigator from './screens/book';
-import CustomerOrderNavigator from './screens/order';
+import CustomerOrderNavigator, {HistoryDetailScreen} from './screens/order';
 
 const Pesanan = () => {
   return (
@@ -155,4 +155,5 @@ export const Navigator = createStackNavigator({
   },
   ...ProfileNavigator,
   ...OrderBookingNavigator,
+  [Screens.ORDER_HISTORY_DETAIL_CUSTOMER]: HistoryDetailScreen,
 });

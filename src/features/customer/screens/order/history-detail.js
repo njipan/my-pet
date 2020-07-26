@@ -12,7 +12,8 @@ import moment from 'moment';
 
 import {useOrderDetail} from '@shared/hooks';
 
-import {ButtonFluid} from '@component';
+import {ButtonFluid, TextInput} from '@component';
+import RateStar from '@component/rate-star';
 import * as Order from '@component/order';
 import {Box, Colors, Typography} from '@style';
 
@@ -47,27 +48,37 @@ const TitleWithAction = (props) => {
   );
 };
 
-const OrderScreen = ({navigation, ...props}) => {
+const HistoryDetailScreen = ({navigation, ...props}) => {
   const params = navigation.state.params || {};
 
   const {order, orderLoading} = useOrderDetail(params.id, true, true);
+  const [reviewing, setReviewing] = React.useState(false);
+  const [review, setReview] = React.useState({});
 
-  const createData = navigation.getParam('createData', {});
-  const merchant = navigation.getParam('merchant', {id: 1});
   const [data, setData] = React.useState(navigation.getParam('data', {}));
-  const [merchants, setMerchants] = React.useState({});
-  const [selectedMerchants, setSelectedMerchants] = React.useState({});
 
-  React.useEffect(() => {
-    //
-  }, []);
+  React.useEffect(() => {}, []);
+
+  const getStarValue = (v) => {
+    return v.reviews ? v.reviews.find((item) => item.order_id == v.id) : {};
+  };
 
   const onEditBooking = () => {
     alert('EDIT BOOKING');
   };
 
-  const onBookNow = () => {
-    alert('Fitur ini belum tersedia!');
+  const onReview = () => {
+    if (!reviewing) {
+      setReviewing(true);
+      navigation.setParams({title: 'Penilaian'});
+      return;
+    }
+    alert(JSON.stringify(review));
+    // alert('Fitur ini belum tersedia!');
+  };
+
+  const onRatingPress = (value) => {
+    setReview({...review, rating: value});
   };
 
   const getDatetime = () => {
@@ -87,6 +98,7 @@ const OrderScreen = ({navigation, ...props}) => {
             name={params.merchantName}
             booking={params.id}
             date={getDatetime()}
+            starValue={getStarValue(order).rating}
           />
         </View>
         <View style={{...Box.SPACER_CONTAINER}} />
@@ -121,67 +133,77 @@ const OrderScreen = ({navigation, ...props}) => {
             onDeletePress={() => alert('delete pressed')}
           />
         </View>
-        <View style={{...Box.SPACER_CONTAINER}} />
-        <View style={{...styles.container}}>
-          <TitleWithAction onPress={onEditBooking} title="Detail Pembayaran" />
-          <View style={{paddingVertical: 10}} />
-          <Order.PaymentInfo
-            done
-            method="Cash"
-            total={`Rp ${new Intl.NumberFormat(['id']).format(
-              order.amount || 0,
-            )}`}
-            serviceAliases={{
-              price: 'amount',
-            }}
-            data={Object.values(order.summary || [])}
-          />
-        </View>
+
+        {!reviewing ? (
+          <View>
+            <View style={{...Box.SPACER_CONTAINER}} />
+            <View style={{...styles.container, marginBottom: 40}}>
+              <TitleWithAction
+                onPress={onEditBooking}
+                title="Detail Pembayaran"
+              />
+              <View style={{paddingVertical: 10}} />
+              <Order.PaymentInfo
+                done
+                method="Cash"
+                total={`Rp ${new Intl.NumberFormat(['id']).format(
+                  order.amount || 0,
+                )}`}
+                serviceAliases={{
+                  price: 'amount',
+                }}
+                data={Object.values(order.summary || [])}
+              />
+            </View>
+          </View>
+        ) : (
+          <View style={{paddingBottom: 28, paddingLeft: 20, paddingRight: 20}}>
+            <View>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  fontFamily: Typography.FONT_FAMILY_BOLD,
+                  fontSize: 20,
+                  marginBottom: 20,
+                }}>
+                Beri Rating Pelayanan
+              </Text>
+            </View>
+            <RateStar value={review.rating} onPress={onRatingPress} />
+            <Text
+              style={{
+                ...Box.LABEL_VALUE,
+                fontSize: 16,
+                color: Colors.LIGHT_GREY,
+                marginTop: 8,
+              }}>
+              Komentar
+            </Text>
+            <TextInput
+              style={{marginTop: 6, height: 100}}
+              placeholder="Berikan komentar"
+              styleText={{fontSize: 16}}
+              multiline
+              value={review.description}
+              onTextChange={(value) =>
+                setReview({...review, description: value})
+              }
+            />
+          </View>
+        )}
       </ScrollView>
-      <View
-        style={{
-          ...Box.CONTAINER_ACTION_BOTTOM,
-          height: 132,
-          backgroundColor: 'white',
-          elevation: 5,
-        }}>
-        <ButtonFluid
-          text="Direction"
-          onPress={onBookNow}
-          styleContainer={{
-            justifyContent: 'center',
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
-          iconLeft={
-            <Image
-              source={require('@asset/icons/maps/direction/normal.png')}
-              style={{width: 24, height: 24, marginRight: 10}}
-            />
-          }
-        />
-        <ButtonFluid
-          text="Chat via Whatsapp"
-          onPress={onBookNow}
-          styleContainer={{
-            justifyContent: 'center',
-            flexDirection: 'row',
-            alignItems: 'center',
+
+      {!getStarValue(order).rating ? (
+        <View
+          style={{
+            ...Box.CONTAINER_ACTION_BOTTOM,
+            height: 72,
             backgroundColor: 'white',
-            borderColor: Colors.PRIMARY,
-            borderWidth: 1,
-          }}
-          styleText={{
-            color: Colors.PRIMARY,
-          }}
-          iconLeft={
-            <Image
-              source={require('@asset/icons/social/whatsapp-outline/normal.png')}
-              style={{width: 24, height: 24, marginRight: 10}}
-            />
-          }
-        />
-      </View>
+            elevation: 10,
+          }}>
+          <ButtonFluid text="Beri Ulasan" onPress={onReview} />
+        </View>
+      ) : null}
     </View>
   );
 };
@@ -198,11 +220,11 @@ const styles = StyleSheet.create({
   },
 });
 
-OrderScreen.navigationOptions = ({navigation}) => {
+HistoryDetailScreen.navigationOptions = ({navigation}) => {
   return {
-    title: 'Detail Pesanan',
+    title: navigation.getParam('title', 'Riwayat'),
     headerTitleStyle: Typography.FONT_HEADER_TITLE,
   };
 };
 
-export default OrderScreen;
+export default HistoryDetailScreen;

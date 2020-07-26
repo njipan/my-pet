@@ -75,12 +75,15 @@ const OrderTreatment = ({navigation, ...props}) => {
     onDeletePress = () => {},
     data = [],
     action = true,
+    petAliases = {},
+    serviceAliases = {},
   } = props;
+  // console.log(data);
 
   return (
     <View>
-      {[0, 0].map((pet, petIdx) => (
-        <View style={{marginBottom: petIdx == [0, 0].length - 1 ? 0 : 16}}>
+      {data.map((pet, petIdx) => (
+        <View style={{marginBottom: petIdx == data.length - 1 ? 0 : 16}}>
           <Text
             style={{
               textDecorationLine: 'underline',
@@ -89,21 +92,25 @@ const OrderTreatment = ({navigation, ...props}) => {
               fontSize: 16,
               color: Colors.REGULAR,
             }}>
-            Peliharaan Dummy {petIdx + 1}
+            {pet[petAliases.name] || pet.name}
           </Text>
 
-          {[0, 0].map((treatment) => (
-            <View style={{...styles.treatmentItemContainer}}>
-              <FieldValue title="Suntik Rabies" text="1x" bold />
-              <Text
+          {(pet[petAliases.services] || pet.services).map((service) => (
+            <View style={{...styles.treatmentItemContainer, marginLeft: 4}}>
+              <FieldValue
+                title={service[serviceAliases.name] || service.name}
+                text="1x"
+                bold
+              />
+              {/* <Text
                 style={{
                   fontFamily: Typography.FONT_FAMILY_MEDIUM,
                   fontSize: 14,
                   color: Colors.LIGHT_GREY,
                   marginTop: -4,
                 }}>
-                Note : Dummy Anjing dan Kucing
-              </Text>
+                {service[serviceAliases.note] || service.note}
+              </Text> */}
               <View style={{flexDirection: 'row', marginTop: 4}}>
                 <View style={{flex: 1}}>
                   <Text
@@ -112,18 +119,18 @@ const OrderTreatment = ({navigation, ...props}) => {
                       fontSize: 14,
                       color: Colors.REGULAR,
                     }}>
-                    Rp 400.000 - Dummy
+                    Rp{service[serviceAliases.price] || service.price}
                   </Text>
                 </View>
                 {action ? (
                   <View style={{flexDirection: 'row'}}>
                     <TouchableOpacity
                       style={{marginRight: 20}}
-                      onPress={() => onEditPress(pet, treatment)}>
+                      onPress={() => onEditPress(pet, service)}>
                       <Text style={{color: Colors.BLUE}}>Ubah</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() => onDeletePress(pet, treatment)}>
+                      onPress={() => onDeletePress(pet, service)}>
                       <Text style={{color: Colors.DANGER}}>Hapus</Text>
                     </TouchableOpacity>
                   </View>

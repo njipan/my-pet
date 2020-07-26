@@ -6,7 +6,14 @@ import {FieldValue} from './treatment';
 import {Box, Colors} from '@style';
 
 const PaymentInfo = (props) => {
-  const {method = null, data = [], total = null, done = true} = props;
+  const {
+    method = null,
+    data = [],
+    total = null,
+    done = true,
+    serviceAliases = {},
+  } = props;
+  console.log(data);
   return (
     <View>
       <View>
@@ -20,8 +27,11 @@ const PaymentInfo = (props) => {
           Detail Pembayaran
         </Text>
         {Array.isArray(data) &&
-          data.map((treatment) => (
-            <FieldValue title={treatment.name} text={treatment.price} />
+          data.map((service) => (
+            <FieldValue
+              title={service[serviceAliases.name] || service.name}
+              text={service[serviceAliases.price] || service.price}
+            />
           ))}
       </View>
       <Dash

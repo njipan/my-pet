@@ -18,6 +18,11 @@ export const PET_CREATE = `/pets/add`;
 export const PET_UPDATE = `/pets/update`;
 export const PET_DELETE = `/pets/delete`;
 
+export const ORDER_ALL = `/orders`;
+export const ORDER_CREATE = `/orders`;
+export const ORDER_UPDATE_STATUS = `/orders/status`;
+export const ORDER_CREATE_RATING = `/orders/ratings`;
+
 export const TREATMENT_CREATE = '/users/profile/merchant/treatment';
 export const TREATMENT_UPDATE = '/users/profile/merchant/treatment';
 export const TREATMENT_DELETE = '/users/profile/merchant/treatment';

@@ -17,7 +17,7 @@ const NotificationItem = (props) => {
         style={{
           shadowColor: '#000',
           backgroundColor: 'white',
-          ...Mixins.padding(14, 18),
+          ...Mixins.padding(14, 8),
           flexDirection: 'row',
           alignItems: 'center',
           borderBottomColor: Colors.BLACK10,

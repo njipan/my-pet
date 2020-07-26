@@ -41,6 +41,7 @@ export const ORDER_CUSTOMER = 'ORDER_CUSTOMER';
 export const ORDER_DETAIL_CUSTOMER = 'Order_Detail_Customer';
 export const ORDER_ON_PROGRESS_CUSTOMER = 'Order_On_Progress_Customer';
 export const ORDER_HISTORY_CUSTOMER = 'Order_History_Customer';
+export const ORDER_HISTORY_DETAIL_CUSTOMER = 'Order_History_Detail_Customer';
 
 export const PROFILE_CUSTOMER = 'PROFILE_CUSTOMER';
 export const PROFILE_SUMMARY_CUSTOMER = 'Profile_Summary_Customer';
