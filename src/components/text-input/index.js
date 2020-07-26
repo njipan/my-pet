@@ -41,7 +41,7 @@ const TextInput = ({
   ...props
 }) => {
   const errorMessage = error;
-  const isBorder = (c) => (!error ? c : !editable ? Colors.DANGER : c);
+  const isBorder = (c) => (!error ? c : editable ? Colors.DANGER : c);
   const [outerColor, setOuterColor] = useState(isBorder(Colors.LIGHT_GREY));
   const [focus, setFocus] = useState(false);
 

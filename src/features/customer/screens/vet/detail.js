@@ -15,12 +15,32 @@ import {Icons, ButtonFluid} from '@component';
 import StarIcon from '@component/icons/star-icon';
 import PhoneIcon from '@component/icons/phone-icon';
 import MailIcon from '@component/icons/mail-icon';
+import {VetService} from '@service';
 
 const VetServiceDetailScreen = ({navigation, ...props}) => {
   const deviceHeight = useWindowDimensions().height;
+  const vetData = navigation.getParam('data', null);
+  const vetId = navigation.getParam('id', null);
+
+  const [data, setData] = React.useState(vetData);
+
+  const getVet = async () => {
+    try {
+      const response = await VetService.get(vetId);
+      console.log(Object.keys(response));
+    } catch (err) {
+      console.log(err.response.data);
+    }
+  };
+
+  useEffect(() => {
+    if (!vetData) getVet();
+  }, []);
 
   const onBooking = () => {
-    navigation.navigate(Screens.ORDER_BOOKING_DETAIL_CUSTOMER);
+    navigation.navigate(Screens.ORDER_BOOKING_DETAIL_CUSTOMER, {
+      vet: data,
+    });
     // alert('Fitur ini belum tersedia.');
   };
 
@@ -36,6 +56,7 @@ const VetServiceDetailScreen = ({navigation, ...props}) => {
                 height: 0.32 * deviceHeight,
                 backgroundColor: Colors.LIGHT_GREY,
               }}
+              source={data.picture || null}
             />
             <TouchableOpacity
               onPress={onBooking}
@@ -67,9 +88,7 @@ const VetServiceDetailScreen = ({navigation, ...props}) => {
           </View>
           <View
             style={{...styles.container, borderTopWidth: 0, paddingTop: 24}}>
-            <Text style={{...Typography.heading('h3')}}>
-              Animal Clinic Jakarta
-            </Text>
+            <Text style={{...Typography.heading('h3')}}>{data.full_name}</Text>
             <View style={styles.spacerText} />
             <View style={styles.containerInfo}>
               <View style={styles.containerIconInfo}>
@@ -77,7 +96,7 @@ const VetServiceDetailScreen = ({navigation, ...props}) => {
               </View>
               <View style={styles.verticalCenter}>
                 <Text style={{...styles.textInfo, fontWeight: 'bold'}}>
-                  4.5
+                  {data.rate || '0.0'}
                 </Text>
               </View>
             </View>
@@ -88,7 +107,7 @@ const VetServiceDetailScreen = ({navigation, ...props}) => {
               </View>
               <View style={styles.verticalCenter}>
                 <Text style={{...styles.textInfo, fontWeight: 'bold'}}>
-                  (021) 8998212
+                  {data.phone}
                 </Text>
               </View>
             </View>
@@ -99,7 +118,7 @@ const VetServiceDetailScreen = ({navigation, ...props}) => {
               </View>
               <View style={styles.verticalCenter}>
                 <Text style={{...styles.textInfo, fontWeight: 'bold'}}>
-                  animalclinic@gmail.com
+                  {data.email}
                 </Text>
               </View>
             </View>
@@ -109,7 +128,7 @@ const VetServiceDetailScreen = ({navigation, ...props}) => {
             <Text style={{...Typography.heading('h3')}}>Lokasi</Text>
             <View style={styles.spacerText} />
             <View>
-              <Text style={styles.textInfo}>Lokasi</Text>
+              <Text style={styles.textInfo}>{data.address}</Text>
             </View>
           </View>
           <View style={styles.spacerContainer} />
@@ -117,7 +136,7 @@ const VetServiceDetailScreen = ({navigation, ...props}) => {
             <Text style={{...Typography.heading('h3')}}>Jam Operasional</Text>
             <View style={styles.spacerText} />
             <View>
-              <Text style={styles.textInfo}>Lokasi</Text>
+              <Text style={styles.textInfo}>{data.operational_hour}</Text>
             </View>
           </View>
           <View style={styles.spacerContainer} />
@@ -126,11 +145,10 @@ const VetServiceDetailScreen = ({navigation, ...props}) => {
             <View style={styles.spacerText} />
 
             <View style={{flexDirection: 'row', marginBottom: 4}}>
-              <View style={{width: 32}}>
-                <Text style={styles.textInfo}>1.</Text>
-              </View>
-              <View style={{flex: 1}}>
-                <Text style={styles.textInfo}>Lokasi</Text>
+              <View style={{marginTop: 4}}>
+                <Text style={{...styles.textInfo, lineHeight: 24}}>
+                  {data.facility}
+                </Text>
               </View>
             </View>
           </View>

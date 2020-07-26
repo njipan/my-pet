@@ -12,6 +12,7 @@ import {Colors, Mixins, Typography} from '@style';
 import {Icons, Heading} from '@component';
 import {VetService} from '@service';
 import {Badge} from '@component';
+import {encodeFromBuffer} from '@util/file';
 
 import VetServiceCard from './../../components/vet-service-card';
 
@@ -26,8 +27,21 @@ const VetServiceListScreen = ({navigation, ...props}) => {
 
   const getVets = async () => {
     try {
-      const vets = await VetService.getAll({});
-      setVets(vets);
+      const response = await VetService.getAll({});
+      const vetsResponse = [];
+      for (let vetIndex in response) {
+        const vet = response[vetIndex];
+        if (!vet.file) {
+          vet.picture = null;
+        } else {
+          const uri = `data:image/jpeg;base64,${await encodeFromBuffer(
+            vet.file.data,
+          )}`;
+          vet.picture = {uri};
+        }
+        vetsResponse.push(vet);
+      }
+      setVets(vetsResponse);
     } catch (error) {
       console.log(error);
     }
@@ -44,9 +58,15 @@ const VetServiceListScreen = ({navigation, ...props}) => {
     setFilter({rate});
   };
 
+  const onVetPress = (value) => {
+    navigation.navigate(Screens.VET_SERVICE_DETAIL_CUSTOMER, {
+      id: value.id,
+      data: value,
+    });
+  };
+
   useEffect(() => {
     refresh();
-    navigation.navigate(Screens.VET_SERVICE_DETAIL_CUSTOMER);
   }, []);
 
   return (
@@ -103,16 +123,12 @@ const VetServiceListScreen = ({navigation, ...props}) => {
           {vets.length > 0 &&
             vets.map((vet) => (
               <VetServiceCard
+                picture={vet.picture || null}
                 key={vet.id}
                 title={vet.full_name}
                 phone={vet.phone}
                 address={vet.address}
-                onPress={() => {
-                  navigation.navigate(Screens.VET_SERVICE_DETAIL_CUSTOMER, {
-                    id: vet.id,
-                    data: vet,
-                  });
-                }}
+                onPress={() => onVetPress(vet)}
               />
             ))}
         </View>

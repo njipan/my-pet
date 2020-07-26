@@ -17,6 +17,7 @@ const VetServiceCard = ({
   rate = null,
   title = null,
   pictureUrl = null,
+  picture = null,
 }) => {
   return (
     <TouchableHighlight
@@ -27,9 +28,11 @@ const VetServiceCard = ({
         <View>
           <Image
             style={styles.cardImage}
-            source={{
-              uri: pictureUrl ?? 'https://via.placeholder.com/100',
-            }}
+            source={
+              picture || {
+                uri: pictureUrl ?? 'https://via.placeholder.com/100',
+              }
+            }
           />
         </View>
         <View style={styles.cardContent}>
@@ -49,13 +52,21 @@ const VetServiceCard = ({
               }}>
               <Icons.MiniStar />
               <View style={{marginLeft: 6}}>
-                <Heading type="h6" text={`${rate || '0.0'}`} color={'#333'} />
+                <Heading
+                  type="h6"
+                  text={`${rate || '0.0'} • `}
+                  color={'#333'}
+                />
               </View>
               <View
                 style={{
-                  paddingLeft: 10,
+                  paddingLeft: 1,
+                  paddingright: 4,
+                  flex: 1,
                 }}>
-                <Heading type="h6" text={`• ${address || ''}`} color={'#333'} />
+                <Text numberOfLines={1} style={{fontSize: 13}}>
+                  {address}
+                </Text>
               </View>
             </View>
             <View style={{flexDirection: 'row'}}>
