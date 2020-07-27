@@ -7,5 +7,17 @@ import * as Animal from './animal';
 import * as Sex from './sex';
 import * as UserType from './user-type';
 import * as Time from './time';
+import * as OrderStatus from './order-status';
 
-export {Animal, Apis, Sex, Navigators, Screens, Texts, Time, Types, UserType};
+export {
+  Animal,
+  Apis,
+  Sex,
+  Navigators,
+  OrderStatus,
+  Screens,
+  Texts,
+  Time,
+  Types,
+  UserType,
+};

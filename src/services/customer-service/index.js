@@ -1,4 +1,4 @@
-import {authAxios} from '@service';
+import {authAxios} from '@util/axios';
 import * as Apis from './../../constants/api';
 
 export const getMe = (id) => {

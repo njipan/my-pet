@@ -70,7 +70,7 @@ const LoginScreen = ({navigation, ...props}) => {
       await AuthService.setType(`${data.type}`);
       let navigationName = Navigators.CUSTOMER_NAVIGATOR;
       if (data.type == 2) navigationName = Navigators.MERCHANT_NAVIGATOR;
-
+      await AuthService.check(response.data.data.token, data.type);
       navigation.dispatch(
         StackActions.reset({
           index: 0,

@@ -17,9 +17,10 @@ const NotificationCard = (props) => {
           backgroundColor: 'white',
           ...Mixins.padding(14, 18),
           margin: 3,
-          borderRadius: 14,
+          borderRadius: 6,
           flexDirection: 'row',
           alignItems: 'center',
+          marginBottom: 8,
         }}>
         <View style={{justifyContent: 'center'}}>{picture}</View>
         <View style={{justifyContent: 'center', flex: 1, marginLeft: 14}}>

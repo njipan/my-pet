@@ -31,14 +31,15 @@ const TopTabHeader = (props) => {
                 flex: 1,
                 flexDirection: 'column',
                 alignItems: 'center',
-                marginHorizontal: 4,
+                marginHorizontal: 2,
                 paddingTop: 6,
               }}>
               <Text
                 style={{
                   fontFamily: Typography.FONT_FAMILY_REGULAR,
                   fontWeight: 'bold',
-                  fontSize: 17,
+                  textAlign: 'center',
+                  fontSize: props.fontSize || 17,
                   textTransform: 'capitalize',
                   color: `${
                     isRouteActive ? Colors.REGULAR : Colors.LIGHT_GREY

@@ -13,7 +13,7 @@ const PaymentInfo = (props) => {
     done = true,
     serviceAliases = {},
   } = props;
-  console.log(data);
+
   return (
     <View>
       <View>

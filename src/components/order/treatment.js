@@ -78,7 +78,6 @@ const OrderTreatment = ({navigation, ...props}) => {
     petAliases = {},
     serviceAliases = {},
   } = props;
-  // console.log(data);
 
   return (
     <View>

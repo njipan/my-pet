@@ -4,74 +4,22 @@ import {
   createMaterialTopTabNavigator,
 } from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
-import HeaderMerchant from './components/layouts/header';
-import {Screens} from '@constant';
+
 import {Icons} from '@component';
-import * as MerchantScreens from './screens';
+import {Screens} from '@constant';
+import {ChangePasswordScreen} from '@shared/screens';
+
 import BottomTabBar from './components/layouts/bottom-tab';
-import {Text, View} from 'react-native';
 import MerchantProfileStackNavigator, {
   MerchantProfileNavigator,
 } from './screens/profile';
 import {MerchantTreatmentNavigator} from './screens/treatment';
-import {ChangePasswordScreen} from '@shared/screens';
-
-const Pesanan = () => {
-  return (
-    <View>
-      <Text>Pesanan</Text>
-    </View>
-  );
-};
-
-const OrderTopNavigator = createMaterialTopTabNavigator(
-  {
-    [Screens.ORDER_MERCHANT]: {
-      screen: Pesanan,
-      navigationOptions: {
-        title: 'Terbaru(1)',
-      },
-    },
-    Pesanan_2: {
-      screen: Pesanan,
-      navigationOptions: {
-        title: 'Dalam Proses',
-      },
-    },
-    Pesanan_1: {
-      screen: Pesanan,
-      navigationOptions: {
-        title: 'Pesanan 222',
-      },
-    },
-  },
-  {
-    tabBarOptions: {
-      activeTintColor: 'black',
-      showIcon: false,
-      showLabel: true,
-      style: {
-        backgroundColor: 'white',
-      },
-    },
-  },
-);
-
-const OrderStackNavigator = createStackNavigator({
-  OrderTopNavigator: {
-    screen: OrderTopNavigator,
-    navigationOptions: (props) => {
-      return {
-        header: <HeaderMerchant {...props} />,
-      };
-    },
-  },
-});
+import MerchantOrderNavigator, {MerchantOrderScreens} from './screens/order';
 
 export const MerchantBottomTabNavigator = createBottomTabNavigator(
   {
-    OrderStackNavigator: {
-      screen: OrderStackNavigator,
+    MerchantOrderNavigator: {
+      screen: MerchantOrderNavigator,
       navigationOptions: {
         tabBarIcon: Icons.OrderTabBarIcon,
         title: 'Pesanan',
@@ -107,5 +55,6 @@ export const Navigator = createStackNavigator({
   },
   ...MerchantProfileNavigator,
   ...MerchantTreatmentNavigator,
+  ...MerchantOrderScreens,
   [Screens.CHANGE_PASSWORD_MERCHANT]: ChangePasswordScreen,
 });

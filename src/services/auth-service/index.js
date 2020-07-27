@@ -26,8 +26,16 @@ export const setToken = (token) => {
   return AsyncStorage.setItem('_token', token);
 };
 
-export const check = (token, type) => {
-  return generalAxios.get(
+export const getUser = async () => {
+  return JSON.parse(await AsyncStorage.getItem('_user'));
+};
+
+export const setUser = (data) => {
+  return AsyncStorage.setItem('_user', JSON.stringify(data));
+};
+
+export const check = async (token, type) => {
+  const response = await generalAxios.get(
     type == UserType.MERCHANT ? Apis.CHECK_TOKEN_MERCHANT : Apis.CHECK_TOKEN,
     {
       headers: {
@@ -35,6 +43,7 @@ export const check = (token, type) => {
       },
     },
   );
+  setUser(response.data.data);
 };
 
 export const register = (data) => {
@@ -45,6 +54,8 @@ export const register = (data) => {
   });
 };
 
-export const logout = () => {
-  return AsyncStorage.removeItem('_token');
+export const logout = async () => {
+  await AsyncStorage.removeItem('_token');
+  await AsyncStorage.removeItem('_type');
+  await AsyncStorage.removeItem('_user');
 };

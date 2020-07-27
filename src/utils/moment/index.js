@@ -15,4 +15,13 @@ export const parseDateFromNow = (date, format = 'DD-MM-YYYY') => {
     : null;
 };
 
+export const getDatetime = (value) => {
+  const date = moment(value);
+  if (!date.isValid()) return null;
+
+  return `${date.locale('id').format('dddd, DD MMMM YYYY HH:MM')} ${date
+    .locale('en')
+    .format('A')}`;
+};
+
 export {moment};

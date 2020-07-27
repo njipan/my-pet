@@ -9,8 +9,16 @@ export const VERIFY_CODE_SCREEN = 'Verify_Code';
 export const CHANGE_PASSWORD_MERCHANT = 'Change_Password_Merchant';
 export const HOME_MERCHANT = 'Home_Merchant';
 export const ORDER_MERCHANT = 'Order_Merchant';
+
 export const ORDER_COMING_MERCHANT = 'Order_Coming_Merchant';
 export const ORDER_ON_PROGRESS_MERCHANT = 'Order_On_Progress_Merchant';
+export const ORDER_HISTORY_MERCHANT = 'Order_History_Merchant';
+
+export const ORDER_COMING_DETAIL_MERCHANT = 'Order_Coming_Detail_Merchant';
+export const ORDER_ON_PROGRESS_DETAIL_MERCHANT =
+  'Order_On_Progress_Detail_Merchant';
+export const ORDER_HISTORY_DETAIL_MERCHANT = 'Order_History_Detail_Merchant';
+export const ORDER_STATUS_DETAIL_MERCHANT = 'Order_Status_Detail_Merchant';
 
 export const PROFILE_MERCHANT = 'Profile_Merchant';
 export const PROFILE_DETAIL_MERCHANT = 'Profile_Detail_Merchant';
