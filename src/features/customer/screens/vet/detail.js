@@ -27,7 +27,6 @@ const VetServiceDetailScreen = ({navigation, ...props}) => {
   const getVet = async () => {
     try {
       const response = await VetService.get(vetId);
-      console.log(Object.keys(response));
     } catch (err) {
       console.log(err.response.data);
     }
@@ -39,9 +38,11 @@ const VetServiceDetailScreen = ({navigation, ...props}) => {
 
   const onBooking = () => {
     navigation.navigate(Screens.ORDER_BOOKING_DETAIL_CUSTOMER, {
-      vet: data,
+      merchant: {
+        id: vetId,
+        fullName: data.full_name,
+      },
     });
-    // alert('Fitur ini belum tersedia.');
   };
 
   return (

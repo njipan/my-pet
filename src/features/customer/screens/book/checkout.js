@@ -10,13 +10,12 @@ import {
 } from 'react-native';
 import {NavigationActions, StackActions} from 'react-navigation';
 import Dash from 'react-native-dash';
-import 'intl';
-import 'intl/locale-data/jsonp/id';
 
 import {ButtonFluid, Label, TreatmentCard} from '@component';
 import {Screens} from '@constant';
-import {PetService} from '@service';
+import {AuthService} from '@service';
 import {Box, Colors, Typography} from '@style';
+import {toNumberFormat} from '@util/transformer';
 
 export const TitleWithAction = (props) => {
   const {
@@ -87,22 +86,81 @@ export const FieldValue = (props) => {
 
 const CheckoutScreen = ({navigation, ...props}) => {
   const createData = navigation.getParam('createData', {});
-  const merchant = navigation.getParam('merchant', {id: 1});
-  const [data, setData] = React.useState(navigation.getParam('data', {}));
-  const [merchants, setMerchants] = React.useState({});
-  const [selectedMerchants, setSelectedMerchants] = React.useState({});
+  const [user, setUser] = React.useState({});
+  const [data, setData] = React.useState(createData);
+  const [summary, setSummary] = React.useState([]);
+
+  const load = async () => {
+    try {
+      setUser(await AuthService.getUser());
+    } catch (err) {}
+  };
 
   React.useEffect(() => {
-    //
+    load();
+    calculateSummary();
   }, []);
 
   const onEditBooking = () => {
-    alert('EDIT BOOKING');
+    navigation.navigate(Screens.ORDER_BOOKING_DETAIL_CUSTOMER, {
+      createData: data,
+      savedState: navigation.state,
+    });
+  };
+
+  const onEditTreatment = (pet) => {
+    navigation.getParam('callbackChooseTreatment', () => {})(pet);
+    navigation.navigate(Screens.ORDER_BOOKING_CHOOSE_TREATMENT_CUSTOMER, {
+      createData: {...data},
+      savedState: navigation.state,
+      petId: pet.id,
+      petName: pet.name,
+    });
+  };
+
+  const onDeleteTreatment = (pet, service) => {
+    const services = pet.services.filter(
+      (item) => item.merchant_service_id != service.merchant_service_id,
+    );
+    const temp = {...data};
+    temp.pets[pet.id].services = services;
+    setData(temp);
+    calculateSummary();
   };
 
   const onBookNow = () => {
     navigation.dispatch(StackActions.popToTop());
     navigation.navigate(Screens.ORDER_BOOKING_CHECKOUT_SUCCESS_CUSTOMER);
+  };
+
+  const calculateSummary = () => {
+    const tempServices = {};
+    const pets = Object.values(data.pets);
+    for (const pet of pets) {
+      for (const service of pet.services) {
+        const tempService = tempServices[service.merchant_service_id] || {};
+        const qty = (tempService.qty || 0) + service.service_qty;
+        const price = (tempService.price || 0) + service.service_price;
+        const amount = (tempService.amount || 0) + qty * price;
+        tempServices[service.merchant_service_id] = {
+          qty,
+          price,
+          amount,
+          name: service.service_name,
+        };
+      }
+    }
+    const services = Object.values(tempServices);
+    const amountBefore = Math.ceil(
+      (services.reduce((res, item) => item.amount + res, 0) || 0) * 0.1,
+    );
+    services.push({name: 'PPn', price: amountBefore, amount: amountBefore});
+    const amount = services.reduce((res, item) => item.amount + res, 0);
+
+    setSummary({
+      amount,
+      services,
+    });
   };
 
   return (
@@ -121,10 +179,17 @@ const CheckoutScreen = ({navigation, ...props}) => {
             }
           />
           <View>
-            <Label title="Nama" text="Edi Junaedi" />
-            <Label title="Nomor Telepon" text="0881282818" />
-            <Label title="Tanggal" text="23 Maret 2020" />
-            <Label title="Waktu" text="08:00" />
+            <Label title="Nama" text={user.full_name} />
+            <Label title="Nomor Telepon" text={user.phone} />
+            <Label
+              title="Tanggal"
+              text={data.bookingDatetime.locale('id').format('DD MMMM YYYY')}
+            />
+            <Label
+              title="Waktu"
+              styleText={{textTransform: 'uppercase'}}
+              text={data.bookingDatetime.locale('en').format('HH:mm A')}
+            />
           </View>
         </View>
         <View style={{...Box.SPACER_CONTAINER}} />
@@ -146,7 +211,7 @@ const CheckoutScreen = ({navigation, ...props}) => {
             dashGap={4}
           />
           <View>
-            {[0, 0].map((pet, petIdx) => (
+            {Object.values(createData.pets).map((pet, petIdx) => (
               <View style={{marginBottom: 16}}>
                 <Text
                   style={{
@@ -156,45 +221,51 @@ const CheckoutScreen = ({navigation, ...props}) => {
                     fontSize: 16,
                     color: Colors.REGULAR,
                   }}>
-                  Peliharaan {petIdx + 1}
+                  {pet.name}
                 </Text>
 
-                {[0, 0].map((treatment) => (
-                  <View style={{...styles.treatmentItemContainer}}>
-                    <FieldValue title="Suntik Rabies" text="1x" bold />
-                    <Text
-                      style={{
-                        fontFamily: Typography.FONT_FAMILY_MEDIUM,
-                        fontSize: 14,
-                        color: Colors.LIGHT_GREY,
-                        marginTop: -4,
-                      }}>
-                      Anjing dan Kucing
-                    </Text>
-                    <View style={{flexDirection: 'row', marginTop: 4}}>
-                      <View style={{flex: 1}}>
-                        <Text
-                          style={{
-                            fontFamily: Typography.FONT_FAMILY_MEDIUM,
-                            fontSize: 14,
-                            color: Colors.REGULAR,
-                          }}>
-                          Rp 400.000
-                        </Text>
-                      </View>
-                      <View style={{flexDirection: 'row'}}>
-                        <TouchableOpacity
-                          style={{marginRight: 20}}
-                          onPress={() => alert('UBAH')}>
-                          <Text style={{color: Colors.BLUE}}>Ubah</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => alert('APUS')}>
-                          <Text style={{color: Colors.DANGER}}>Hapus</Text>
-                        </TouchableOpacity>
+                {pet.services &&
+                  pet.services.map((service) => (
+                    <View style={{...styles.treatmentItemContainer}}>
+                      <FieldValue
+                        title={service.service_name}
+                        text={`${service.service_qty}x`}
+                        bold
+                      />
+                      <Text
+                        style={{
+                          fontFamily: Typography.FONT_FAMILY_MEDIUM,
+                          fontSize: 14,
+                          color: Colors.LIGHT_GREY,
+                          marginTop: -4,
+                        }}>
+                        {service.service_description}
+                      </Text>
+                      <View style={{flexDirection: 'row', marginTop: 4}}>
+                        <View style={{flex: 1}}>
+                          <Text
+                            style={{
+                              fontFamily: Typography.FONT_FAMILY_MEDIUM,
+                              fontSize: 14,
+                              color: Colors.REGULAR,
+                            }}>
+                            {toNumberFormat(service.service_price)}
+                          </Text>
+                        </View>
+                        <View style={{flexDirection: 'row'}}>
+                          <TouchableOpacity
+                            style={{marginRight: 20}}
+                            onPress={() => onEditTreatment(pet)}>
+                            <Text style={{color: Colors.BLUE}}>Ubah</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => onDeleteTreatment(pet, service)}>
+                            <Text style={{color: Colors.DANGER}}>Hapus</Text>
+                          </TouchableOpacity>
+                        </View>
                       </View>
                     </View>
-                  </View>
-                ))}
+                  ))}
               </View>
             ))}
           </View>
@@ -213,9 +284,13 @@ const CheckoutScreen = ({navigation, ...props}) => {
             <Text style={{...Box.LABEL_TITLE, fontSize: 14, marginBottom: 10}}>
               Detail Pembayaran
             </Text>
-            <FieldValue title="Suntik Rabies" text="Rp 400.000" />
-            <FieldValue title="Suntik Rabies" text="Rp 400.000" />
-            <FieldValue title="PPn" text="Rp 4.000" />
+            {summary.services &&
+              summary.services.map((item) => (
+                <FieldValue
+                  title={item.name}
+                  text={toNumberFormat(item.price)}
+                />
+              ))}
           </View>
           <Dash
             style={{width: '100%', marginBottom: 10, marginTop: 10}}
@@ -223,7 +298,11 @@ const CheckoutScreen = ({navigation, ...props}) => {
             dashThickness={1}
             dashGap={4}
           />
-          <FieldValue title="Total" text="Rp 804.000" bold={true} />
+          <FieldValue
+            title="Total"
+            text={toNumberFormat(summary.amount)}
+            bold={true}
+          />
         </View>
       </ScrollView>
       <View style={{...Box.CONTAINER_ACTION_BOTTOM, elevation: 5}}>

@@ -27,7 +27,8 @@ export const setToken = (token) => {
 };
 
 export const getUser = async () => {
-  return JSON.parse(await AsyncStorage.getItem('_user'));
+  const parse = JSON.parse(await AsyncStorage.getItem('_user'));
+  return parse.user || parse;
 };
 
 export const setUser = (data) => {

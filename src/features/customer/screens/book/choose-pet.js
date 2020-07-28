@@ -46,7 +46,12 @@ const MyPets = ({
 };
 
 const ChoosePetScreen = ({navigation, ...props}) => {
+  const createData = navigation.getParam('createData', {});
+  const createPets = createData.pets || {};
+
   const [pets, setPets] = React.useState([]);
+  const [selectedPet, setSelectedPet] = React.useState({});
+
   const [data, setData] = React.useState(navigation.getParam('data', {}));
 
   const getMyPets = async () => {
@@ -69,17 +74,18 @@ const ChoosePetScreen = ({navigation, ...props}) => {
 
   const onPetPress = (value) => {
     if (!value) return;
-    setData({...data, id: value.value, name: value.label});
+    setSelectedPet(value);
   };
 
   const onNext = () => {
-    if (!data.id) {
+    if (!selectedPet) {
       ToastAndroid.show('Pilih hewan peliharaan!', ToastAndroid.LONG);
       return;
     }
     navigation.navigate(Screens.ORDER_BOOKING_CHOOSE_TREATMENT_CUSTOMER, {
-      data: navigation.getParam('data', {}),
-      createData: data,
+      createData: createData,
+      petId: selectedPet.value,
+      petName: selectedPet.label,
     });
   };
 
@@ -98,7 +104,7 @@ const ChoosePetScreen = ({navigation, ...props}) => {
             </Text>
             <MyPets
               data={pets}
-              value={data.id || null}
+              value={selectedPet.value || null}
               onPress={onPetPress}
               iconChecked={
                 <Image
@@ -112,24 +118,6 @@ const ChoosePetScreen = ({navigation, ...props}) => {
                   style={{width: 24, height: 24}}
                 />
               }
-            />
-          </View>
-          <View style={{...Box.SPACER_CONTAINER}} />
-          <View style={{padding: 16}}>
-            <Text
-              style={{
-                fontFamily: Typography.FONT_FAMILY_REGULAR,
-                fontWeight: 'bold',
-                fontSize: 18,
-              }}>
-              Catatan
-            </Text>
-            <Text style={{...Box.LABEL_VALUE, color: Colors.LIGHT_GREY}}>
-              Opsional
-            </Text>
-            <TextInput
-              placeholder="Contoh: Kucing Perempuan"
-              onChangeText={(value) => setData({...data, note: value})}
             />
           </View>
         </ScrollView>

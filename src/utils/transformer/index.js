@@ -22,6 +22,10 @@ export const isObject = function (obj) {
   );
 };
 
+export const toNumberFormat = (number, prefix = 'Rp ') => {
+  return `${prefix}${new Intl.NumberFormat(['id']).format(number || 0)}`;
+};
+
 export const keysToCamel = function (obj) {
   if (isObject(obj)) {
     const n = {};

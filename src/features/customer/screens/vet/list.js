@@ -60,7 +60,7 @@ const VetServiceListScreen = ({navigation, ...props}) => {
 
   const onVetPress = (value) => {
     navigation.navigate(Screens.VET_SERVICE_DETAIL_CUSTOMER, {
-      id: value.id,
+      id: value.merchant_id,
       data: value,
     });
   };
@@ -124,7 +124,7 @@ const VetServiceListScreen = ({navigation, ...props}) => {
             vets.map((vet) => (
               <VetServiceCard
                 picture={vet.picture || null}
-                key={vet.id}
+                key={vet.merchant_id}
                 title={vet.full_name}
                 phone={vet.phone}
                 address={vet.address}

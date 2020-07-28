@@ -12,55 +12,78 @@ import 'intl/locale-data/jsonp/id';
 
 import {ButtonFluid, TreatmentCard} from '@component';
 import {Screens} from '@constant';
-import {PetService} from '@service';
+import {VetService} from '@service';
 import {Box, Colors, Typography} from '@style';
 
 const ChooseTreatementScreen = ({navigation, ...props}) => {
   const createData = navigation.getParam('createData', {});
-  const merchant = navigation.getParam('merchant', {id: 1});
-  const [data, setData] = React.useState(navigation.getParam('data', {}));
-  const [merchants, setMerchants] = React.useState({});
-  const [selectedMerchants, setSelectedMerchants] = React.useState({});
+  const createPets = createData.pets || {};
+  const petId = navigation.getParam('petId', {});
+  const petName = navigation.getParam('petName', {});
 
-  const dummyServices = [
-    {
-      id: 1,
-      name: 'Suntik Vaksin',
-      price: '20000',
-      description: 'sadf dsaf asfdsa f',
-    },
-    {
-      id: 11,
-      name: 'Suntik Rabies',
-      price: '1000',
-      description: 'sadf dsaf asfdsa f',
-    },
-    {
-      id: 12,
-      name: 'Suntik Vitamin',
-      price: '21000',
-      description: 'sadf dsaf asfdsa f',
-    },
-  ];
+  const [merchant, setMerchant] = React.useState({});
+  const [selectedMerchants, setSelectedMerchants] = React.useState({});
+  const [cart, setCart] = React.useState({});
+
+  const getMerchant = async () => {
+    try {
+      const response = await VetService.get(createData.merchant_id);
+      setMerchant(response);
+    } catch (error) {}
+  };
 
   React.useEffect(() => {
-    setMerchants(
-      dummyServices.reduce((res, item) => {
-        return {...res, [`${item.id}`]: item};
-      }, {}),
-    );
+    getMerchant();
   }, []);
 
   const onTreatmentSelect = (value) => {
     const temp = selectedMerchants;
     if (!selectedMerchants[`${value.id}`] == false) delete temp[`${value.id}`];
-    else temp[`${value.id}`] = value;
+    else
+      temp[`${value.id}`] = {
+        merchant_service_id: value.id,
+        service_name: value.name,
+        service_description: value.description,
+        service_price: value.price,
+        service_qty: 1,
+      };
     setSelectedMerchants({...temp});
+    setTimeout(() => {
+      const amount = Object.values(temp).reduce(
+        (res, item) => res + item.service_price,
+        0,
+      );
+      setCart({
+        amount,
+        count: Object.keys(temp).length,
+      });
+    }, 0);
   };
 
   const onAddToCard = () => {
-    navigation.navigate(Screens.ORDER_BOOKING_CHECKOUT_CUSTOMER);
-    console.log(selectedMerchants);
+    const body = {
+      ...createData,
+      pets: {
+        ...createPets,
+        [petId]: {
+          id: petId,
+          name: petName,
+          services: Object.values(selectedMerchants),
+        },
+      },
+    };
+
+    navigation.navigate(Screens.ORDER_BOOKING_CHECKOUT_CUSTOMER, {
+      createData: body,
+      callbackChooseTreatment: (pet) => {
+        const tempMerchants = pet
+          ? pet.services.reduce((res, item) => {
+              return {...res, [item.merchant_service_id]: item};
+            }, {})
+          : {};
+        setSelectedMerchants(tempMerchants);
+      },
+    });
   };
 
   return (
@@ -75,11 +98,11 @@ const ChooseTreatementScreen = ({navigation, ...props}) => {
                 fontSize: 18,
                 marginBottom: 14,
               }}>
-              {createData.name}
+              {merchant.user?.full_name}
             </Text>
             <View style={{backgroundColor: 'white'}}>
-              {Object.keys(merchants).length > 0 &&
-                Object.values(merchants).map((item, key) => (
+              {merchant.merchantServices &&
+                merchant.merchantServices.map((item, key) => (
                   <TouchableWithoutFeedback
                     onPress={() => onTreatmentSelect(item)}
                     underlayColor="white">
@@ -121,16 +144,18 @@ const ChooseTreatementScreen = ({navigation, ...props}) => {
           />
         </View>
         <View style={{justifyContent: 'center', marginLeft: 14}}>
-          <Text style={{color: Colors.LIGHT_GREY, marginBottom: 4}}>
-            Total 2 Items
+          <Text
+            style={{color: Colors.LIGHT_GREY, marginBottom: 4, fontSize: 13}}>
+            Total {cart.count || 0} Items
           </Text>
           <Text
             style={{
               fontFamily: Typography.FONT_FAMILY_REGULAR,
               fontWeight: '700',
-              fontSize: 18,
+              fontSize: 16,
             }}>
-            Rp500.000
+            Rp
+            {new Intl.NumberFormat(['id']).format(cart.amount || 0)}
           </Text>
         </View>
         <View
@@ -146,7 +171,7 @@ const ChooseTreatementScreen = ({navigation, ...props}) => {
                 paddingRight: 10,
                 width: '100%',
               }}
-              styleRoot={{width: '85%'}}
+              styleRoot={{width: 156}}
               fullWidth={false}
               onPress={onAddToCard}
             />

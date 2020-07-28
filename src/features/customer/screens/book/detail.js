@@ -13,10 +13,20 @@ import {useSchema} from '@shared/hooks';
 
 import {OrderBookDetailSchema} from './../../schemas';
 
-const DetailScreen = ({navigation}) => {
+const DetailScreen = ({navigation, ...props}) => {
+  const merchant = navigation.getParam('merchant', {});
+  const createData = navigation.getParam('createData', {});
+  const savedState = navigation.getParam('savedState', null);
   const [showDate, setShowDate] = React.useState(false);
   const {data, messages, setMessages, setFormAndValidate} = useSchema(
-    {},
+    {
+      date: createData.bookingDatetime
+        ? moment(createData.bookingDatetime).format('DD MMMM YYYY')
+        : null,
+      time: createData.bookingDatetime
+        ? moment(createData.bookingDatetime).format('HH:mm A')
+        : null,
+    },
     {},
     OrderBookDetailSchema,
   );
@@ -26,6 +36,10 @@ const DetailScreen = ({navigation}) => {
   };
 
   const onDateChange = (value) => {
+    if (!value) {
+      setFormAndValidate('date', null);
+      return;
+    }
     const dateString = moment(new Date(value)).format('DD MMMM YYYY');
     setFormAndValidate('date', dateString);
   };
@@ -34,8 +48,12 @@ const DetailScreen = ({navigation}) => {
     Modal.select({
       items: Time.hours,
       onCallback: (value, hide) => {
-        setFormAndValidate('time', value);
         hide(null);
+        if (!value) {
+          setFormAndValidate('time', null);
+          return;
+        }
+        setFormAndValidate('time', value);
       },
     });
   };
@@ -45,9 +63,23 @@ const DetailScreen = ({navigation}) => {
       const errs = await validate(data, OrderBookDetailSchema);
       setMessages(errs);
       if (!isObjectValuesNull(errs)) return;
-      navigation.navigate(Screens.ORDER_BOOKING_CHOOSE_PET_CUSTOMER, {
-        data,
-      });
+
+      const body = {
+        createData: {
+          ...createData,
+          merchant_id: merchant.id,
+          bookingDatetime: moment(
+            `${data.date} ${data.time}`,
+            'DD MMMM YYYY HH:mm A',
+          ),
+        },
+      };
+      if (savedState) {
+        const {routeName, key} = savedState;
+        navigation.navigate({routeName, key, params: body});
+        return;
+      }
+      navigation.navigate(Screens.ORDER_BOOKING_CHOOSE_PET_CUSTOMER, body);
     } catch (err) {}
   };
 
