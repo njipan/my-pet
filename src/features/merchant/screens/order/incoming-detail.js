@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
 
 IncomingDetailScreen.navigationOptions = ({navigation}) => {
   return {
-    title: 'Detail',
+    title: 'Pesanan Baru',
     headerTitleStyle: Typography.FONT_HEADER_TITLE,
   };
 };

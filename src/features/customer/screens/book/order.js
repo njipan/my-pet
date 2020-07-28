@@ -76,67 +76,78 @@ const OrderScreen = ({navigation, ...props}) => {
 
     return `${date
       .locale('id')
-      .format('dddd, DD MMMM YYYY HH:MM')} ${date.locale('en').format('A')}`;
+      .format('dddd, DD MMMM YYYY HH:mm')} ${date.locale('en').format('A')}`;
   };
 
   return (
     <View style={{flex: 1}}>
       <ScrollView>
-        <View style={{...styles.container}}>
-          <Order.Info
-            name={params.merchantName}
-            booking={params.id}
-            date={getDatetime()}
-          />
-        </View>
-        <View style={{...Box.SPACER_CONTAINER}} />
-        <View style={{...styles.container}}>
-          <Text
-            style={{
-              fontFamily: Typography.FONT_FAMILY_MEDIUM,
-              fontSize: 16,
-              color: Colors.LIGHT_GREY,
-            }}>
-            Detail Perawatan
-          </Text>
-          <Dash
-            style={{width: '100%', marginBottom: 10, marginTop: 8}}
-            dashColor={Colors.BLACK10}
-            dashThickness={1}
-            dashGap={4}
-          />
-          <Order.Treatment
-            data={order.order_pets}
-            petAliases={{
-              name: 'pet_name',
-              note: 'pet_note',
-              services: 'order_pet_services',
-            }}
-            serviceAliases={{
-              name: 'service_name',
-              description: 'service_description',
-              price: 'service_price',
-            }}
-            onEditPress={() => alert('edit pressed')}
-            onDeletePress={() => alert('delete pressed')}
-          />
-        </View>
-        <View style={{...Box.SPACER_CONTAINER}} />
-        <View style={{...styles.container}}>
-          <TitleWithAction onPress={onEditBooking} title="Detail Pembayaran" />
-          <View style={{paddingVertical: 10}} />
-          <Order.PaymentInfo
-            done
-            method="Cash"
-            total={`Rp ${new Intl.NumberFormat(['id']).format(
-              order.amount || 0,
-            )}`}
-            serviceAliases={{
-              price: 'amount',
-            }}
-            data={Object.values(order.summary || [])}
-          />
-        </View>
+        {!orderLoading ? (
+          <View>
+            <View style={{...styles.container}}>
+              <Order.Info
+                name={params.merchantName}
+                booking={params.id}
+                date={getDatetime()}
+              />
+            </View>
+            <View style={{...Box.SPACER_CONTAINER}} />
+            <View style={{...styles.container}}>
+              <Text
+                style={{
+                  fontFamily: Typography.FONT_FAMILY_MEDIUM,
+                  fontSize: 16,
+                  color: Colors.LIGHT_GREY,
+                }}>
+                Detail Perawatan
+              </Text>
+              <Dash
+                style={{width: '100%', marginBottom: 10, marginTop: 8}}
+                dashColor={Colors.BLACK10}
+                dashThickness={1}
+                dashGap={4}
+              />
+              <Order.Treatment
+                data={order.order_pets}
+                petAliases={{
+                  name: 'pet_name',
+                  note: 'pet_note',
+                  services: 'order_pet_services',
+                }}
+                serviceAliases={{
+                  name: 'service_name',
+                  description: 'service_description',
+                  price: 'service_price',
+                }}
+                action={false}
+              />
+            </View>
+            <View style={{...Box.SPACER_CONTAINER}} />
+            <View style={{...styles.container, marginBottom: 40}}>
+              <TitleWithAction
+                onPress={onEditBooking}
+                title="Detail Pembayaran"
+                styleText={{
+                  color: Colors.LIGHT_GREY,
+                  fontFamily: Typography.FONT_FAMILY_MEDIUM,
+                }}
+                fontSize={16}
+              />
+              <View style={{paddingVertical: 10}} />
+              <Order.PaymentInfo
+                done
+                method="Cash"
+                total={`Rp ${new Intl.NumberFormat(['id']).format(
+                  order.amount || 0,
+                )}`}
+                serviceAliases={{
+                  price: 'amount',
+                }}
+                data={Object.values(order.summary || [])}
+              />
+            </View>
+          </View>
+        ) : null}
       </ScrollView>
       <View
         style={{

@@ -13,7 +13,8 @@ import Dash from 'react-native-dash';
 
 import {ButtonFluid, Label, TreatmentCard} from '@component';
 import {Screens} from '@constant';
-import {AuthService} from '@service';
+import {AuthService, OrderService} from '@service';
+import * as Modal from '@util/modal';
 import {Box, Colors, Typography} from '@style';
 import {toNumberFormat} from '@util/transformer';
 
@@ -123,14 +124,54 @@ const CheckoutScreen = ({navigation, ...props}) => {
       (item) => item.merchant_service_id != service.merchant_service_id,
     );
     const temp = {...data};
-    temp.pets[pet.id].services = services;
+    if (services.length < 1) {
+      delete temp.pets[pet.id];
+    } else {
+      temp.pets[pet.id].services = services;
+    }
     setData(temp);
     calculateSummary();
   };
 
-  const onBookNow = () => {
-    navigation.dispatch(StackActions.popToTop());
-    navigation.navigate(Screens.ORDER_BOOKING_CHECKOUT_SUCCESS_CUSTOMER);
+  const onAddPet = () => {
+    navigation.push(Screens.ORDER_BOOKING_CHOOSE_PET_CUSTOMER, {
+      createData: {...data},
+      savedState: navigation.state,
+      callback: (value) => setData(value),
+    });
+  };
+
+  const onBookNow = async () => {
+    const body = {
+      merchant_id: data.merchant_id,
+      booking_datetime: data.bookingDatetime,
+      pets: Object.values(data.pets),
+    };
+    Modal.confirm({
+      isLoading: true,
+      onLoad: async (modalNav) => {
+        let orderData = null;
+        try {
+          orderData = await OrderService.create(body);
+        } catch (err) {
+          console.log(err);
+        }
+        try {
+          const backToIdx =
+            navigation.dangerouslyGetParent().state.routes.length - 2;
+          const routeBack = navigation.dangerouslyGetParent().state.routes[
+            backToIdx
+          ];
+          navigation.navigate(routeBack);
+        } catch (err) {
+          navigation.popToTop();
+        }
+        navigation.push(Screens.ORDER_BOOKING_CHECKOUT_SUCCESS_CUSTOMER, {
+          orderData,
+          createData: {...data},
+        });
+      },
+    });
   };
 
   const calculateSummary = () => {
@@ -195,7 +236,7 @@ const CheckoutScreen = ({navigation, ...props}) => {
         <View style={{...Box.SPACER_CONTAINER}} />
         <View style={{...styles.container}}>
           <TitleWithAction
-            onPress={onEditBooking}
+            onPress={onAddPet}
             title="Detail Perawatan"
             actionIcon={
               <Image

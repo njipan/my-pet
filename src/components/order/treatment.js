@@ -101,15 +101,15 @@ const OrderTreatment = ({navigation, ...props}) => {
                 text="1x"
                 bold
               />
-              {/* <Text
+              <Text
                 style={{
                   fontFamily: Typography.FONT_FAMILY_MEDIUM,
                   fontSize: 14,
                   color: Colors.LIGHT_GREY,
                   marginTop: -4,
                 }}>
-                {service[serviceAliases.note] || service.note}
-              </Text> */}
+                {service[serviceAliases.description] || service.description}
+              </Text>
               <View style={{flexDirection: 'row', marginTop: 4}}>
                 <View style={{flex: 1}}>
                   <Text

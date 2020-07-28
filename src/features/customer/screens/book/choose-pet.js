@@ -47,7 +47,6 @@ const MyPets = ({
 
 const ChoosePetScreen = ({navigation, ...props}) => {
   const createData = navigation.getParam('createData', {});
-  const createPets = createData.pets || {};
 
   const [pets, setPets] = React.useState([]);
   const [selectedPet, setSelectedPet] = React.useState({});
@@ -82,8 +81,8 @@ const ChoosePetScreen = ({navigation, ...props}) => {
       ToastAndroid.show('Pilih hewan peliharaan!', ToastAndroid.LONG);
       return;
     }
-    navigation.navigate(Screens.ORDER_BOOKING_CHOOSE_TREATMENT_CUSTOMER, {
-      createData: createData,
+    navigation.push(Screens.ORDER_BOOKING_CHOOSE_TREATMENT_CUSTOMER, {
+      createData: {...createData},
       petId: selectedPet.value,
       petName: selectedPet.label,
     });

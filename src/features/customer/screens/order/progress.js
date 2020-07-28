@@ -72,6 +72,7 @@ const ProgressScreen = ({navigation, ...props}) => {
             );
           })}
       </View>
+      <View style={{paddingVertical: 10}} />
     </ScrollView>
   );
 };

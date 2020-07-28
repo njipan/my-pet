@@ -2,19 +2,23 @@ import React from 'react';
 import {
   TouchableOpacity,
   Image,
+  RefreshControl,
   StyleSheet,
   ScrollView,
   Text,
   View,
+  ToastAndroid,
 } from 'react-native';
 import Dash from 'react-native-dash';
 import moment from 'moment';
 
 import {useOrderDetail} from '@shared/hooks';
 
+import {OrderService} from '@service';
 import {ButtonFluid, TextInput} from '@component';
 import RateStar from '@component/rate-star';
 import * as Order from '@component/order';
+import * as Modal from '@util/modal';
 import {Box, Colors, Typography} from '@style';
 
 const TitleWithAction = (props) => {
@@ -51,7 +55,11 @@ const TitleWithAction = (props) => {
 const HistoryDetailScreen = ({navigation, ...props}) => {
   const params = navigation.state.params || {};
 
-  const {order, orderLoading} = useOrderDetail(params.id, true, true);
+  const {order, orderLoading, refreshOrder} = useOrderDetail(
+    params.id,
+    true,
+    true,
+  );
   const [reviewing, setReviewing] = React.useState(false);
   const [review, setReview] = React.useState({});
 
@@ -60,7 +68,10 @@ const HistoryDetailScreen = ({navigation, ...props}) => {
   React.useEffect(() => {}, []);
 
   const getStarValue = (v) => {
-    return v.reviews ? v.reviews.find((item) => item.order_id == v.id) : {};
+    if (!v.reviews) return {};
+    return Object.keys(v.reviews).length > 0
+      ? v.reviews.find((item) => item.order_id == v.id)
+      : {};
   };
 
   const onEditBooking = () => {
@@ -73,8 +84,25 @@ const HistoryDetailScreen = ({navigation, ...props}) => {
       navigation.setParams({title: 'Penilaian'});
       return;
     }
-    alert(JSON.stringify(review));
-    // alert('Fitur ini belum tersedia!');
+    Modal.confirm({
+      isLoading: true,
+      onLoad: async (modalNav) => {
+        modalNav.goBack(null);
+        try {
+          const body = {
+            ...review,
+            order_id: parseInt(params.id),
+          };
+          const response = await OrderService.createRating(body);
+          setReviewing(true);
+          navigation.setParams({title: 'Riwayat'});
+          ToastAndroid.show('Penilaian berhasil disimpan!', ToastAndroid.LONG);
+          refreshOrder();
+        } catch (err) {
+          console.log(err.response.data);
+        }
+      },
+    });
   };
 
   const onRatingPress = (value) => {
@@ -92,7 +120,14 @@ const HistoryDetailScreen = ({navigation, ...props}) => {
 
   return (
     <View style={{flex: 1}}>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={orderLoading}
+            colors={Colors.REFRESH_CONTROL_SECONDARY}
+            onRefresh={refreshOrder}
+          />
+        }>
         <View style={{...styles.container}}>
           <Order.Info
             name={params.merchantName}
@@ -129,8 +164,7 @@ const HistoryDetailScreen = ({navigation, ...props}) => {
               description: 'service_description',
               price: 'service_price',
             }}
-            onEditPress={() => alert('edit pressed')}
-            onDeletePress={() => alert('delete pressed')}
+            action={false}
           />
         </View>
 
@@ -150,7 +184,7 @@ const HistoryDetailScreen = ({navigation, ...props}) => {
                   order.amount || 0,
                 )}`}
                 serviceAliases={{
-                  price: 'amount',
+                  price: 'amountFormatted',
                 }}
                 data={Object.values(order.summary || [])}
               />
@@ -185,7 +219,7 @@ const HistoryDetailScreen = ({navigation, ...props}) => {
               styleText={{fontSize: 16}}
               multiline
               value={review.description}
-              onTextChange={(value) =>
+              onChangeText={(value) =>
                 setReview({...review, description: value})
               }
             />

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  TouchableOpacity,
+  ToastAndroid,
   TouchableWithoutFeedback,
   Image,
   ScrollView,
@@ -20,7 +20,7 @@ const ChooseTreatementScreen = ({navigation, ...props}) => {
   const createPets = createData.pets || {};
   const petId = navigation.getParam('petId', {});
   const petName = navigation.getParam('petName', {});
-
+  console.log();
   const [merchant, setMerchant] = React.useState({});
   const [selectedMerchants, setSelectedMerchants] = React.useState({});
   const [cart, setCart] = React.useState({});
@@ -29,6 +29,14 @@ const ChooseTreatementScreen = ({navigation, ...props}) => {
     try {
       const response = await VetService.get(createData.merchant_id);
       setMerchant(response);
+      const pet = createPets[petId];
+      const tempMerchants = pet
+        ? pet.services.reduce((res, item) => {
+            return {...res, [item.merchant_service_id]: item};
+          }, {})
+        : {};
+      setSelectedMerchants(tempMerchants);
+      updateCart(tempMerchants);
     } catch (error) {}
   };
 
@@ -36,8 +44,22 @@ const ChooseTreatementScreen = ({navigation, ...props}) => {
     getMerchant();
   }, []);
 
+  const updateCart = (value) => {
+    setTimeout(() => {
+      const amount = Object.values(value).reduce(
+        (res, item) => res + item.service_price,
+        0,
+      );
+      setCart({
+        amount,
+        count: Object.keys(value).length,
+      });
+    }, 0);
+  };
+
   const onTreatmentSelect = (value) => {
-    const temp = selectedMerchants;
+    const temp = selectedMerchants || {};
+
     if (!selectedMerchants[`${value.id}`] == false) delete temp[`${value.id}`];
     else
       temp[`${value.id}`] = {
@@ -48,19 +70,16 @@ const ChooseTreatementScreen = ({navigation, ...props}) => {
         service_qty: 1,
       };
     setSelectedMerchants({...temp});
-    setTimeout(() => {
-      const amount = Object.values(temp).reduce(
-        (res, item) => res + item.service_price,
-        0,
-      );
-      setCart({
-        amount,
-        count: Object.keys(temp).length,
-      });
-    }, 0);
+    updateCart(temp);
   };
 
-  const onAddToCard = () => {
+  const onAddToCart = () => {
+    if (Object.keys(selectedMerchants).length < 1) {
+      ToastAndroid.show('Perawatan harus dipilih!', ToastAndroid.LONG);
+      return;
+    }
+
+    navigation.pop(navigation.dangerouslyGetParent().state.routes.length - 2);
     const body = {
       ...createData,
       pets: {
@@ -73,7 +92,7 @@ const ChooseTreatementScreen = ({navigation, ...props}) => {
       },
     };
 
-    navigation.navigate(Screens.ORDER_BOOKING_CHECKOUT_CUSTOMER, {
+    navigation.push(Screens.ORDER_BOOKING_CHECKOUT_CUSTOMER, {
       createData: body,
       callbackChooseTreatment: (pet) => {
         const tempMerchants = pet
@@ -173,7 +192,7 @@ const ChooseTreatementScreen = ({navigation, ...props}) => {
               }}
               styleRoot={{width: 156}}
               fullWidth={false}
-              onPress={onAddToCard}
+              onPress={onAddToCart}
             />
           </View>
         </View>

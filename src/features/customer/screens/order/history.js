@@ -56,6 +56,7 @@ const HistroryScreen = ({navigation, ...props}) => {
             </View>
           ))}
       </View>
+      <View style={{paddingVertical: 10}} />
     </ScrollView>
   );
 };

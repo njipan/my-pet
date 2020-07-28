@@ -19,7 +19,7 @@ export const getDatetime = (value) => {
   const date = moment(value);
   if (!date.isValid()) return null;
 
-  return `${date.locale('id').format('dddd, DD MMMM YYYY HH:MM')} ${date
+  return `${date.locale('id').format('dddd, DD MMMM YYYY HH:mm')} ${date
     .locale('en')
     .format('A')}`;
 };

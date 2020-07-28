@@ -18,21 +18,45 @@ export default (id, initLoading = true, effectProcess = true) => {
         pet.pet_detail = pet_detail.pets || {};
         temp_order_pets.push(pet);
         for (let service of pet.order_pet_services) {
-          const summaryItem = summary[service.id] || {};
+          const summaryItem = summary[service.merchant_service_id] || {};
           const name = service.service_name;
           const qty = service.service_qty + (summaryItem.qty || 0);
+          console.log(
+            name,
+            ' ',
+            qty,
+            ' ',
+            'Merchant ID : ',
+            service.merchant_service_id,
+            'Merchant Price : ',
+            service.service_price,
+          );
           const price = service.service_price;
-          const amount = (summaryItem.amount || 0) + qty * price;
-          summary[service.id] = {
+          const amount = qty * price;
+          summary[service.merchant_service_id] = {
             name,
             qty,
             price,
-            amount: `Rp ${new Intl.NumberFormat(['id']).format(amount || 0)}`,
+            amountFormatted: `Rp ${new Intl.NumberFormat(['id']).format(
+              amount || 0,
+            )}`,
+            amount: amount,
           };
         }
       }
+      console.log(summary);
+      const ppn = response.amount * 0.1;
+      summary['-1'] = {
+        name: 'PPn',
+        qty: 1,
+        price: ppn,
+        amountFormatted: `Rp ${new Intl.NumberFormat(['id']).format(ppn || 0)}`,
+        amount: `Rp ${new Intl.NumberFormat(['id']).format(ppn || 0)}`,
+      };
+
       response.order_pets = temp_order_pets;
       response.summary = summary;
+      response.amount += ppn;
       setOrder(response);
       setOrderLoading(false);
       return response;

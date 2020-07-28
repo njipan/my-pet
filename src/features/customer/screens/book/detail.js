@@ -15,11 +15,13 @@ import {OrderBookDetailSchema} from './../../schemas';
 
 const DetailScreen = ({navigation, ...props}) => {
   const merchant = navigation.getParam('merchant', {});
+
   const createData = navigation.getParam('createData', {});
   const savedState = navigation.getParam('savedState', null);
   const [showDate, setShowDate] = React.useState(false);
   const {data, messages, setMessages, setFormAndValidate} = useSchema(
     {
+      merchantName: merchant.fullName || createData.merchantName,
       date: createData.bookingDatetime
         ? moment(createData.bookingDatetime).format('DD MMMM YYYY')
         : null,
@@ -67,6 +69,7 @@ const DetailScreen = ({navigation, ...props}) => {
       const body = {
         createData: {
           ...createData,
+          merchantName: merchant.fullName || createData.merchantName,
           merchant_id: merchant.id,
           bookingDatetime: moment(
             `${data.date} ${data.time}`,
