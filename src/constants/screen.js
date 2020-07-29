@@ -17,6 +17,7 @@ export const ORDER_HISTORY_MERCHANT = 'Order_History_Merchant';
 export const ORDER_COMING_DETAIL_MERCHANT = 'Order_Coming_Detail_Merchant';
 export const ORDER_ON_PROGRESS_DETAIL_MERCHANT =
   'Order_On_Progress_Detail_Merchant';
+export const ORDER_CHECKOUT_DETAIL_MERCHANT = 'Order_Checkout_Detail_Merchant';
 export const ORDER_HISTORY_DETAIL_MERCHANT = 'Order_History_Detail_Merchant';
 export const ORDER_STATUS_DETAIL_MERCHANT = 'Order_Status_Detail_Merchant';
 

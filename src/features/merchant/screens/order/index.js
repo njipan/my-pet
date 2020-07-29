@@ -9,8 +9,9 @@ import HistoryScreen from './history';
 import IncomingScreen from './incoming';
 import IncomingDetailScreen from './incoming-detail';
 import StatusDetailScreen from './status-detail';
-// import ProgressDetailScreen from './progress-detail';
-// import HistoryDetailScreen from './history-detail';
+import ProgressDetailScreen from './progress-detail';
+import CheckoutDetailScreen from './checkout';
+import HistoryDetailScreen from './history-detail';
 
 import {Screens} from '@constant';
 import {Typography} from '@style';
@@ -43,7 +44,9 @@ MerchantOrderTopTabNavigator.navigationOptions = (props) => {
 export const MerchantOrderScreens = {
   [Screens.ORDER_COMING_DETAIL_MERCHANT]: IncomingDetailScreen,
   [Screens.ORDER_STATUS_DETAIL_MERCHANT]: StatusDetailScreen,
-  // [Screens.ORDER_HISTORY_DETAIL_MERCHANT]: HistoryDetailScreen,
+  [Screens.ORDER_ON_PROGRESS_DETAIL_MERCHANT]: ProgressDetailScreen,
+  [Screens.ORDER_CHECKOUT_DETAIL_MERCHANT]: CheckoutDetailScreen,
+  [Screens.ORDER_HISTORY_DETAIL_MERCHANT]: HistoryDetailScreen,
 };
 // export {ProgressScreen, HistoryScreen, HistoryDetailScreen};
 

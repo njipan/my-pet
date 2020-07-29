@@ -21,16 +21,6 @@ export default (id, initLoading = true, effectProcess = true) => {
           const summaryItem = summary[service.merchant_service_id] || {};
           const name = service.service_name;
           const qty = service.service_qty + (summaryItem.qty || 0);
-          console.log(
-            name,
-            ' ',
-            qty,
-            ' ',
-            'Merchant ID : ',
-            service.merchant_service_id,
-            'Merchant Price : ',
-            service.service_price,
-          );
           const price = service.service_price;
           const amount = qty * price;
           summary[service.merchant_service_id] = {
@@ -44,7 +34,6 @@ export default (id, initLoading = true, effectProcess = true) => {
           };
         }
       }
-      console.log(summary);
       const ppn = response.amount * 0.1;
       summary['-1'] = {
         name: 'PPn',

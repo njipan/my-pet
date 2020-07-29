@@ -40,11 +40,13 @@ const OrderInfo = (props) => {
           <RateStar value={starValue} />
         </View>
       ) : null}
-      <Label
-        styleText={{textTransform: 'none'}}
-        title="Tanggal/Waktu"
-        text={date}
-      />
+      {date ? (
+        <Label
+          styleText={{textTransform: 'none'}}
+          title="Tanggal/Waktu"
+          text={date}
+        />
+      ) : null}
     </View>
   );
 };

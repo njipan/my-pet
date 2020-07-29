@@ -4,7 +4,8 @@ import moment from 'moment';
 
 import {NotificationCard} from '@component/order';
 import * as Transformer from '@util/transformer';
-import {Screens} from '@constant';
+import {getDatetime} from '@util/moment';
+import {Screens, OrderStatus} from '@constant';
 import {Colors} from '@style';
 
 import ListOrder from './hooks/orders-hook';
@@ -32,9 +33,14 @@ const ProgressScreen = ({navigation, ...props}) => {
   }, []);
 
   const onPress = (value) => {
-    navigation.navigate(Screens.ORDER_ON_PROGRESS_DETAIL_MERCHANT, {
-      data: Transformer.keysToCamel(value),
-    });
+    navigation.navigate(
+      value.status == OrderStatus.CUSTOMER_ON_PROGRESS
+        ? Screens.ORDER_CHECKOUT_DETAIL_MERCHANT
+        : Screens.ORDER_ON_PROGRESS_DETAIL_MERCHANT,
+      {
+        data: Transformer.keysToCamel(value),
+      },
+    );
   };
 
   return (
@@ -55,9 +61,7 @@ const ProgressScreen = ({navigation, ...props}) => {
               <View key={order.id}>
                 <NotificationCard
                   text={order.full_name}
-                  description={moment(order.booking_datetime)
-                    .locale('en')
-                    .format('dddd, LL HH:MM A')}
+                  description={getDatetime(order.booking_datetime)}
                   picture={
                     <Image
                       source={require('@asset/icons/menu-bar/vet-service-active/normal.png')}

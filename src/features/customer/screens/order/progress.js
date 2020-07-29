@@ -2,6 +2,8 @@ import React from 'react';
 import {Image, Text, RefreshControl, ScrollView, View} from 'react-native';
 import moment from 'moment';
 
+import {getDatetime} from '@util/moment';
+
 import {NotificationCard} from '@component/order';
 import {Screens} from '@constant';
 import {Colors} from '@style';
@@ -56,9 +58,7 @@ const ProgressScreen = ({navigation, ...props}) => {
               <View key={order.id}>
                 <NotificationCard
                   text={order.merchant_name}
-                  description={moment(order.booking_datetime)
-                    .locale('en')
-                    .format('dddd, LL HH:MM A')}
+                  description={getDatetime(order.booking_datetime)}
                   picture={
                     <Image
                       source={require('@asset/icons/menu-bar/vet-service-active/normal.png')}

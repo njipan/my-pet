@@ -1,9 +1,8 @@
 import React from 'react';
 import {
   TouchableOpacity,
-  ToastAndroid,
-  Image,
   RefreshControl,
+  Image,
   StyleSheet,
   ScrollView,
   Text,
@@ -15,11 +14,11 @@ import moment from 'moment';
 import 'intl';
 import 'intl/locale-data/jsonp/id';
 
-import {OrderService} from '@service';
 import {ButtonFluid, Label, TreatmentCard} from '@component';
 import * as Order from '@component/order';
 import * as Transformer from '@util/transformer';
 import {Screens, OrderStatus} from '@constant';
+import {OrderService} from '@service';
 import {Box, Colors, Typography} from '@style';
 import * as Modal from '@util/modal';
 
@@ -92,16 +91,28 @@ export const FieldValue = (props) => {
   );
 };
 
-const ProgressDetailScreen = ({navigation, ...props}) => {
+const CheckoutDetailScreen = ({navigation, ...props}) => {
   const paramData = navigation.getParam('data', {});
   const orderData = navigation.getParam('orderData', null);
+  const paramPets = navigation.getParam('orderPets', []);
   const {
     order,
     orderLoading,
-    setOrderLoading,
     refreshOrder,
+    setOrderLoading,
     setOrder,
-  } = useOrderDetail(paramData.id, orderData != null, orderData == null);
+  } = useOrderDetail(paramData.id, orderData == null, orderData == null);
+  const [orderPets, setOrderPets] = React.useState(paramPets);
+
+  const overrideRefreshOrder = async () => {
+    try {
+      const response = await refreshOrder();
+      setOrderPets(response.order_pets);
+      setOrderLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   React.useEffect(() => {
     if (orderData) {
@@ -109,16 +120,41 @@ const ProgressDetailScreen = ({navigation, ...props}) => {
       setOrderLoading(false);
       return;
     }
+    overrideRefreshOrder();
   }, []);
 
-  const onProgress = () => {
+  const onEditBooking = () => {
+    alert('EDIT BOOKING');
+  };
+
+  const updateOrderPets = (petId, services) => {
+    const newPets = [...orderPets].map((item) => {
+      if (item.pet_id == petId)
+        return {
+          ...item,
+          order_pet_services: services,
+        };
+      return item;
+    });
+    setOrderPets(newPets);
+  };
+
+  const onDeleteService = (pet, service) => {
+    const petId = pet.pet_id;
+    const petServices = (pet.order_pet_services || []).filter(
+      (item) => item.merchant_service_id != service.merchant_service_id,
+    );
+    updateOrderPets(petId, petServices);
+  };
+
+  const onCompleted = () => {
     Modal.confirm({
       isLoading: true,
       onLoad: async (modalNav) => {
         try {
           // const response = await OrderService.updateStatus(
           //   parseInt(paramData.id),
-          //   OrderStatus.CUSTOMER_ON_PROGRESS,
+          //   OrderStatus.ORDER_COMPLETED,
           // );
           const backToIdx =
             navigation.dangerouslyGetParent().state.routes.length - 2;
@@ -126,10 +162,8 @@ const ProgressDetailScreen = ({navigation, ...props}) => {
             backToIdx
           ];
           navigation.navigate(routeBack);
-          navigation.navigate(Screens.ORDER_CHECKOUT_DETAIL_MERCHANT, {
+          navigation.navigate(Screens.ORDER_STATUS_DETAIL_MERCHANT, {
             data: {...paramData},
-            orderData: order,
-            orderPets: order.order_pets,
           });
         } catch (error) {
           modalNav.goBack(null);
@@ -173,7 +207,16 @@ const ProgressDetailScreen = ({navigation, ...props}) => {
         </View>
         <View style={{...Box.SPACER_CONTAINER}} />
         <View style={{...styles.container}}>
-          <TitleWithAction onPress={() => {}} title="Detail Perawatan" />
+          <TitleWithAction
+            onPress={onEditBooking}
+            title="Detail Perawatan"
+            actionIcon={
+              <Image
+                source={require('@asset/icons/form/plus-blue/normal.png')}
+                style={{width: 20, height: 20}}
+              />
+            }
+          />
           <Dash
             style={{width: '100%', marginBottom: 10, marginTop: 8}}
             dashColor={Colors.BLACK10}
@@ -182,7 +225,7 @@ const ProgressDetailScreen = ({navigation, ...props}) => {
           />
 
           <Order.Treatment
-            data={order.order_pets || []}
+            data={orderPets || []}
             petAliases={{
               services: 'order_pet_services',
               name: 'pet_name',
@@ -192,7 +235,7 @@ const ProgressDetailScreen = ({navigation, ...props}) => {
               description: 'service_description',
               price: 'service_price',
             }}
-            action={false}
+            onDeletePress={onDeleteService}
           />
         </View>
         <View>
@@ -217,32 +260,10 @@ const ProgressDetailScreen = ({navigation, ...props}) => {
       <View
         style={{
           ...Box.CONTAINER_ACTION_BOTTOM,
-          height: 132,
           backgroundColor: 'white',
           elevation: 5,
         }}>
-        <ButtonFluid text="Proses Pesanan" onPress={onProgress} />
-        <ButtonFluid
-          text="Chat via Whatsapp"
-          onPress={() => {}}
-          styleContainer={{
-            justifyContent: 'center',
-            flexDirection: 'row',
-            alignItems: 'center',
-            backgroundColor: 'white',
-            borderColor: Colors.PRIMARY,
-            borderWidth: 1,
-          }}
-          styleText={{
-            color: Colors.PRIMARY,
-          }}
-          iconLeft={
-            <Image
-              source={require('@asset/icons/social/whatsapp-outline/normal.png')}
-              style={{width: 24, height: 24, marginRight: 10}}
-            />
-          }
-        />
+        <ButtonFluid text="Pesanan Selesai" onPress={onCompleted} />
       </View>
     </View>
   );
@@ -260,11 +281,11 @@ const styles = StyleSheet.create({
   },
 });
 
-ProgressDetailScreen.navigationOptions = ({navigation}) => {
+CheckoutDetailScreen.navigationOptions = ({navigation}) => {
   return {
-    title: 'Pesanan Baru',
+    title: 'Pesanan',
     headerTitleStyle: Typography.FONT_HEADER_TITLE,
   };
 };
 
-export default ProgressDetailScreen;
+export default CheckoutDetailScreen;

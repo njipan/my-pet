@@ -24,15 +24,6 @@ const StatusDetailScreen = ({navigation, ...props}) => {
   const paramData = navigation.getParam('data', {});
   const {order, orderLoading, refreshOrder} = useOrderDetail(paramData.id);
 
-  React.useEffect(() => {
-    console.log(order);
-  }, []);
-
-  const goToMyOrder = () => {
-    navigation.dispatch(StackActions.popToTop());
-    navigation.navigate(Screens.ORDER_DETAIL_CUSTOMER);
-  };
-
   return (
     <View style={{flex: 1}}>
       <ScrollView
@@ -106,14 +97,30 @@ const StatusDetailScreen = ({navigation, ...props}) => {
                 dashGap={4}
               />
               <Order.Treatment
-                data={[]}
-                onEditPress={() => alert('edit pressed')}
-                onDeletePress={() => alert('delete pressed')}
+                data={order.order_pets || []}
+                petAliases={{
+                  services: 'order_pet_services',
+                  name: 'pet_name',
+                }}
+                serviceAliases={{
+                  name: 'service_name',
+                  qty: 'service_qty',
+                  description: 'service_description',
+                  price: 'service_price',
+                }}
+                action={false}
               />
             </View>
             <View style={{...Box.SPACER_CONTAINER}} />
             <View style={{...styles.container}}>
-              <TitleWithAction title="Detail Pembayaran" />
+              <Text
+                style={{
+                  fontFamily: Typography.FONT_FAMILY_MEDIUM,
+                  fontSize: 16,
+                  color: Colors.LIGHT_GREY,
+                }}>
+                Detail Pembayaran
+              </Text>
               <View style={{paddingVertical: 10}} />
               <Order.PaymentInfo
                 done
@@ -122,11 +129,12 @@ const StatusDetailScreen = ({navigation, ...props}) => {
                   order.amount || 0,
                 )}`}
                 serviceAliases={{
-                  price: 'amount',
+                  price: 'amountFormatted',
                 }}
                 data={Object.values(order.summary || [])}
               />
             </View>
+            <View style={{paddingVertical: 10}} />
           </View>
         ) : null}
       </ScrollView>

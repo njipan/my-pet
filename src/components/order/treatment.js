@@ -2,6 +2,8 @@ import React from 'react';
 import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
 import {Box, Colors, Typography} from '@style';
 
+import {toNumberFormat} from '@util/transformer';
+
 export const FieldValue = (props) => {
   const {title = null, text = null, bold = false, fontSize = 14} = props;
   return (
@@ -38,37 +40,6 @@ export const FieldValue = (props) => {
   );
 };
 
-const TitleWithAction = (props) => {
-  const {
-    styleText = {},
-    fontSize = 18,
-    title = null,
-    actionIcon = null,
-    onPress = () => {},
-  } = props;
-
-  return (
-    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-      <View style={{justifyContent: 'center', flex: 1}}>
-        <Text
-          style={{
-            ...Box.LABEL_TITLE,
-            color: Colors.REGULAR,
-            fontSize,
-            ...styleText,
-          }}>
-          {title}
-        </Text>
-      </View>
-      {actionIcon ? (
-        <View style={{justifyContent: 'center'}}>
-          <TouchableOpacity onPress={onPress}>{actionIcon}</TouchableOpacity>
-        </View>
-      ) : null}
-    </View>
-  );
-};
-
 const OrderTreatment = ({navigation, ...props}) => {
   const {
     onEditPress = () => {},
@@ -77,6 +48,7 @@ const OrderTreatment = ({navigation, ...props}) => {
     action = true,
     petAliases = {},
     serviceAliases = {},
+    serviceTransform = {},
   } = props;
 
   return (
@@ -98,7 +70,7 @@ const OrderTreatment = ({navigation, ...props}) => {
             <View style={{...styles.treatmentItemContainer, marginLeft: 4}}>
               <FieldValue
                 title={service[serviceAliases.name] || service.name}
-                text="1x"
+                text={`${service[serviceAliases.qty] || service.qty || 1}x`}
                 bold
               />
               <Text
@@ -118,22 +90,31 @@ const OrderTreatment = ({navigation, ...props}) => {
                       fontSize: 14,
                       color: Colors.REGULAR,
                     }}>
-                    Rp{service[serviceAliases.price] || service.price}
+                    {toNumberFormat(
+                      service[serviceAliases.price] || service.price,
+                    )}
                   </Text>
                 </View>
-                {action ? (
-                  <View style={{flexDirection: 'row'}}>
-                    <TouchableOpacity
-                      style={{marginRight: 20}}
-                      onPress={() => onEditPress(pet, service)}>
-                      <Text style={{color: Colors.BLUE}}>Ubah</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => onDeletePress(pet, service)}>
-                      <Text style={{color: Colors.DANGER}}>Hapus</Text>
-                    </TouchableOpacity>
-                  </View>
-                ) : null}
+                <View style={{flexDirection: 'row'}}>
+                  <TouchableOpacity
+                    style={{marginRight: 20}}
+                    onPress={() => onEditPress(pet, service)}>
+                    <Text
+                      style={{
+                        color: action ? Colors.BLUE : Colors.LIGHT_GREY,
+                      }}>
+                      Ubah
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => onDeletePress(pet, service)}>
+                    <Text
+                      style={{
+                        color: action ? Colors.DANGER : Colors.LIGHT_GREY,
+                      }}>
+                      Hapus
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           ))}
