@@ -67,3 +67,9 @@ export const HOME_NOTIFICATION = 'Home_Notification';
 export const DETAIL_PET_CUSTOMER = 'Detail_Pet_Customer';
 export const ADD_PET_CUSTOMER = 'Add_Pet_Customer';
 export const EDIT_PET_CUSTOMER = 'Edit_Pet_Customer';
+
+export const PROMO_LIST_CUSTOMER = 'Promo_List_Customer';
+export const PROMO_DETAIL_CUSTOMER = 'Promo_Detail_Customer';
+
+export const EVENT_LIST_CUSTOMER = 'Event_List_Customer';
+export const EVENT_DETAIL_CUSTOMER = 'Event_Detail_Customer';

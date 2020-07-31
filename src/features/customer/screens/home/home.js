@@ -53,7 +53,11 @@ const HomeScreen = ({navigation, ...props}) => {
       <View style={{backgroundColor: 'black'}}>
         <StatusBar backgroundColor="white" barStyle="dark-content" />
         <View style={{backgroundColor: 'white'}}>
-          <PromoCarousel />
+          <PromoCarousel
+            onRightSidePress={() =>
+              navigation.navigate(Screens.PROMO_LIST_CUSTOMER)
+            }
+          />
         </View>
         <HomePet
           onCardPress={(id) => {

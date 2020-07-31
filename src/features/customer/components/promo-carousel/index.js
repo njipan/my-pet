@@ -43,7 +43,7 @@ const PromoCarousel = (props) => {
         data={dummy}
         onIndexChange={(value) => setIndex(value)}
       />
-      <View style={{padding: 10}}>
+      <View style={{padding: 20}}>
         <CarouselIndicator
           length={dummy.length}
           activeIndex={index}
