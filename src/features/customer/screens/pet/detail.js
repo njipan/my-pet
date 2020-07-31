@@ -13,6 +13,7 @@ const DetailScreen = ({navigation, ...props}) => {
   const id = navigation.state.params.id || null;
 
   const [pet, setPet] = React.useState({});
+  const [medicalRecords, setMedicalRecords] = React.useState([]);
   const [picture, setPicture] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
 
@@ -37,8 +38,8 @@ const DetailScreen = ({navigation, ...props}) => {
     setLoading(true);
     try {
       const response = await PetService.get(id);
-      console.log(Object.keys(response.pets));
       setPet(response.pets);
+      setMedicalRecords(response.medical_records);
       getPicture(response, response.pictures.file.data || null);
       navigation.setParams({reloadPet: () => getPet()});
     } catch (err) {
@@ -53,7 +54,14 @@ const DetailScreen = ({navigation, ...props}) => {
 
   return (
     <ScrollView style={{backgroundColor: Colors.BLACK10}}>
-      <PetDetail data={{...pet, picture: picture, pictureLoading: loading}} />
+      <PetDetail
+        data={{
+          ...pet,
+          picture: picture,
+          pictureLoading: loading,
+          medicalRecords,
+        }}
+      />
     </ScrollView>
   );
 };

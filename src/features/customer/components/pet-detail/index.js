@@ -13,7 +13,7 @@ import 'moment/locale/id';
 import {Badge, Icons} from '@component';
 import {Sex} from '@constant';
 import {Colors, Mixins, Typography} from '@style';
-import {parseDateFromNow} from '@util/moment';
+import {parseDateFromNow, getDatetime} from '@util/moment';
 
 export const InfoItem = (props) => {
   const {label = '', text = ''} = props;
@@ -139,11 +139,13 @@ const PetDetail = ({data, ...props}) => {
       <View style={{...styles.section, marginBottom: 0}}>
         <Text style={styles.textHeading}>Riwayat Kesehatan</Text>
         <View>
-          <PetHistoryItem
-            title="Suntik Vaksi"
-            text="Minggu, 20 April 2016 - 08:00 AM"
-            image={require('@asset/icons/sex/male.png')}
-          />
+          {data.medicalRecords.map((service) => (
+            <PetHistoryItem
+              title={service.service_name}
+              text={getDatetime(service.booking_datetime)}
+              image={require('@asset/icons/sex/male.png')}
+            />
+          ))}
         </View>
       </View>
     </View>

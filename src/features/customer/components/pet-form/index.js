@@ -187,7 +187,7 @@ const PetFormSecond = ({
           value={bodyColor}
         />
         <TextInput
-          label="Warna Badan"
+          label="Warna Mata"
           onChangeText={onEyeColorChange}
           error={errorMessages.eyeColor || false}
           value={eyeColor}
