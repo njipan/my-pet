@@ -6,10 +6,7 @@ import {Colors, Mixins, Typography} from '@style';
 const NotificationCard = (props) => {
   const {picture, text = null, description = null, onPress = () => {}} = props;
   return (
-    <TouchableHighlight
-      onPress={onPress}
-      underlayColor="transparent"
-      onPress={onPress}>
+    <TouchableHighlight underlayColor="transparent" onPress={onPress}>
       <View
         style={{
           elevation: 3,

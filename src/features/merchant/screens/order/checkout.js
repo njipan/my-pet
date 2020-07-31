@@ -2,7 +2,7 @@ import React from 'react';
 import {
   TouchableOpacity,
   RefreshControl,
-  Image,
+  ToastAndroid,
   StyleSheet,
   ScrollView,
   Text,
@@ -102,6 +102,7 @@ const CheckoutDetailScreen = ({navigation, ...props}) => {
     setOrderLoading,
     setOrder,
   } = useOrderDetail(paramData.id, orderData == null, orderData == null);
+
   const [orderPets, setOrderPets] = React.useState(paramPets);
 
   const overrideRefreshOrder = async () => {
@@ -123,8 +124,14 @@ const CheckoutDetailScreen = ({navigation, ...props}) => {
     overrideRefreshOrder();
   }, []);
 
-  const onEditBooking = () => {
-    alert('EDIT BOOKING');
+  const onAddTreatment = (pet) => {
+    navigation.navigate(Screens.ORDER_CHOOSE_TREATMENT_MERCHANT, {
+      orderId: paramData.id,
+      orderPetId: pet.id,
+      alreadySelected:
+        pet.order_pet_services.map((item) => item.merchant_service_id) || [],
+      callback: overrideRefreshOrder,
+    });
   };
 
   const updateOrderPets = (petId, services) => {
@@ -139,7 +146,18 @@ const CheckoutDetailScreen = ({navigation, ...props}) => {
     setOrderPets(newPets);
   };
 
-  const onDeleteService = (pet, service) => {
+  const onDeleteService = async (pet, service) => {
+    try {
+      const body = {
+        order_id: paramData.id,
+        order_pet_id: pet.id,
+        service_id: service.id,
+      };
+      await OrderService.deleteTreatment(body);
+      overrideRefreshOrder();
+    } catch (error) {
+      console.log();
+    }
     const petId = pet.pet_id;
     const petServices = (pet.order_pet_services || []).filter(
       (item) => item.merchant_service_id != service.merchant_service_id,
@@ -147,15 +165,24 @@ const CheckoutDetailScreen = ({navigation, ...props}) => {
     updateOrderPets(petId, petServices);
   };
 
+  const onEditService = (pet, service) => {
+    navigation.navigate(Screens.ORDER_EDIT_TREATMENT_MERCHANT, {
+      orderId: paramData.id,
+      orderPetId: pet.id,
+      updateData: service,
+      callback: overrideRefreshOrder,
+    });
+  };
+
   const onCompleted = () => {
     Modal.confirm({
       isLoading: true,
       onLoad: async (modalNav) => {
         try {
-          // const response = await OrderService.updateStatus(
-          //   parseInt(paramData.id),
-          //   OrderStatus.ORDER_COMPLETED,
-          // );
+          const response = await OrderService.updateStatus(
+            parseInt(paramData.id),
+            OrderStatus.ORDER_COMPLETED,
+          );
           const backToIdx =
             navigation.dangerouslyGetParent().state.routes.length - 2;
           const routeBack = navigation.dangerouslyGetParent().state.routes[
@@ -165,6 +192,7 @@ const CheckoutDetailScreen = ({navigation, ...props}) => {
           navigation.navigate(Screens.ORDER_STATUS_DETAIL_MERCHANT, {
             data: {...paramData},
           });
+          navigation.getParam('reloadOrders', () => {})();
         } catch (error) {
           modalNav.goBack(null);
           ToastAndroid.show('Terjadi Kesalahan', ToastAndroid.LONG);
@@ -207,16 +235,7 @@ const CheckoutDetailScreen = ({navigation, ...props}) => {
         </View>
         <View style={{...Box.SPACER_CONTAINER}} />
         <View style={{...styles.container}}>
-          <TitleWithAction
-            onPress={onEditBooking}
-            title="Detail Perawatan"
-            actionIcon={
-              <Image
-                source={require('@asset/icons/form/plus-blue/normal.png')}
-                style={{width: 20, height: 20}}
-              />
-            }
-          />
+          <TitleWithAction title="Detail Perawatan" />
           <Dash
             style={{width: '100%', marginBottom: 10, marginTop: 8}}
             dashColor={Colors.BLACK10}
@@ -226,6 +245,12 @@ const CheckoutDetailScreen = ({navigation, ...props}) => {
 
           <Order.Treatment
             data={orderPets || []}
+            petIcon={
+              <Text style={{fontSize: 20, color: Colors.BLUE, marginRight: 2}}>
+                +
+              </Text>
+            }
+            onPetIconPress={onAddTreatment}
             petAliases={{
               services: 'order_pet_services',
               name: 'pet_name',
@@ -234,7 +259,9 @@ const CheckoutDetailScreen = ({navigation, ...props}) => {
               name: 'service_name',
               description: 'service_description',
               price: 'service_price',
+              qty: 'service_qty',
             }}
+            onEditPress={onEditService}
             onDeletePress={onDeleteService}
           />
         </View>
@@ -257,14 +284,16 @@ const CheckoutDetailScreen = ({navigation, ...props}) => {
           </View>
         </View>
       </ScrollView>
-      <View
-        style={{
-          ...Box.CONTAINER_ACTION_BOTTOM,
-          backgroundColor: 'white',
-          elevation: 5,
-        }}>
-        <ButtonFluid text="Pesanan Selesai" onPress={onCompleted} />
-      </View>
+      {!orderLoading ? (
+        <View
+          style={{
+            ...Box.CONTAINER_ACTION_BOTTOM,
+            backgroundColor: 'white',
+            elevation: 5,
+          }}>
+          <ButtonFluid text="Pesanan Selesai" onPress={onCompleted} />
+        </View>
+      ) : null}
     </View>
   );
 };

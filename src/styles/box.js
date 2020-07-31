@@ -2,6 +2,10 @@ import * as Mixins from './mixins';
 import * as Colors from './colors';
 import * as Typography from './typography';
 
+export const SHADOW = {
+  elevation: 3,
+};
+
 export const NO_SHADOW = {
   elevation: 0,
   shadowOpacity: 0,

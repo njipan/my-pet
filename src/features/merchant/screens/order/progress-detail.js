@@ -116,10 +116,10 @@ const ProgressDetailScreen = ({navigation, ...props}) => {
       isLoading: true,
       onLoad: async (modalNav) => {
         try {
-          // const response = await OrderService.updateStatus(
-          //   parseInt(paramData.id),
-          //   OrderStatus.CUSTOMER_ON_PROGRESS,
-          // );
+          const response = await OrderService.updateStatus(
+            parseInt(paramData.id),
+            OrderStatus.CUSTOMER_ON_PROGRESS,
+          );
           const backToIdx =
             navigation.dangerouslyGetParent().state.routes.length - 2;
           const routeBack = navigation.dangerouslyGetParent().state.routes[
@@ -137,6 +137,11 @@ const ProgressDetailScreen = ({navigation, ...props}) => {
         }
       },
     });
+  };
+
+  const editTreatment = (pet, value) => {
+    console.log(pet);
+    console.log(value);
   };
 
   return (
@@ -193,6 +198,7 @@ const ProgressDetailScreen = ({navigation, ...props}) => {
               price: 'service_price',
             }}
             action={false}
+            onEditPress={editTreatment}
           />
         </View>
         <View>

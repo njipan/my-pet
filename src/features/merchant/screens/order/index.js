@@ -12,6 +12,9 @@ import StatusDetailScreen from './status-detail';
 import ProgressDetailScreen from './progress-detail';
 import CheckoutDetailScreen from './checkout';
 import HistoryDetailScreen from './history-detail';
+import CreateTreatmentScreen from './create-treatment';
+import UpdateTreatmentScreen from './update-treatment';
+import ChooseTreatmentScreen from './choose-treatment';
 
 import {Screens} from '@constant';
 import {Typography} from '@style';
@@ -47,6 +50,9 @@ export const MerchantOrderScreens = {
   [Screens.ORDER_ON_PROGRESS_DETAIL_MERCHANT]: ProgressDetailScreen,
   [Screens.ORDER_CHECKOUT_DETAIL_MERCHANT]: CheckoutDetailScreen,
   [Screens.ORDER_HISTORY_DETAIL_MERCHANT]: HistoryDetailScreen,
+  [Screens.ORDER_CREATE_TREATMENT_MERCHANT]: CreateTreatmentScreen,
+  [Screens.ORDER_EDIT_TREATMENT_MERCHANT]: UpdateTreatmentScreen,
+  [Screens.ORDER_CHOOSE_TREATMENT_MERCHANT]: ChooseTreatmentScreen,
 };
 // export {ProgressScreen, HistoryScreen, HistoryDetailScreen};
 

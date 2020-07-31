@@ -12,7 +12,7 @@ export const get = async (id) => {
 
 export const all = async (config = {}) => {
   const response = await authAxios.get(`${Apis.PET_ALL}`);
-  return response.data.data.pets;
+  return response.data.data;
 };
 
 export const update = (id, data) => {

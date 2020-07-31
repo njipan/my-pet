@@ -104,6 +104,19 @@ const HomePet = ({
                   underlayColor="transparent">
                   <PetItemCard
                     data={{...pet, dateOfBirth: pet.date_of_birth}}
+                    iconName={
+                      pet.type == 1 ? (
+                        <Image
+                          style={{width: 32, height: 32}}
+                          source={require('@asset/icons/animal/cat.png')}
+                        />
+                      ) : (
+                        <Image
+                          style={{width: 32, height: 32}}
+                          source={require('@asset/icons/animal/dog.png')}
+                        />
+                      )
+                    }
                     {...props}
                   />
                 </TouchableHighlight>

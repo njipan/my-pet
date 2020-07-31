@@ -32,3 +32,25 @@ export const createRating = async ({order_id, rating, description}) => {
   });
   return response.data.data;
 };
+
+export const createTreatment = (order_id, order_pet_id, body) => {
+  return authAxios.post(
+    `${Apis.ORDER_ALL}/${order_id}/pet/${order_pet_id}/service`,
+    {...body},
+  );
+};
+
+export const updateTreatment = ({order_id, order_pet_id, service_id, qty}) => {
+  return authAxios.put(
+    `${Apis.ORDER_ALL}/${order_id}/pet/${order_pet_id}/service/${service_id}`,
+    {
+      qty,
+    },
+  );
+};
+
+export const deleteTreatment = ({order_id, order_pet_id, service_id}) => {
+  return authAxios.delete(
+    `${Apis.ORDER_ALL}/${order_id}/pet/${order_pet_id}/service/${service_id}`,
+  );
+};

@@ -100,10 +100,10 @@ const IncomingDetailScreen = ({navigation, ...props}) => {
       isLoading: true,
       onLoad: async (modalNav) => {
         try {
-          // const response = await OrderService.updateStatus(
-          //   parseInt(paramData.id),
-          //   OrderStatus.MERCHANT_APPROVED,
-          // );
+          const response = await OrderService.updateStatus(
+            parseInt(paramData.id),
+            OrderStatus.MERCHANT_APPROVED,
+          );
           const backToIdx =
             navigation.dangerouslyGetParent().state.routes.length - 2;
           const routeBack = navigation.dangerouslyGetParent().state.routes[

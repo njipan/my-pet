@@ -25,6 +25,7 @@ const PetDetailInfo = ({label = '', value = ''}) => {
           color: Colors.PRIMARY,
           fontWeight: '700',
           fontFamily: Typography.FONT_FAMILY_REGULAR,
+          textTransform: 'capitalize',
         }}>
         {value}
       </Text>
@@ -32,12 +33,7 @@ const PetDetailInfo = ({label = '', value = ''}) => {
   );
 };
 
-const PetItemCard = ({
-  data = {},
-  onPress = () => {},
-  onEditPress = () => {},
-  ...props
-}) => {
+const PetItemCard = ({data = {}, onPress = () => {}, iconName, ...props}) => {
   const heightCard = 160;
   const getAge = (date = null) => {
     const parseDate = moment(date, 'DD-MM-YYYY');
@@ -114,10 +110,8 @@ const PetItemCard = ({
             borderBottomColor: Colors.BLACK10,
             borderBottomWidth: 1,
           }}>
-          <Image
-            style={{width: 32, height: 32}}
-            source={require('@asset/icons/animal/cat.png')}
-          />
+          {iconName}
+
           <View
             style={{
               flex: 1,
@@ -157,7 +151,9 @@ const PetItemCard = ({
           <PetDetailInfo label="Ras : " value={data.breed || '-'} />
           <PetDetailInfo
             label="Usia : "
-            value={parseDateFromNow(data.dateOfBirth)}
+            value={parseDateFromNow(
+              moment(data.dateOfBirth || data.date_of_birth, 'DD-MM-YYYY'),
+            )}
           />
         </View>
         <View

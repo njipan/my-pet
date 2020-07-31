@@ -104,7 +104,7 @@ const PetFormFirst = ({
           label="Berat Badan (Optional)"
           onChangeText={onWeightChange}
           error={errorMessages.weight || false}
-          value={`${weight}` || ''}
+          value={`${weight || ''}` || ''}
         />
       </View>
     </View>
@@ -186,14 +186,13 @@ const PetFormSecond = ({
           error={errorMessages.bodyColor || false}
           value={bodyColor}
         />
-        <Dropdown
-          label="Warna Mata"
-          data={eyes}
-          placeholder={{label: 'Warna Mata', value: null}}
+        <TextInput
+          label="Warna Badan"
+          onChangeText={onEyeColorChange}
           error={errorMessages.eyeColor || false}
-          onValueChange={onEyeColorChange}
           value={eyeColor}
         />
+
         <TextInput
           label="Microschip ID"
           onChangeText={onMicroschipIdChange}

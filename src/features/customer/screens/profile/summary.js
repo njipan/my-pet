@@ -18,7 +18,7 @@ import {AuthService, CustomerService, PetService} from '@service';
 import * as Modal from '@util/modal';
 import {encodeFromBuffer} from '@util/file';
 
-const MyPet = ({pets = [], onAddPet = () => {}}) => {
+const MyPet = ({navigation, pets = [], onAddPet = () => {}}) => {
   return (
     <View style={{padding: 16, backgroundColor: Colors.WHITE}}>
       <Heading
@@ -33,7 +33,10 @@ const MyPet = ({pets = [], onAddPet = () => {}}) => {
       <View style={{marginVertical: 8}} />
       <View>
         <View>
-          {pets && pets.map((pet) => <PetItemCard data={pet} key={pet.id} />)}
+          {pets &&
+            pets.map((pet) => (
+              <PetItemCard data={pet} key={pet.id} navigation={navigation} />
+            ))}
         </View>
         <TouchableOpacity onPress={onAddPet}>
           <AddPetCard
@@ -160,7 +163,11 @@ const ProfileSummaryScreen = ({navigation}) => {
             {...{title: me.full_name, text: 'Lihat Profil', picture}}
           />
         </View>
-        <MyPet onAddPet={() => navigation.navigate(Screens.ADD_PET_CUSTOMER)} />
+        <MyPet
+          onAddPet={() => navigation.navigate(Screens.ADD_PET_CUSTOMER)}
+          pets={pets}
+          navigation={navigation}
+        />
         <View style={{marginVertical: 5}} />
         <View style={{backgroundColor: Colors.WHITE, padding: 16}}>
           <ProfileSetting {...{onLogout, onTNC, onFAQ, onChangePassword}} />

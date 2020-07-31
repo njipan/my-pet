@@ -33,16 +33,22 @@ const DetailScreen = ({navigation, ...props}) => {
     setLoading(false);
   };
 
+  const getPet = async () => {
+    setLoading(true);
+    try {
+      const response = await PetService.get(id);
+      console.log(Object.keys(response.pets));
+      setPet(response.pets);
+      getPicture(response, response.pictures.file.data || null);
+      navigation.setParams({reloadPet: () => getPet()});
+    } catch (err) {
+      console.log(err);
+    }
+    setLoading(false);
+  };
+
   React.useEffect(() => {
-    PetService.get(id)
-      .then((response) => {
-        setPet(response.pets);
-        getPicture(response, response.pictures.file.data || null);
-      })
-      .catch((e) => {
-        console.log(e);
-        setLoading(false);
-      });
+    getPet();
   }, []);
 
   return (
@@ -63,6 +69,7 @@ DetailScreen.navigationOptions = ({navigation}) => {
           data: navigation.getParam('data'),
           picture: navigation.getParam('picture'),
           savedState: navigation.state,
+          reloadPet: navigation.getParam('reloadPet', () => {}),
         });
         ref.hide();
       },

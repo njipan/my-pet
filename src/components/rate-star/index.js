@@ -20,6 +20,7 @@ const RateStar = (props) => {
         style={{width: 40, height: 40}}
       />
     ),
+    editable = true,
   } = props;
 
   const makeArray = (n) => {
@@ -38,16 +39,24 @@ const RateStar = (props) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        {makeArray(value).map((item, idx) => (
-          <TouchableOpacity onPress={() => onPress(idx + 1)}>
-            {activeIcon}
-          </TouchableOpacity>
-        ))}
-        {makeArray(max - value).map((item, idx) => (
-          <TouchableOpacity onPress={() => onPress(value + (idx + 1))}>
-            {inactiveIcon}
-          </TouchableOpacity>
-        ))}
+        {makeArray(value).map((item, idx) =>
+          editable ? (
+            <TouchableOpacity onPress={() => onPress(idx + 1)}>
+              {activeIcon}
+            </TouchableOpacity>
+          ) : (
+            activeIcon
+          ),
+        )}
+        {makeArray(max - value).map((item, idx) =>
+          editable ? (
+            <TouchableOpacity onPress={() => onPress(idx + 1)}>
+              {inactiveIcon}
+            </TouchableOpacity>
+          ) : (
+            inactiveIcon
+          ),
+        )}
       </View>
     </View>
   );

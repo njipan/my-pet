@@ -10,19 +10,27 @@ const TreatmentCard = (props) => {
     name = null,
     description = null,
     price = null,
+    disabled = false,
   } = props;
   return (
     <View
       style={{
         ...Box.CONTAINER_CARD,
-        backgroundColor: Colors.WHITE,
+        elevation: null,
+        backgroundColor: disabled ? Colors.BLACK10 : Colors.WHITE,
         flexDirection: 'row',
         ...Mixins.padding(16),
         marginBottom: 14,
         alignItems: 'center',
+        borderColor: Colors.SHADOW,
+        borderWidth: 1,
         ...styleRoot,
       }}>
-      <View style={{flex: 1, backgroundColor: 'white'}}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: disabled ? Colors.BLACK10 : Colors.WHITE,
+        }}>
         <Text style={{...styles.text}}>{name}</Text>
         <Text
           style={{

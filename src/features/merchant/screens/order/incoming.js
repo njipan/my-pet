@@ -1,13 +1,11 @@
 import React from 'react';
-import {Image, Text, RefreshControl, ScrollView, View} from 'react-native';
-import moment from 'moment';
+import {Text, Image, RefreshControl, ScrollView, View} from 'react-native';
 
 import {getDatetime} from '@util/moment';
 import * as Transformer from '@util/transformer';
 
 import {NotificationCard} from '@component/order';
-import {Screens} from '@constant';
-import {Colors} from '@style';
+import {Colors, Typography} from '@style';
 
 import ListOrder from './hooks/orders-hook';
 
@@ -31,6 +29,13 @@ const IncomingScreen = ({navigation, ...props}) => {
 
   React.useEffect(() => {
     load();
+    const didFocus = navigation.addListener('didFocus', (payload) => {
+      load();
+    });
+
+    return () => {
+      didFocus.remove();
+    };
   }, []);
 
   const onPress = (value) => {
@@ -41,38 +46,74 @@ const IncomingScreen = ({navigation, ...props}) => {
   };
 
   return (
-    <ScrollView
-      style={{padding: 16, overflow: 'visible'}}
-      showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl
-          colors={Colors.REFRESH_CONTROL_PRIMARY}
-          refreshing={orderLoading}
-          onRefresh={load}
-        />
-      }>
-      <View style={{backgroundColor: 'white'}}>
-        {getOrders(STATUS) &&
-          getOrders(STATUS).map((order) => {
-            return (
-              <View key={order.id}>
-                <NotificationCard
-                  text={order.full_name}
-                  description={getDatetime(order.booking_datetime)}
-                  picture={
-                    <Image
-                      source={require('@asset/icons/menu-bar/vet-service-active/normal.png')}
-                      style={{width: 36, height: 36}}
-                    />
-                  }
-                  onPress={() => onPress(order)}
-                />
-                <View style={{marginVertical: 1}} />
-              </View>
-            );
-          })}
-      </View>
-    </ScrollView>
+    <View style={{flex: 1}}>
+      <ScrollView
+        style={{
+          padding: 16,
+          overflow: getOrders(STATUS).length < 1 ? 'scroll' : 'visible',
+        }}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            colors={Colors.REFRESH_CONTROL_PRIMARY}
+            refreshing={orderLoading}
+            onRefresh={load}
+          />
+        }>
+        {getOrders(STATUS).length < 1 && (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 64,
+            }}>
+            <Image
+              style={{width: 280, height: 280}}
+              source={require('@asset/images/illustrations/order-empty.png')}
+            />
+            <Text
+              style={{
+                ...Typography.ERROR_HANDLER_TITLE,
+              }}>
+              Tidak Ada Pesanan
+            </Text>
+            <Text
+              style={{
+                ...Typography.ERROR_HANDLER_DESCRIPTION,
+              }}>
+              Tidak ada yang kamu pesan
+            </Text>
+          </View>
+        )}
+        <View
+          style={{
+            backgroundColor: 'white',
+            flex: 1,
+            height: '100%',
+          }}>
+          {getOrders(STATUS) &&
+            getOrders(STATUS).map((order) => {
+              return (
+                <View key={order.id}>
+                  <NotificationCard
+                    text={order.full_name}
+                    description={getDatetime(order.booking_datetime)}
+                    picture={
+                      <Image
+                        source={require('@asset/icons/menu-bar/vet-service-active/normal.png')}
+                        style={{width: 36, height: 36}}
+                      />
+                    }
+                    onPress={() => onPress(order)}
+                  />
+                  <View style={{marginVertical: 1}} />
+                </View>
+              );
+            })}
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 

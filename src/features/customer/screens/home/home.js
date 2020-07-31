@@ -4,11 +4,16 @@ import {
   StatusBar,
   RefreshControl,
   ScrollView,
+  Text,
   StyleSheet,
 } from 'react-native';
 import HomePet from './../../components/home-pet';
+import PromoCarousel from './../../components/promo-carousel';
+import EventCarousel from './../../components/event-carousel';
+import HomeNews from './../../components/home-news';
+
 import {Screens} from '@constant';
-import {Colors} from '@style';
+import {Colors, Typography} from '@style';
 import {PetService} from '@service';
 
 const HomeScreen = ({navigation, ...props}) => {
@@ -45,8 +50,11 @@ const HomeScreen = ({navigation, ...props}) => {
           onRefresh={load}
         />
       }>
-      <View>
+      <View style={{backgroundColor: 'black'}}>
         <StatusBar backgroundColor="white" barStyle="dark-content" />
+        <View style={{backgroundColor: 'white'}}>
+          <PromoCarousel />
+        </View>
         <HomePet
           onCardPress={(id) => {
             navigation.navigate(Screens.DETAIL_PET_CUSTOMER, {
@@ -61,7 +69,28 @@ const HomeScreen = ({navigation, ...props}) => {
           data={pets}
           navigation={navigation}
         />
-        <View style={{height: 1000, backgroundColor: 'white'}}></View>
+        <View style={{backgroundColor: Colors.WHITE}}>
+          <View
+            style={{paddingHorizontal: 20, paddingTop: 20, marginBottom: -4}}>
+            <Text style={{...Typography.heading('h3')}}>Event</Text>
+            <Text
+              style={{
+                color: Colors.LIGHT_GREY,
+                width: '80%',
+                fontSize: 13,
+                marginTop: 4,
+              }}>
+              Temukan berbagai keseruan dengan hewan peliharaan kamu.
+            </Text>
+          </View>
+          <EventCarousel />
+        </View>
+        <View style={{padding: 20, backgroundColor: 'white'}}>
+          <Text style={{...Typography.heading('h3'), marginBottom: 10}}>
+            Berita
+          </Text>
+          <HomeNews />
+        </View>
       </View>
     </ScrollView>
   );

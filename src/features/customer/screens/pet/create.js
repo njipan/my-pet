@@ -7,6 +7,7 @@ import PetForm from './../../components/pet-form';
 import {PetSchema} from './../../schemas';
 
 import * as Modal from '@util/modal';
+import {parseDateFromNow} from '@util/moment';
 import {validate, singleValidate} from '@util/validate';
 import {PetService, PictureService} from '@service';
 import {Screens} from '@constant';
@@ -16,7 +17,7 @@ const initData = {
   type: null,
   breed: null,
   sex: null,
-  weight: null,
+  weight: 0,
   pictureId: null,
   dateOfBirth: null,
   bodyColor: null,
@@ -129,12 +130,7 @@ const CreateScreen = ({navigation, ...props}) => {
         setData({
           ...data,
           dateOfBirth: dateString,
-          age: date
-            .locale('id')
-            .fromNow()
-            .replace('ago', '')
-            .replace('a ', '')
-            .replace('in ', ''),
+          age: parseDateFromNow(date),
         });
       }
     }
@@ -183,7 +179,7 @@ const CreateScreen = ({navigation, ...props}) => {
         breed: data.breed,
         sex: data.sex,
         weight: data.weight,
-        picture_id: 3,
+        picture_id: data.pictureId,
         date_of_birth: data.dateOfBirth,
         body_color: data.bodyColor,
         eye_color: data.eyeColor,
@@ -195,7 +191,7 @@ const CreateScreen = ({navigation, ...props}) => {
         })
         .catch((err) => {
           navigation.goBack(null);
-          ToastAndroid.show(`Ooops, terdapat masalah!`, ToastAndroid.LONG);
+          ToastAndroid.show(`Terjadi Kesalahan!`, ToastAndroid.LONG);
         });
     }
   };

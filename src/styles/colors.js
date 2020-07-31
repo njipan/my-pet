@@ -25,6 +25,7 @@ export const BLACK60 = '#9AA3AA';
 export const BLACK80 = '#52575C';
 export const BLACK87 = '#212220';
 export const REGULAR = '#333';
+export const SHADOW = '#80808017';
 
 export const MODAL = '#00000029';
 

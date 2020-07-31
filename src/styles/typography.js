@@ -76,3 +76,23 @@ export const heading = (type, color = null, style = {}) => {
   };
   return {...(rules[type] || {}), fontFamily: FONT_FAMILY_REGULAR, ...style};
 };
+
+export const ERROR_HANDLER_TITLE = {
+  fontFamily: FONT_FAMILY_BOLD,
+  fontSize: 24,
+  color: Colors.REGULAR,
+  marginBottom: 10,
+};
+
+export const ERROR_HANDLER_DESCRIPTION = {
+  fontFamily: FONT_FAMILY_MEDIUM,
+  fontSize: 13,
+  color: Colors.LIGHT_GREY,
+};
+
+export const CAROUSEL_INDICATOR_TEXT = {
+  color: Colors.PRIMARY,
+  fontFamily: FONT_FAMILY_MEDIUM,
+  fontSize: 13,
+  fontWeight: '700',
+};

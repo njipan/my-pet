@@ -2,7 +2,6 @@ import React from 'react';
 import {ToastAndroid, StyleSheet, View} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 
-import {Screens} from '@constant';
 import {PetService, PictureService} from '@service';
 import {useSchema} from '@shared/hooks';
 import {Typography} from '@style';
@@ -131,10 +130,13 @@ const EditScreen = ({navigation, ...props}) => {
           };
           const response = await PetService.update(data.id, body);
           ToastAndroid.show('Perubahan berhasil disimpan!', ToastAndroid.LONG);
+
           modalNavigation.navigate(routeName, key, {
             data: navigation.getParam('data'),
             picture: navigation.getParam('picture'),
           });
+
+          navigation.getParam('reloadPet', () => {})();
         } catch (err) {
           ToastAndroid.show(`Terjadi Kesalahan!`, ToastAndroid.LONG);
           modalNavigation.goBack(null);
@@ -156,7 +158,7 @@ const EditScreen = ({navigation, ...props}) => {
         title: 'Konfirmasi',
         description:
           'Apakah anda yakin ingin menyimpan perubahan hewan peliharaan?',
-        textConfirm: 'Ya, Tambahkan',
+        textConfirm: 'Ya, Ubah',
         textCancel: 'Tidak',
         onCallback: onSave,
       });

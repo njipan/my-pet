@@ -3,7 +3,7 @@ import {Image, RefreshControl, Text, ScrollView, View} from 'react-native';
 import moment from 'moment';
 
 import {NotificationItem} from '@component/order';
-import {Screens} from '@constant';
+import {Screens, OrderStatus} from '@constant';
 import {Colors} from '@style';
 import ListOrder from './hooks/orders-hook';
 
@@ -41,6 +41,7 @@ const HistroryScreen = ({navigation, ...props}) => {
           getOrders(STATUS).map((order) => (
             <View key={order.id}>
               <NotificationItem
+                done={order.status == OrderStatus.ORDER_COMPLETED}
                 onPress={() => onPress(order)}
                 text={order.merchant_name}
                 description={moment(order.booking_datetime)

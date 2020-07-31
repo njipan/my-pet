@@ -106,6 +106,7 @@ const HistoryDetailScreen = ({navigation, ...props}) => {
   }, []);
 
   const getReview = () => {
+    if (!Array.isArray(order.reviews)) return {};
     return (
       (order.reviews || []).find((item) => item.order_id == paramData.id) || {}
     );
@@ -122,7 +123,7 @@ const HistoryDetailScreen = ({navigation, ...props}) => {
                 booking={order.id || paramData.id}
               />
               <View style={{marginVertical: 14, paddingHorizontal: 20}}>
-                <RateStar value={getReview().rating} />
+                <RateStar value={getReview().rating} editable={false} />
                 {getReview().description ? (
                   <TextInput
                     style={{marginTop: 28, height: 100}}

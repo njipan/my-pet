@@ -74,10 +74,6 @@ const HistoryDetailScreen = ({navigation, ...props}) => {
       : {};
   };
 
-  const onEditBooking = () => {
-    alert('EDIT BOOKING');
-  };
-
   const onReview = () => {
     if (!reviewing) {
       setReviewing(true);
@@ -94,7 +90,7 @@ const HistoryDetailScreen = ({navigation, ...props}) => {
             order_id: parseInt(params.id),
           };
           const response = await OrderService.createRating(body);
-          setReviewing(true);
+          setReviewing(false);
           navigation.setParams({title: 'Riwayat'});
           ToastAndroid.show('Penilaian berhasil disimpan!', ToastAndroid.LONG);
           refreshOrder();
@@ -172,10 +168,7 @@ const HistoryDetailScreen = ({navigation, ...props}) => {
           <View>
             <View style={{...Box.SPACER_CONTAINER}} />
             <View style={{...styles.container, marginBottom: 40}}>
-              <TitleWithAction
-                onPress={onEditBooking}
-                title="Detail Pembayaran"
-              />
+              <TitleWithAction onPress={() => {}} title="Detail Pembayaran" />
               <View style={{paddingVertical: 10}} />
               <Order.PaymentInfo
                 done

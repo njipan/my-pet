@@ -49,22 +49,39 @@ const OrderTreatment = ({navigation, ...props}) => {
     petAliases = {},
     serviceAliases = {},
     serviceTransform = {},
+    petIcon = null,
+    onPetIconPress = () => {},
   } = props;
 
   return (
     <View>
       {data.map((pet, petIdx) => (
         <View style={{marginBottom: petIdx == data.length - 1 ? 0 : 16}}>
-          <Text
+          <View
             style={{
-              textDecorationLine: 'underline',
-              fontFamily: Typography.FONT_FAMILY_REGULAR,
-              fontWeight: 'bold',
-              fontSize: 16,
-              color: Colors.REGULAR,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
             }}>
-            {pet[petAliases.name] || pet.name}
-          </Text>
+            <Text
+              style={{
+                textDecorationLine: 'underline',
+                fontFamily: Typography.FONT_FAMILY_REGULAR,
+                fontWeight: 'bold',
+                fontSize: 16,
+                color: Colors.REGULAR,
+              }}>
+              {pet[petAliases.name] || pet.name}
+            </Text>
+
+            {React.isValidElement(petIcon) ? (
+              <TouchableOpacity onPress={() => onPetIconPress(pet)}>
+                {petIcon}
+              </TouchableOpacity>
+            ) : (
+              <></>
+            )}
+          </View>
 
           {(pet[petAliases.services] || pet.services).map((service) => (
             <View style={{...styles.treatmentItemContainer, marginLeft: 4}}>

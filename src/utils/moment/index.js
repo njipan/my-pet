@@ -12,6 +12,7 @@ export const parseDateFromNow = (date, format = 'DD-MM-YYYY') => {
         .replace('sejam', '1 jam')
         .replace('semenit', '1 menit')
         .replace('sedetik', '1 detik')
+        .replace('beberapa detik', '1 detik')
     : null;
 };
 

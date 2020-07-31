@@ -6,7 +6,7 @@ import {NotificationCard} from '@component/order';
 import * as Transformer from '@util/transformer';
 import {getDatetime} from '@util/moment';
 import {Screens, OrderStatus} from '@constant';
-import {Colors} from '@style';
+import {Colors, Typography} from '@style';
 
 import ListOrder from './hooks/orders-hook';
 
@@ -22,14 +22,21 @@ const ProgressScreen = ({navigation, ...props}) => {
   const STATUS = 'ongoing';
 
   const load = async () => {
-    const response = await refreshOrders();
-    navigation.setParams({
-      count: (response[STATUS] || []).length,
-    });
+    // const response = await refreshOrders();
+    // navigation.setParams({
+    //   count: (response[STATUS] || []).length,
+    // });
   };
 
   React.useEffect(() => {
     load();
+    const didFocus = navigation.addListener('didFocus', (payload) => {
+      load();
+    });
+
+    return () => {
+      didFocus.remove();
+    };
   }, []);
 
   const onPress = (value) => {
@@ -39,43 +46,75 @@ const ProgressScreen = ({navigation, ...props}) => {
         : Screens.ORDER_ON_PROGRESS_DETAIL_MERCHANT,
       {
         data: Transformer.keysToCamel(value),
+        reloadOrders: load,
       },
     );
   };
 
   return (
-    <ScrollView
-      style={{padding: 16, overflow: 'visible'}}
-      showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl
-          colors={Colors.REFRESH_CONTROL_PRIMARY}
-          refreshing={orderLoading}
-          onRefresh={load}
-        />
-      }>
-      <View style={{backgroundColor: 'white'}}>
-        {getOrders(STATUS) &&
-          getOrders(STATUS).map((order) => {
-            return (
-              <View key={order.id}>
-                <NotificationCard
-                  text={order.full_name}
-                  description={getDatetime(order.booking_datetime)}
-                  picture={
-                    <Image
-                      source={require('@asset/icons/menu-bar/vet-service-active/normal.png')}
-                      style={{width: 36, height: 36}}
-                    />
-                  }
-                  onPress={() => onPress(order)}
-                />
-                <View style={{marginVertical: 1}} />
-              </View>
-            );
-          })}
-      </View>
-    </ScrollView>
+    <View style={{flex: 1}}>
+      <ScrollView
+        style={{
+          padding: 16,
+          overflow: getOrders(STATUS).length < 1 ? 'scroll' : 'visible',
+        }}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            colors={Colors.REFRESH_CONTROL_PRIMARY}
+            refreshing={orderLoading}
+            onRefresh={load}
+          />
+        }>
+        {getOrders(STATUS).length < 1 && (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 64,
+            }}>
+            <Image
+              style={{width: 280, height: 280}}
+              source={require('@asset/images/illustrations/order-empty.png')}
+            />
+            <Text
+              style={{
+                ...Typography.ERROR_HANDLER_TITLE,
+              }}>
+              Tidak Ada Pesanan
+            </Text>
+            <Text
+              style={{
+                ...Typography.ERROR_HANDLER_DESCRIPTION,
+              }}>
+              Tidak ada yang kamu pesan
+            </Text>
+          </View>
+        )}
+        <View style={{backgroundColor: 'white'}}>
+          {getOrders(STATUS) &&
+            getOrders(STATUS).map((order) => {
+              return (
+                <View key={order.id}>
+                  <NotificationCard
+                    text={order.full_name}
+                    description={getDatetime(order.booking_datetime)}
+                    picture={
+                      <Image
+                        source={require('@asset/icons/menu-bar/vet-service-active/normal.png')}
+                        style={{width: 36, height: 36}}
+                      />
+                    }
+                    onPress={() => onPress(order)}
+                  />
+                  <View style={{marginVertical: 1}} />
+                </View>
+              );
+            })}
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 

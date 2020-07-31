@@ -20,7 +20,7 @@ const ChooseTreatementScreen = ({navigation, ...props}) => {
   const createPets = createData.pets || {};
   const petId = navigation.getParam('petId', {});
   const petName = navigation.getParam('petName', {});
-  console.log();
+
   const [merchant, setMerchant] = React.useState({});
   const [selectedMerchants, setSelectedMerchants] = React.useState({});
   const [cart, setCart] = React.useState({});

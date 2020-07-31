@@ -20,6 +20,11 @@ export const ORDER_ON_PROGRESS_DETAIL_MERCHANT =
 export const ORDER_CHECKOUT_DETAIL_MERCHANT = 'Order_Checkout_Detail_Merchant';
 export const ORDER_HISTORY_DETAIL_MERCHANT = 'Order_History_Detail_Merchant';
 export const ORDER_STATUS_DETAIL_MERCHANT = 'Order_Status_Detail_Merchant';
+export const ORDER_CREATE_TREATMENT_MERCHANT =
+  'Order_Create_Treatment_Merchant';
+export const ORDER_EDIT_TREATMENT_MERCHANT = 'Order_Edit_Treatment_Merchant';
+export const ORDER_CHOOSE_TREATMENT_MERCHANT =
+  'Order_Choose_Treatment_Merchant';
 
 export const PROFILE_MERCHANT = 'Profile_Merchant';
 export const PROFILE_DETAIL_MERCHANT = 'Profile_Detail_Merchant';

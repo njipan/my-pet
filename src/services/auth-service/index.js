@@ -31,6 +31,11 @@ export const getUser = async () => {
   return parse.user || parse;
 };
 
+export const getMerchant = async () => {
+  const parse = JSON.parse(await AsyncStorage.getItem('_user'));
+  return parse.merchant || {};
+};
+
 export const setUser = (data) => {
   return AsyncStorage.setItem('_user', JSON.stringify(data));
 };
