@@ -14,11 +14,14 @@ import HomeNews from './../../components/home-news';
 
 import {Screens} from '@constant';
 import {Colors, Typography} from '@style';
-import {PetService} from '@service';
+import {PetService, EventService, NewsService, PromoService} from '@service';
 
 const HomeScreen = ({navigation, ...props}) => {
   const [pets, setPets] = React.useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [promos, setPromos] = React.useState([]);
+  const [news, setNews] = React.useState([]);
+  const [events, setEvents] = React.useState([]);
 
   const getMyPets = async () => {
     try {
@@ -29,9 +32,14 @@ const HomeScreen = ({navigation, ...props}) => {
     }
   };
 
+  const getPromos = async () => {
+    setPromos(await PromoService.all());
+  };
+
   const load = async () => {
     setRefreshing(true);
     await getMyPets();
+    await getPromos();
     setRefreshing(false);
   };
 
@@ -54,6 +62,7 @@ const HomeScreen = ({navigation, ...props}) => {
         <StatusBar backgroundColor="white" barStyle="dark-content" />
         <View style={{backgroundColor: 'white'}}>
           <PromoCarousel
+            data={promos}
             onRightSidePress={() =>
               navigation.navigate(Screens.PROMO_LIST_CUSTOMER)
             }

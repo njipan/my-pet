@@ -7,21 +7,40 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
+import moment from 'moment';
 
 import {ButtonFluid} from '@component';
 import {Screens} from '@constant';
 import {Colors, Mixins, Typography} from '@style';
+import {PromoService} from '@service';
+import {encodeFromBuffer} from '@util/file';
 
 const PromoListItem = (props) => {
   const {
-    picture = null,
     title = null,
     description = null,
+    file = {},
     onPress = () => {},
   } = props;
 
+  const [picture, setPicture] = React.useState({});
+
+  const parsePicture = async () => {
+    try {
+      const uri = await encodeFromBuffer(file.data);
+      const source = {uri: `data:image/jpeg;base64,${uri}`};
+      setPicture(source);
+    } catch (err) {
+      setPicture(null);
+    }
+  };
+
+  React.useEffect(() => {
+    parsePicture();
+  }, []);
+
   return (
-    <View style={{marginVertical: 4}}>
+    <View style={{marginTop: 4, marginBottom: 8}}>
       <Image
         style={{
           backgroundColor: Colors.BLACK10,
@@ -29,6 +48,7 @@ const PromoListItem = (props) => {
           borderTopRightRadius: 16,
           borderTopLeftRadius: 16,
         }}
+        source={picture}
       />
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <View style={{padding: 8, flex: 1}}>
@@ -37,14 +57,14 @@ const PromoListItem = (props) => {
               ...Typography.heading('h4'),
               fontSize: 16,
             }}>
-            Voucher 20% di MyPet
+            {title}
           </Text>
           <Text
             style={{
               fontSize: 14,
               color: Colors.LIGHT_GREY,
             }}>
-            Berlaku sampai dengan 20 Juli
+            {description}
           </Text>
         </View>
         <View style={{paddingRight: 10, paddingLeft: 10}}>
@@ -66,12 +86,44 @@ const PromoListItem = (props) => {
 };
 
 const PromoListScreen = ({navigation, ...props}) => {
+  const [promos, setPromos] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  const getPromos = async () => {
+    setLoading(true);
+    setPromos(await PromoService.all());
+    setLoading(false);
+  };
+
+  React.useEffect(() => {
+    getPromos();
+  }, []);
   return (
-    <ScrollView refreshControl={<RefreshControl refreshing={false} />}>
-      <View style={{padding: 20}}>
-        <PromoListItem
-          onPress={() => navigation.navigate(Screens.PROMO_DETAIL_CUSTOMER)}
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={loading}
+          onRefresh={getPromos}
+          colors={Colors.REFRESH_CONTROL_PRIMARY}
         />
+      }>
+      <View style={{padding: 20}}>
+        {Array.isArray(promos) &&
+          promos.map((promo, idx) => (
+            <PromoListItem
+              key={idx}
+              title={promo.title}
+              description={`Berlaku sampai dengan ${moment(promo.end_at)
+                .locale('id')
+                .format('DD MMMM YYYY')}`}
+              file={promo.file}
+              onPress={() =>
+                navigation.navigate(Screens.PROMO_DETAIL_CUSTOMER, {
+                  paramData: promo,
+                })
+              }
+            />
+          ))}
       </View>
     </ScrollView>
   );

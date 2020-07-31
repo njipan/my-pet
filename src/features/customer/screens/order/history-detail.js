@@ -20,6 +20,7 @@ import RateStar from '@component/rate-star';
 import * as Order from '@component/order';
 import * as Modal from '@util/modal';
 import {Box, Colors, Typography} from '@style';
+import {OrderStatus} from '@constant';
 
 const TitleWithAction = (props) => {
   const {
@@ -124,7 +125,38 @@ const HistoryDetailScreen = ({navigation, ...props}) => {
             onRefresh={refreshOrder}
           />
         }>
-        <View style={{...styles.container}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: 10,
+            marginTop: 20,
+          }}>
+          {order.status == OrderStatus.MERCHANT_REJECTED && (
+            <Image
+              style={{width: 28, height: 28}}
+              source={require('@asset/icons/order/cancel/large.png')}
+            />
+          )}
+          <Text
+            style={{
+              fontSize: 22,
+              fontFamily: Typography.FONT_FAMILY_BOLD,
+              marginLeft: 14,
+            }}>
+            {order.status == OrderStatus.ORDER_COMPLETED
+              ? `Booking Berhasil`
+              : `Dibatalkan`}
+          </Text>
+        </View>
+        <Dash
+          style={{width: '100%', marginBottom: 10, marginTop: 20}}
+          dashColor={Colors.BLACK10}
+          dashThickness={1}
+          dashGap={4}
+        />
+        <View style={{...styles.container, marginTop: -10}}>
           <Order.Info
             name={params.merchantName}
             booking={params.id}
@@ -163,7 +195,6 @@ const HistoryDetailScreen = ({navigation, ...props}) => {
             action={false}
           />
         </View>
-
         {!reviewing ? (
           <View>
             <View style={{...Box.SPACER_CONTAINER}} />
@@ -220,7 +251,8 @@ const HistoryDetailScreen = ({navigation, ...props}) => {
         )}
       </ScrollView>
 
-      {!getStarValue(order).rating ? (
+      {!getStarValue(order).rating &&
+      order.status == OrderStatus.ORDER_COMPLETED ? (
         <View
           style={{
             ...Box.CONTAINER_ACTION_BOTTOM,

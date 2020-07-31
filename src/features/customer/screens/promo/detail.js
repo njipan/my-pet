@@ -12,7 +12,9 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import Dash from 'react-native-dash';
+import moment from 'moment';
 
+import {PromoService} from '@service';
 import {Colors, Typography, Box} from '@style';
 
 const PromoInfoItem = ({icon = null, label = null, text = null}) => {
@@ -39,6 +41,21 @@ const PromoInfoItem = ({icon = null, label = null, text = null}) => {
 
 const PromoDetailScreen = ({navigation, ...props}) => {
   const deviceWidth = useWindowDimensions().width;
+  const paramData = navigation.getParam('paramData');
+
+  const [promo, setPromo] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  const getPromo = async () => {
+    setLoading(true);
+    setPromo(await PromoService.get(paramData.id));
+    setLoading(false);
+  };
+
+  React.useEffect(() => {
+    getPromo();
+  }, []);
+
   return (
     <View style={{flex: 1}}>
       <View style={{flex: 1}}>
@@ -62,6 +79,7 @@ const PromoDetailScreen = ({navigation, ...props}) => {
                 width: '100%',
                 backgroundColor: Colors.BLACK10,
               }}
+              source={promo.picture}
             />
             <TouchableOpacity
               style={{
@@ -87,7 +105,7 @@ const PromoDetailScreen = ({navigation, ...props}) => {
           </View>
 
           <View style={{padding: 20}}>
-            <Text style={{...Typography.heading('h3')}}>National Pet Day</Text>
+            <Text style={{...Typography.heading('h3')}}>{promo.title}</Text>
             <Dash
               style={{width: '100%', marginBottom: 10, marginTop: 8}}
               dashColor={Colors.BLACK10}
@@ -104,7 +122,7 @@ const PromoDetailScreen = ({navigation, ...props}) => {
                 Masa Berlaku Hingga
               </Text>
               <Text style={{...Typography.heading('h4'), fontSize: 14}}>
-                20 Agustus 2020
+                {moment(promo.end_at).locale('id').format('DD MMMM YYYY')}
               </Text>
             </View>
             <View style={{marginTop: 28}}>
@@ -123,11 +141,11 @@ const PromoDetailScreen = ({navigation, ...props}) => {
                   marginTop: 8,
                 }}>
                 <Text style={{...Typography.heading('h4'), fontSize: 14}}>
-                  XXX123
+                  {promo.code}
                 </Text>
                 <TouchableOpacity
                   onPress={() => {
-                    Clipboard.setString('XXX123');
+                    Clipboard.setString(promo.code);
                     ToastAndroid.show('Tersalin', ToastAndroid.LONG);
                   }}>
                   <Image
@@ -148,7 +166,7 @@ const PromoDetailScreen = ({navigation, ...props}) => {
                 Syarat dan Ketentuan
               </Text>
               <Text style={{fontSize: 14, color: Colors.GREY, lineHeight: 22}}>
-                {'1. lorem \n2.dsafd afdsaf'}
+                {promo.term_condition}
               </Text>
             </View>
           </View>
