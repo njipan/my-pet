@@ -1,11 +1,24 @@
 import React from 'react';
-import {RefreshControl, View, Text, Image, ScrollView} from 'react-native';
+import {
+  RefreshControl,
+  TouchableOpacity,
+  View,
+  Text,
+  Image,
+  ScrollView,
+} from 'react-native';
 
 import {ButtonFluid} from '@component';
+import {Screens} from '@constant';
 import {Colors, Mixins, Typography} from '@style';
 
 const PromoListItem = (props) => {
-  const {picture = null, title = null, description = null} = props;
+  const {
+    picture = null,
+    title = null,
+    description = null,
+    onPress = () => {},
+  } = props;
 
   return (
     <View style={{marginVertical: 4}}>
@@ -37,6 +50,7 @@ const PromoListItem = (props) => {
         <View style={{paddingRight: 10, paddingLeft: 10}}>
           <ButtonFluid
             text="Lihat"
+            onPress={onPress}
             styleContainer={{
               ...Mixins.padding(4, 10),
             }}
@@ -55,9 +69,9 @@ const PromoListScreen = ({navigation, ...props}) => {
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={false} />}>
       <View style={{padding: 20}}>
-        <PromoListItem />
-        <PromoListItem />
-        <PromoListItem />
+        <PromoListItem
+          onPress={() => navigation.navigate(Screens.PROMO_DETAIL_CUSTOMER)}
+        />
       </View>
     </ScrollView>
   );

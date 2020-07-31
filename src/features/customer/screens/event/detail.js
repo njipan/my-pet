@@ -11,7 +11,6 @@ import {
   ToastAndroid,
   useWindowDimensions,
 } from 'react-native';
-import Dash from 'react-native-dash';
 
 import {Colors, Typography, Box} from '@style';
 
@@ -44,12 +43,7 @@ const PromoDetailScreen = ({navigation, ...props}) => {
       <View style={{flex: 1}}>
         <ScrollView
           style={{backgroundColor: 'white'}}
-          refreshControl={
-            <RefreshControl
-              refreshing={false}
-              colors={Colors.REFRESH_CONTROL_PRIMARY}
-            />
-          }>
+          refreshControl={<RefreshControl refreshing={false} />}>
           <View
             style={{
               justifyContent: 'center',
@@ -77,58 +71,64 @@ const PromoDetailScreen = ({navigation, ...props}) => {
               onPress={() => navigation.goBack()}>
               <Image
                 style={{
-                  height: 28,
-                  width: 28,
+                  height: 32,
+                  width: 32,
                   borderRadius: 20,
                 }}
                 source={require('@asset/icons/arrow-back/normal.png')}
               />
             </TouchableOpacity>
           </View>
-
           <View style={{padding: 20}}>
-            <Text style={{...Typography.heading('h3')}}>National Pet Day</Text>
-            <Dash
-              style={{width: '100%', marginBottom: 10, marginTop: 8}}
-              dashColor={Colors.BLACK10}
-              dashThickness={1}
-              dashGap={4}
-            />
+            <Text style={{...Typography.heading('h3')}}>Dog Show</Text>
+
             <View
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
+                borderBottomWidth: 0.2,
+                paddingBottom: 10,
+                marginBottom: 10,
+                borderBottomColor: Colors.BLACK10,
               }}>
-              <Text style={{color: Colors.GREY, fontSize: 14}}>
-                Masa Berlaku Hingga
-              </Text>
-              <Text style={{...Typography.heading('h4'), fontSize: 14}}>
-                20 Agustus 2020
-              </Text>
+              <PromoInfoItem
+                label="Tanggal Event"
+                text="14 - 15 Agustus 2020"
+                icon={
+                  <Image
+                    source={require('@asset/icons/calendar/normal.png')}
+                    style={{width: 20, height: 20, marginRight: 10}}
+                  />
+                }
+              />
+              <PromoInfoItem
+                label="Lokasi"
+                text="Central Park Mall Jakarta"
+                icon={
+                  <Image
+                    source={require('@asset/icons/maps/place/normal.png')}
+                    style={{width: 20, height: 20, marginRight: 10}}
+                  />
+                }
+              />
             </View>
-            <View style={{marginTop: 28}}>
-              <Text style={{color: Colors.GREY, fontSize: 16}}>
-                Gunakan kode promo dibawah ini
+            <View>
+              <Text
+                style={{color: Colors.GREY, fontSize: 14, marginBottom: 10}}>
+                Link Pendaftaran
               </Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: 20,
-                  borderColor: Colors.LIGHT_GREY,
-                  borderWidth: 1,
-                  borderRadius: 8,
-                  marginTop: 8,
-                }}>
-                <Text style={{...Typography.heading('h4'), fontSize: 14}}>
-                  XXX123
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Text
+                  style={{
+                    color: Colors.BLUE,
+                    fontFamily: Typography.FONT_FAMILY_BOLD,
+                    fontSize: 14,
+                    marginRight: 10,
+                  }}>
+                  bit.ly/dsaf/dsaf
                 </Text>
                 <TouchableOpacity
                   onPress={() => {
-                    Clipboard.setString('XXX123');
-                    ToastAndroid.show('Tersalin', ToastAndroid.LONG);
+                    Clipboard.setString('bit.ly/dsfsd/dsaf');
+                    ToastAndroid.show('Salin', ToastAndroid.LONG);
                   }}>
                   <Image
                     source={require('@asset/icons/copy//normal.png')}
@@ -137,23 +137,17 @@ const PromoDetailScreen = ({navigation, ...props}) => {
                       height: 18,
                       marginRight: 10,
                       marginTop: 4,
-                      marginLeft: 10,
                     }}
                   />
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={{marginVertical: 20}}>
-              <Text style={{...Typography.heading('h4'), marginBottom: 8}}>
-                Syarat dan Ketentuan
-              </Text>
-              <Text style={{fontSize: 14, color: Colors.GREY, lineHeight: 22}}>
-                {'1. lorem \n2.dsafd afdsaf'}
-              </Text>
-            </View>
           </View>
+          <View style={Box.SPACER_CONTAINER} />
         </ScrollView>
       </View>
+      <View
+        style={{height: 100, elevation: 3, backgroundColor: 'white'}}></View>
     </View>
   );
 };
