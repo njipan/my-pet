@@ -125,6 +125,7 @@ const VetServiceListScreen = ({navigation, ...props}) => {
               <VetServiceCard
                 picture={vet.picture || null}
                 key={vet.merchant_id}
+                rate={parseFloat(vet.ratings || 0).toFixed(1)}
                 title={vet.full_name}
                 phone={vet.phone}
                 address={vet.address}
