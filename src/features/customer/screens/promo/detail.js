@@ -63,7 +63,8 @@ const PromoDetailScreen = ({navigation, ...props}) => {
           style={{backgroundColor: 'white'}}
           refreshControl={
             <RefreshControl
-              refreshing={false}
+              refreshing={loading}
+              onRefresh={getPromo}
               colors={Colors.REFRESH_CONTROL_PRIMARY}
             />
           }>
@@ -104,72 +105,75 @@ const PromoDetailScreen = ({navigation, ...props}) => {
             </TouchableOpacity>
           </View>
 
-          <View style={{padding: 20}}>
-            <Text style={{...Typography.heading('h3')}}>{promo.title}</Text>
-            <Dash
-              style={{width: '100%', marginBottom: 10, marginTop: 8}}
-              dashColor={Colors.BLACK10}
-              dashThickness={1}
-              dashGap={4}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}>
-              <Text style={{color: Colors.GREY, fontSize: 14}}>
-                Masa Berlaku Hingga
-              </Text>
-              <Text style={{...Typography.heading('h4'), fontSize: 14}}>
-                {moment(promo.end_at).locale('id').format('DD MMMM YYYY')}
-              </Text>
-            </View>
-            <View style={{marginTop: 28}}>
-              <Text style={{color: Colors.GREY, fontSize: 16}}>
-                Gunakan kode promo dibawah ini
-              </Text>
+          {!loading ? (
+            <View style={{padding: 20}}>
+              <Text style={{...Typography.heading('h3')}}>{promo.title}</Text>
+              <Dash
+                style={{width: '100%', marginBottom: 10, marginTop: 8}}
+                dashColor={Colors.BLACK10}
+                dashThickness={1}
+                dashGap={4}
+              />
               <View
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: 20,
-                  borderColor: Colors.LIGHT_GREY,
-                  borderWidth: 1,
-                  borderRadius: 8,
-                  marginTop: 8,
+                  justifyContent: 'space-between',
                 }}>
-                <Text style={{...Typography.heading('h4'), fontSize: 14}}>
-                  {promo.code}
+                <Text style={{color: Colors.GREY, fontSize: 14}}>
+                  Masa Berlaku Hingga
                 </Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    Clipboard.setString(promo.code);
-                    ToastAndroid.show('Tersalin', ToastAndroid.LONG);
+                <Text style={{...Typography.heading('h4'), fontSize: 14}}>
+                  {moment(promo.end_at).locale('id').format('DD MMMM YYYY')}
+                </Text>
+              </View>
+              <View style={{marginTop: 28}}>
+                <Text style={{color: Colors.GREY, fontSize: 16}}>
+                  Gunakan kode promo dibawah ini
+                </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: 20,
+                    borderColor: Colors.LIGHT_GREY,
+                    borderWidth: 1,
+                    borderRadius: 8,
+                    marginTop: 8,
                   }}>
-                  <Image
-                    source={require('@asset/icons/copy//normal.png')}
-                    style={{
-                      width: 18,
-                      height: 18,
-                      marginRight: 10,
-                      marginTop: 4,
-                      marginLeft: 10,
-                    }}
-                  />
-                </TouchableOpacity>
+                  <Text style={{...Typography.heading('h4'), fontSize: 14}}>
+                    {promo.code}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      Clipboard.setString(promo.code);
+                      ToastAndroid.show('Tersalin', ToastAndroid.LONG);
+                    }}>
+                    <Image
+                      source={require('@asset/icons/copy//normal.png')}
+                      style={{
+                        width: 18,
+                        height: 18,
+                        marginRight: 10,
+                        marginTop: 4,
+                        marginLeft: 10,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={{marginVertical: 20}}>
+                <Text style={{...Typography.heading('h4'), marginBottom: 8}}>
+                  Syarat dan Ketentuan
+                </Text>
+                <Text
+                  style={{fontSize: 14, color: Colors.GREY, lineHeight: 22}}>
+                  {promo.term_condition}
+                </Text>
               </View>
             </View>
-            <View style={{marginVertical: 20}}>
-              <Text style={{...Typography.heading('h4'), marginBottom: 8}}>
-                Syarat dan Ketentuan
-              </Text>
-              <Text style={{fontSize: 14, color: Colors.GREY, lineHeight: 22}}>
-                {promo.term_condition}
-              </Text>
-            </View>
-          </View>
+          ) : null}
         </ScrollView>
       </View>
     </View>

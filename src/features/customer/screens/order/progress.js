@@ -80,7 +80,7 @@ const ProgressScreen = ({navigation, ...props}) => {
 ProgressScreen.navigationOptions = ({navigation, ...props}) => {
   const count = navigation.getParam('count', 0);
   const textCount = count > 0 ? ` (${count})` : '';
-  console.log(`Dalam Proses${textCount}`);
+
   return {
     title: `Dalam Proses${textCount}`,
   };

@@ -36,10 +36,20 @@ const HomeScreen = ({navigation, ...props}) => {
     setPromos(await PromoService.all());
   };
 
+  const getNews = async () => {
+    setNews(await NewsService.all());
+  };
+
+  const getEvents = async () => {
+    setEvents(await EventService.all());
+  };
+
   const load = async () => {
     setRefreshing(true);
     await getMyPets();
     await getPromos();
+    await getNews();
+    await getEvents();
     setRefreshing(false);
   };
 
@@ -97,17 +107,30 @@ const HomeScreen = ({navigation, ...props}) => {
             </Text>
           </View>
           <EventCarousel
+            data={events.slice(0, 5)}
             onRightSidePress={() =>
               navigation.navigate(Screens.EVENT_LIST_CUSTOMER)
             }
           />
         </View>
-        <View style={{padding: 20, backgroundColor: 'white'}}>
-          <Text style={{...Typography.heading('h3'), marginBottom: 10}}>
-            Berita
-          </Text>
-          <HomeNews />
-        </View>
+        {Array.isArray(news) && news.length > 0 && (
+          <View style={{padding: 20, backgroundColor: 'white'}}>
+            <Text style={{...Typography.heading('h3'), marginBottom: 10}}>
+              Berita
+            </Text>
+            <HomeNews
+              data={(news || []).slice(0, 4)}
+              onViewAll={() =>
+                navigation.navigate(Screens.NEWS_TRENDING_CUSTOMER)
+              }
+              onNewsPress={(news) =>
+                navigation.navigate(Screens.NEWS_DETAIL_CUSTOMER, {
+                  paramData: news,
+                })
+              }
+            />
+          </View>
+        )}
       </View>
     </ScrollView>
   );

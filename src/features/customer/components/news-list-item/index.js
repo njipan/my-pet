@@ -2,9 +2,28 @@ import React from 'react';
 import {View, Text, Image} from 'react-native';
 
 import {Colors, Typography} from '@style';
+import {encodeFromBuffer} from '@util/file';
 
 const NewsListItem = (props) => {
-  const {label = null, title = null, time = null, picture = null} = props;
+  const {label = null, title = null, time = null, file = null} = props;
+  const [picture, setPicture] = React.useState({});
+
+  const parsePicture = async () => {
+    try {
+      const uri = await encodeFromBuffer(file.data);
+      const source = {uri: `data:image/jpeg;base64,${uri}`};
+
+      setPicture(source);
+    } catch (err) {
+      console.log(err);
+      setPicture(null);
+    }
+  };
+
+  React.useEffect(() => {
+    parsePicture();
+  }, []);
+
   return (
     <View
       style={{
@@ -29,9 +48,10 @@ const NewsListItem = (props) => {
             numberOfLines={3}
             style={{
               ...Typography.heading('h4'),
-              fontSize: 14,
+              fontSize: 16,
               lineHeight: 20,
               marginRight: 20,
+              textTransform: 'capitalize',
             }}>
             {title}
           </Text>
@@ -61,7 +81,14 @@ const NewsListItem = (props) => {
           justifyContent: 'space-between',
         }}>
         <View>
-          <Text style={{fontSize: 12, color: Colors.LIGHT_GREY}}>{time}</Text>
+          <Text
+            style={{
+              fontSize: 12,
+              color: Colors.LIGHT_GREY,
+              textTransform: 'capitalize',
+            }}>
+            {time}
+          </Text>
         </View>
         <View>
           <Image />

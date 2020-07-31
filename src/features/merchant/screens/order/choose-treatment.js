@@ -21,7 +21,6 @@ const ChooseTreatmentScreen = ({navigation, ...props}) => {
   const orderId = navigation.getParam('orderId', null);
   const orderPetId = navigation.getParam('orderPetId', null);
   const alreadySelected = navigation.getParam('alreadySelected', null);
-  console.log(alreadySelected);
 
   const [services, setServices] = React.useState([]);
   const [selectedService, setSelectedService] = React.useState(null);

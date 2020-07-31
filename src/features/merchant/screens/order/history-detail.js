@@ -101,7 +101,7 @@ const HistoryDetailScreen = ({navigation, ...props}) => {
 
   React.useEffect(() => {
     (async () => {
-      console.log(await refreshOrder());
+      await refreshOrder();
     })();
   }, []);
 

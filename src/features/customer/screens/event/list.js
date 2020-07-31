@@ -7,18 +7,37 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
+import moment from 'moment';
 
+import {EventService} from '@service';
+import {encodeFromBuffer} from '@util/file';
 import {ButtonFluid} from '@component';
 import {Screens} from '@constant';
 import {Colors, Mixins, Typography} from '@style';
 
 const EventListItem = (props) => {
   const {
-    picture = null,
+    file = null,
     title = null,
     description = null,
     onPress = () => {},
   } = props;
+
+  const [picture, setPicture] = React.useState({});
+
+  const parsePicture = async () => {
+    try {
+      const uri = await encodeFromBuffer(file.data);
+      const source = {uri: `data:image/jpeg;base64,${uri}`};
+      setPicture(source);
+    } catch (err) {
+      setPicture(null);
+    }
+  };
+
+  React.useEffect(() => {
+    parsePicture();
+  }, []);
 
   return (
     <View style={{marginVertical: 4}}>
@@ -29,6 +48,7 @@ const EventListItem = (props) => {
           borderTopRightRadius: 16,
           borderTopLeftRadius: 16,
         }}
+        source={picture}
       />
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <View style={{padding: 8, flex: 1}}>
@@ -37,14 +57,14 @@ const EventListItem = (props) => {
               ...Typography.heading('h4'),
               fontSize: 16,
             }}>
-            Dog Show Event - D
+            {title}
           </Text>
           <Text
             style={{
               fontSize: 14,
               color: Colors.LIGHT_GREY,
             }}>
-            10 - 15 Agustus 2020 - D
+            {description}
           </Text>
         </View>
         <View style={{paddingRight: 10, paddingLeft: 10}}>
@@ -66,12 +86,44 @@ const EventListItem = (props) => {
 };
 
 const EventListScreen = ({navigation, ...props}) => {
+  const [events, setEvents] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  const getEvents = async () => {
+    setLoading(true);
+    setEvents(await EventService.all());
+    setLoading(false);
+  };
+
+  React.useEffect(() => {
+    getEvents();
+  }, []);
+
   return (
-    <ScrollView refreshControl={<RefreshControl refreshing={false} />}>
-      <View style={{padding: 20}}>
-        <EventListItem
-          onPress={() => navigation.navigate(Screens.EVENT_DETAIL_CUSTOMER)}
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={loading}
+          onRefresh={getEvents}
+          colors={Colors.REFRESH_CONTROL_PRIMARY}
         />
+      }>
+      <View style={{padding: 20}}>
+        {Array.isArray(events) &&
+          events.map((event) => (
+            <EventListItem
+              file={event.file}
+              title={event.title}
+              description={moment(event.event_date)
+                .locale('id')
+                .format('DD MMMM YYYY')}
+              onPress={() =>
+                navigation.navigate(Screens.EVENT_DETAIL_CUSTOMER, {
+                  paramData: event,
+                })
+              }
+            />
+          ))}
       </View>
     </ScrollView>
   );

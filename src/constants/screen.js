@@ -73,3 +73,10 @@ export const PROMO_DETAIL_CUSTOMER = 'Promo_Detail_Customer';
 
 export const EVENT_LIST_CUSTOMER = 'Event_List_Customer';
 export const EVENT_DETAIL_CUSTOMER = 'Event_Detail_Customer';
+
+export const NEWS_LATEST_CUSTOMER = 'News_Latest_Customer';
+export const NEWS_TRENDING_CUSTOMER = 'News_Trending_Customer';
+export const NEWS_LIFE_CUSTOMER = 'News_Life_Customer';
+export const NEWS_STORY_CUSTOMER = 'News_Story_Customer';
+export const NEWS_MOVIES_CUSTOMER = 'News_Movies_Customer';
+export const NEWS_DETAIL_CUSTOMER = 'News_Detail_Customer';
