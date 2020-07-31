@@ -16,6 +16,7 @@ import {HomeStackNavigator} from './screens/home';
 import OrderBookingNavigator from './screens/book';
 import CustomerOrderNavigator, {HistoryDetailScreen} from './screens/order';
 import PromoNavigator from './screens/promo';
+import EventNavigator from './screens/event';
 
 const Pesanan = () => {
   return (
@@ -157,5 +158,6 @@ export const Navigator = createStackNavigator({
   ...ProfileNavigator,
   ...OrderBookingNavigator,
   ...PromoNavigator,
+  ...EventNavigator,
   [Screens.ORDER_HISTORY_DETAIL_CUSTOMER]: HistoryDetailScreen,
 });

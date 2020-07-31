@@ -87,7 +87,11 @@ const HomeScreen = ({navigation, ...props}) => {
               Temukan berbagai keseruan dengan hewan peliharaan kamu.
             </Text>
           </View>
-          <EventCarousel />
+          <EventCarousel
+            onRightSidePress={() =>
+              navigation.navigate(Screens.EVENT_LIST_CUSTOMER)
+            }
+          />
         </View>
         <View style={{padding: 20, backgroundColor: 'white'}}>
           <Text style={{...Typography.heading('h3'), marginBottom: 10}}>

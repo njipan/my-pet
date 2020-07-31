@@ -14,7 +14,7 @@ import {
 
 import {Colors, Typography, Box} from '@style';
 
-const PromoInfoItem = ({icon = null, label = null, text = null}) => {
+const EventInfoItem = ({icon = null, label = null, text = null}) => {
   return (
     <View
       style={{
@@ -36,7 +36,7 @@ const PromoInfoItem = ({icon = null, label = null, text = null}) => {
   );
 };
 
-const PromoDetailScreen = ({navigation, ...props}) => {
+const EventDetailScreen = ({navigation, ...props}) => {
   const deviceWidth = useWindowDimensions().width;
   return (
     <View style={{flex: 1}}>
@@ -89,7 +89,7 @@ const PromoDetailScreen = ({navigation, ...props}) => {
                 marginBottom: 10,
                 borderBottomColor: Colors.BLACK10,
               }}>
-              <PromoInfoItem
+              <EventInfoItem
                 label="Tanggal Event"
                 text="14 - 15 Agustus 2020"
                 icon={
@@ -99,7 +99,7 @@ const PromoDetailScreen = ({navigation, ...props}) => {
                   />
                 }
               />
-              <PromoInfoItem
+              <EventInfoItem
                 label="Lokasi"
                 text="Central Park Mall Jakarta"
                 icon={
@@ -144,18 +144,33 @@ const PromoDetailScreen = ({navigation, ...props}) => {
             </View>
           </View>
           <View style={Box.SPACER_CONTAINER} />
+          <View style={{padding: 20}}>
+            <Text style={{...Typography.heading('h4'), marginBottom: 8}}>
+              Cara Pendaftaran
+            </Text>
+            <Text style={{fontSize: 14, color: Colors.GREY, lineHeight: 22}}>
+              {'1. lorem \n2.dsafd afdsaf'}
+            </Text>
+          </View>
+          <View style={Box.SPACER_CONTAINER} />
+          <View style={{padding: 20}}>
+            <Text style={{...Typography.heading('h4'), marginBottom: 8}}>
+              Syarat dan Ketentuan
+            </Text>
+            <Text style={{fontSize: 14, color: Colors.GREY, lineHeight: 22}}>
+              {'1. lorem \n2.dsafd afdsaf'}
+            </Text>
+          </View>
         </ScrollView>
       </View>
-      <View
-        style={{height: 100, elevation: 3, backgroundColor: 'white'}}></View>
     </View>
   );
 };
 
-PromoDetailScreen.navigationOptions = ({navigation, ...props}) => {
+EventDetailScreen.navigationOptions = ({navigation, ...props}) => {
   return {
     header: null,
   };
 };
 
-export default PromoDetailScreen;
+export default EventDetailScreen;
