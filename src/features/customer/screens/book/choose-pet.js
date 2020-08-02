@@ -77,7 +77,7 @@ const ChoosePetScreen = ({navigation, ...props}) => {
   };
 
   const onNext = () => {
-    if (!selectedPet) {
+    if (!Object.keys(selectedPet).length) {
       ToastAndroid.show('Pilih hewan peliharaan!', ToastAndroid.LONG);
       return;
     }

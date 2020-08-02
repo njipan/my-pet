@@ -47,8 +47,10 @@ const ProfileEditScreen = ({navigation}) => {
         facility: response.merchant.facility,
         pictureId: response.user.picture_id,
       };
-      const uri = await encodeFromBuffer(response.pictures.file.data);
-      setPicture({uri: `data:image/jpeg;base64,${uri}`});
+      if (response.pictures.file) {
+        const uri = await encodeFromBuffer(response.pictures.file.data);
+        setPicture({uri: `data:image/jpeg;base64,${uri}`});
+      }
       setData(body);
       navigation.setParams({
         onPress: () => onSubmit({...body}),

@@ -157,11 +157,7 @@ const CreateScreen = ({navigation, ...props}) => {
   };
 
   const onMicroschipIdChange = (value) => {
-    setErrorMessages({
-      ...errorMessages,
-      microschipId: singleValidate(value, PetSchema.microschipId),
-    });
-    setData({...data, microschipId: value});
+    setData({...data, microschipId: value || null});
   };
 
   const onPrevious = () => {
@@ -185,9 +181,11 @@ const CreateScreen = ({navigation, ...props}) => {
         eye_color: data.eyeColor,
         microchip_id: data.microschipId,
       })
-        .then((res) => {
+        .then(async (res) => {
+          await navigation.getParam('reload', () => {})();
+          await navigation.getParam('reloadPet', () => {})();
           ToastAndroid.show('Berhasil ditambahkan!', ToastAndroid.LONG);
-          navigation.navigate(Screens.HOME_CUSTOMER);
+          navigation.goBack();
         })
         .catch((err) => {
           navigation.goBack(null);

@@ -54,10 +54,17 @@ const ProfileEditScreen = ({navigation, ...props}) => {
         birthPlace: birth_place,
         sex,
       });
-      if (!fileData) return;
-      const uri = await encodeFromBuffer(fileData);
-      setPicture({uri: `data:image/jpeg;base64,${uri}`});
-    } catch (err) {}
+      if (fileData) {
+        const uri = await encodeFromBuffer(fileData);
+        setPicture({uri: `data:image/jpeg;base64,${uri}`});
+      }
+      navigation.setParams({
+        onPress: () => onSubmit({...data}),
+      });
+    } catch (err) {
+      setPicture(null);
+      setUploading(false);
+    }
     setUploading(false);
   };
 
@@ -96,6 +103,7 @@ const ProfileEditScreen = ({navigation, ...props}) => {
 
   React.useEffect(() => {
     getMe();
+    setUploading(false);
   }, []);
 
   const onBirthDateChange = (timestamp) => {

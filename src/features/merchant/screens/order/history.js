@@ -1,5 +1,12 @@
 import React from 'react';
-import {Image, RefreshControl, Text, ScrollView, View} from 'react-native';
+import {
+  Image,
+  StatusBar,
+  RefreshControl,
+  Text,
+  ScrollView,
+  View,
+} from 'react-native';
 import moment from 'moment';
 
 import {NotificationItem} from '@component/order';
@@ -42,6 +49,7 @@ const HistroryScreen = ({navigation, ...props}) => {
 
   return (
     <View style={{flex: 1}}>
+      <StatusBar backgroundColor="white" barStyle="dark-content" />
       <ScrollView
         style={{
           padding: 16,

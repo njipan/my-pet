@@ -21,7 +21,7 @@ const schema = {
   },
   confirmNewPassword: {
     required: true,
-    messageRequired: 'Ulang Kata Sandi tidak boleh kosong!',
+    messageRequired: 'Ulang Kata Sandi Baru tidak boleh kosong!',
     validators: [
       {
         handler: (text) => text.length >= 6,

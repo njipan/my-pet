@@ -14,6 +14,7 @@ import PetForm from './../../components/pet-form';
 import {PetSchema} from './../../schemas';
 
 const EditScreen = ({navigation, ...props}) => {
+  console.log();
   const {routeName, key} = navigation.getParam('savedState');
   const initData = Transformer(navigation.getParam('data') || {});
   const initPicture = navigation.getParam('picture');
@@ -111,7 +112,10 @@ const EditScreen = ({navigation, ...props}) => {
   };
 
   const onSave = (res, hide) => {
-    if (!res) return;
+    if (!res) {
+      hide(null);
+      return;
+    }
     Modal.confirm({
       isLoading: true,
       onLoad: async (modalNavigation) => {
@@ -131,13 +135,14 @@ const EditScreen = ({navigation, ...props}) => {
           const response = await PetService.update(data.id, body);
           ToastAndroid.show('Perubahan berhasil disimpan!', ToastAndroid.LONG);
 
-          modalNavigation.navigate(routeName, key, {
+          await navigation.getParam('reload', () => {})();
+          await navigation.getParam('reloadPet', () => {})();
+          navigation.navigate(routeName, key, {
             data: navigation.getParam('data'),
             picture: navigation.getParam('picture'),
           });
-
-          navigation.getParam('reloadPet', () => {})();
         } catch (err) {
+          console.log(err);
           ToastAndroid.show(`Terjadi Kesalahan!`, ToastAndroid.LONG);
           modalNavigation.goBack(null);
         }

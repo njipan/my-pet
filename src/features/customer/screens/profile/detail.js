@@ -48,7 +48,10 @@ const ProfileDetailScreen = ({navigation, ...props}) => {
         </Text>
         <PersonalInfoItem label="Email" text={me.email} />
         <PersonalInfoItem label="Nomor Telepon" text={me.phone} />
-        <PersonalInfoItem label="Tanggal Lahir" text={me.birth_date} />
+        <PersonalInfoItem
+          label="Tanggal Lahir"
+          text={me.birth_date == 'Invalid date' ? '' : me.birth_date}
+        />
         <PersonalInfoItem label="Tempat Lahir" text={me.birth_place} />
         <PersonalInfoItem label="Jenis Kelamin" text={me.sex} />
       </View>

@@ -29,6 +29,7 @@ const ChooseTreatementScreen = ({navigation, ...props}) => {
     try {
       const response = await VetService.get(createData.merchant_id);
       setMerchant(response);
+      console.log(response);
       const pet = createPets[petId];
       const tempMerchants = pet
         ? pet.services.reduce((res, item) => {
@@ -37,7 +38,9 @@ const ChooseTreatementScreen = ({navigation, ...props}) => {
         : {};
       setSelectedMerchants(tempMerchants);
       updateCart(tempMerchants);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   React.useEffect(() => {
@@ -80,6 +83,7 @@ const ChooseTreatementScreen = ({navigation, ...props}) => {
     }
 
     navigation.pop(navigation.dangerouslyGetParent().state.routes.length - 2);
+
     const body = {
       ...createData,
       pets: {

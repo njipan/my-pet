@@ -1,5 +1,12 @@
 import React from 'react';
-import {Image, Text, RefreshControl, ScrollView, View} from 'react-native';
+import {
+  Image,
+  StatusBar,
+  Text,
+  RefreshControl,
+  ScrollView,
+  View,
+} from 'react-native';
 import moment from 'moment';
 
 import {NotificationCard} from '@component/order';
@@ -22,10 +29,10 @@ const ProgressScreen = ({navigation, ...props}) => {
   const STATUS = 'ongoing';
 
   const load = async () => {
-    // const response = await refreshOrders();
-    // navigation.setParams({
-    //   count: (response[STATUS] || []).length,
-    // });
+    const response = await refreshOrders();
+    navigation.setParams({
+      count: (response[STATUS] || []).length,
+    });
   };
 
   React.useEffect(() => {
@@ -53,6 +60,7 @@ const ProgressScreen = ({navigation, ...props}) => {
 
   return (
     <View style={{flex: 1}}>
+      <StatusBar backgroundColor="white" barStyle="dark-content" />
       <ScrollView
         style={{
           padding: 16,

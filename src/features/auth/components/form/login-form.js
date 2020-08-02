@@ -96,17 +96,7 @@ const LoginForm = ({
           onChangeText={onPasswordChange}
           error={errorMessages.password || false}
         />
-        <TouchableOpacity
-          onPress={() => navigation.navigate(Screens.FORGOT_PASSWORD_SCREEN)}>
-          <View
-            style={{
-              ...Mixins.padding(10, 0),
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-            }}>
-            <Heading text="Lupa Kata Sandi" type="h5" />
-          </View>
-        </TouchableOpacity>
+
         <View
           style={{
             ...Mixins.padding(20, 0),

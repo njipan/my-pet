@@ -80,7 +80,7 @@ const PetDetail = ({data, ...props}) => {
           style={{
             width: '100%',
             height: deviceHeight * 0.35,
-            backgroundColor: 'black',
+            backgroundColor: Colors.BLACK10,
             justifyContent: 'center',
           }}>
           <ActivityIndicator color={Colors.LIGHT_GREY} />

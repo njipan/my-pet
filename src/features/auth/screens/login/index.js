@@ -19,6 +19,8 @@ import {Screens, Navigators} from '@constant';
 import {LoginSchema} from './../../schemas';
 import * as Modal from '@util/modal';
 
+import {LocalNotification} from '@util/notification/local';
+
 const SignInIcon = () => {
   return (
     <Image
@@ -65,9 +67,11 @@ const LoginScreen = ({navigation, ...props}) => {
 
   const doLogin = async (navigation) => {
     try {
-      const response = await AuthService.login(data);
+      const fcmToken = await AuthService.getFcmToken();
+      const response = await AuthService.login({...data, token: fcmToken});
       await AuthService.setToken(response.data.data.token);
       await AuthService.setType(`${data.type}`);
+      await AuthService.setUser(response.data.data);
       let navigationName = Navigators.CUSTOMER_NAVIGATOR;
       if (data.type == 2) navigationName = Navigators.MERCHANT_NAVIGATOR;
       await AuthService.check(response.data.data.token, data.type);

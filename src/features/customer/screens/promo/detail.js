@@ -79,6 +79,7 @@ const PromoDetailScreen = ({navigation, ...props}) => {
                 height: '100%',
                 width: '100%',
                 backgroundColor: Colors.BLACK10,
+                resizeMode: 'stretch',
               }}
               source={promo.picture}
             />

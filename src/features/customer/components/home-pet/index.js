@@ -100,9 +100,10 @@ const HomePet = ({
                 <TouchableHighlight
                   key={pet.id}
                   style={{marginRight: 16, width: deviceWidth * 0.85}}
-                  onPress={() => onCardPress(pet.id)}
+                  onPress={() => onCardPress(pet.id, pet)}
                   underlayColor="transparent">
                   <PetItemCard
+                    onEditPress={onCardEditPress}
                     data={{...pet, dateOfBirth: pet.date_of_birth}}
                     iconName={
                       pet.type == 1 ? (

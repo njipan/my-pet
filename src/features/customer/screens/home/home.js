@@ -79,15 +79,26 @@ const HomeScreen = ({navigation, ...props}) => {
           />
         </View>
         <HomePet
-          onCardPress={(id) => {
+          onCardPress={(id, pet) => {
             navigation.navigate(Screens.DETAIL_PET_CUSTOMER, {
               id,
               backTo: navigation.state,
+              data: pet,
               reload: getMyPets,
             });
           }}
+          onCardEditPress={(pet, picture) => {
+            navigation.navigate(Screens.EDIT_PET_CUSTOMER, {
+              data: pet,
+              picture,
+              reload: getMyPets,
+              savedState: navigation.state,
+            });
+          }}
           onAddPress={() => {
-            navigation.navigate(Screens.ADD_PET_CUSTOMER);
+            navigation.navigate(Screens.ADD_PET_CUSTOMER, {
+              reload: getMyPets,
+            });
           }}
           data={pets}
           navigation={navigation}
@@ -106,12 +117,20 @@ const HomeScreen = ({navigation, ...props}) => {
               Temukan berbagai keseruan dengan hewan peliharaan kamu.
             </Text>
           </View>
-          <EventCarousel
-            data={events.slice(0, 5)}
-            onRightSidePress={() =>
-              navigation.navigate(Screens.EVENT_LIST_CUSTOMER)
-            }
-          />
+          {events && events.length > 0 ? (
+            <EventCarousel
+              data={events.slice(0, 5)}
+              onRightSidePress={() =>
+                navigation.navigate(Screens.EVENT_LIST_CUSTOMER)
+              }
+            />
+          ) : (
+            <View
+              style={{
+                height: 240,
+              }}
+            />
+          )}
         </View>
         {Array.isArray(news) && news.length > 0 && (
           <View style={{padding: 20, backgroundColor: 'white'}}>
@@ -121,13 +140,15 @@ const HomeScreen = ({navigation, ...props}) => {
             <HomeNews
               data={(news || []).slice(0, 4)}
               onViewAll={() =>
-                navigation.navigate(Screens.NEWS_TRENDING_CUSTOMER)
-              }
-              onNewsPress={(news) =>
-                navigation.navigate(Screens.NEWS_DETAIL_CUSTOMER, {
+                navigation.navigate(Screens.NEWS_LATEST_CUSTOMER, {
                   paramData: news,
                 })
               }
+              onNewsPress={(news) => {
+                navigation.navigate(Screens.NEWS_DETAIL_CUSTOMER, {
+                  paramData: news,
+                });
+              }}
             />
           </View>
         )}

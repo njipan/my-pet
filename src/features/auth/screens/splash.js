@@ -15,6 +15,7 @@ import LogoTextLight from './../../../assets/logos/LogoTextLight_2x.png';
 import Loading from './../../../assets/icons/loading.png';
 import {AuthService} from '@service';
 import {Screens, Navigators, UserType} from '@constant';
+import messaging from '@react-native-firebase/messaging';
 
 const SplashScreen = ({navigation}) => {
   const [spinAnim, setSpinAnim] = useState(new Animated.Value(0));
@@ -23,7 +24,10 @@ const SplashScreen = ({navigation}) => {
     let screen = Navigators.AUTH_NAVIGATOR;
     try {
       const token = await AuthService.getToken();
-      if (!token) throw Error(null);
+      messaging().registerDeviceForRemoteMessages();
+      await AuthService.setFcmToken(await messaging().getToken());
+
+      if (!token) throw Error({response: {}});
       const type = await AuthService.getType();
       await AuthService.check(token, type);
 
@@ -39,7 +43,6 @@ const SplashScreen = ({navigation}) => {
         }),
       );
     } catch (err) {
-      console.log(err);
       navigation.navigate(Screens.LOGIN_SCREEN);
     }
   };

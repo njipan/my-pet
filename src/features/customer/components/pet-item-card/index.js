@@ -33,7 +33,13 @@ const PetDetailInfo = ({label = '', value = ''}) => {
   );
 };
 
-const PetItemCard = ({data = {}, onPress = () => {}, iconName, ...props}) => {
+const PetItemCard = ({
+  data = {},
+  onPress = () => {},
+  onEditPress = () => {},
+  iconName,
+  ...props
+}) => {
   const heightCard = 160;
   const getAge = (date = null) => {
     const parseDate = moment(date, 'DD-MM-YYYY');
@@ -45,17 +51,17 @@ const PetItemCard = ({data = {}, onPress = () => {}, iconName, ...props}) => {
 
   React.useEffect(() => {
     getPicture();
-  }, []);
+  }, [data]);
 
   const getPicture = async () => {
     try {
       const response = await PetService.get(data.id);
-      if (response.pictures.file.data) {
-        const uri = await encodeFromBuffer(response.pictures.file.data);
-        setPicture({uri: `data:image/jpeg;base64,${uri}`});
-      }
+      console.log('pet id : ', data.id, Object.keys(response));
+      const uri = await encodeFromBuffer(response.pictures.file.data);
+      setPicture({uri: `data:image/jpeg;base64,${uri}`});
     } catch (err) {
       console.log(err);
+      setPicture(null);
     }
     setPictureLoading(false);
   };
@@ -89,6 +95,7 @@ const PetItemCard = ({data = {}, onPress = () => {}, iconName, ...props}) => {
               height: heightCard - 28,
               borderRadius: 10,
               resizeMode: 'cover',
+              backgroundColor: picture ? 'transparent' : Colors.BLACK10,
             }}
             source={picture}
           />
@@ -132,14 +139,7 @@ const PetItemCard = ({data = {}, onPress = () => {}, iconName, ...props}) => {
             />
           </View>
           {pictureLoading ? null : (
-            <TouchableOpacity
-              onPress={() =>
-                props.navigation.navigate(Screens.EDIT_PET_CUSTOMER, {
-                  data,
-                  picture,
-                  savedState: props.navigation.state,
-                })
-              }>
+            <TouchableOpacity onPress={() => onEditPress(data, picture)}>
               <Image
                 style={{width: 22, height: 22}}
                 source={require('@asset/icons/pencil-grey.png')}

@@ -45,7 +45,9 @@ const HeaderCustomer = ({navigation}) => {
           paddingHorizontal: 4,
         }}>
         <TouchableOpacity
-          onPress={() => navigation.navigate(Screens.HOME_NOTIFICATION)}>
+          onPress={() =>
+            navigation.navigate(Screens.NOTIFICATION_ORDER_CUSTOMER)
+          }>
           <Image
             style={{width: 20, height: 20}}
             source={require('./../../../../../assets/icons/notification.png')}

@@ -1,5 +1,12 @@
 import React from 'react';
-import {Text, Image, RefreshControl, ScrollView, View} from 'react-native';
+import {
+  Text,
+  StatusBar,
+  Image,
+  RefreshControl,
+  ScrollView,
+  View,
+} from 'react-native';
 
 import {getDatetime} from '@util/moment';
 import * as Transformer from '@util/transformer';
@@ -47,6 +54,7 @@ const IncomingScreen = ({navigation, ...props}) => {
 
   return (
     <View style={{flex: 1}}>
+      <StatusBar backgroundColor="white" barStyle="dark-content" />
       <ScrollView
         style={{
           padding: 16,

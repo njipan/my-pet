@@ -14,8 +14,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import androidx.multidex.MultiDexApplication;
 
-public class MainApplication extends Application implements ReactApplication {
+public class MainApplication extends MultiDexApplication implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
       new ReactNativeHost(this) {
@@ -32,7 +34,6 @@ public class MainApplication extends Application implements ReactApplication {
           // packages.add(new MyReactNativePackage());
           packages.add(new LinearGradientPackage());
           packages.add(new RNCPickerPackage());
-          // packages.add(new RNDateTimePickerPackage());
 
           return packages;
         }

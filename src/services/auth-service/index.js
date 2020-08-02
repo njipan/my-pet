@@ -1,6 +1,7 @@
-import generalAxios from '@util/axios';
+import generalAxios, {authAxios} from '@util/axios';
 import {Apis, UserType} from '@constant';
 import AsyncStorage from '@react-native-community/async-storage';
+import messaging from '@react-native-firebase/messaging';
 
 export const login = ({email, password, type}) => {
   return generalAxios.post(Apis.SIGN_IN, {
@@ -41,15 +42,18 @@ export const setUser = (data) => {
 };
 
 export const check = async (token, type) => {
-  const response = await generalAxios.get(
-    type == UserType.MERCHANT ? Apis.CHECK_TOKEN_MERCHANT : Apis.CHECK_TOKEN,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
+  try {
+    const response = await generalAxios.get(
+      type == UserType.MERCHANT ? Apis.CHECK_TOKEN_MERCHANT : Apis.CHECK_TOKEN,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    },
-  );
-  setUser(response.data.data);
+    );
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const register = (data) => {
@@ -60,8 +64,26 @@ export const register = (data) => {
   });
 };
 
+export const getFcmToken = () => {
+  return AsyncStorage.getItem('_fcmToken');
+};
+
+export const setFcmToken = (token) => {
+  AsyncStorage.setItem('_fcmToken', token);
+};
+
 export const logout = async () => {
+  const fcm = await getFcmToken();
+  try {
+    const response = await authAxios.post('/users/logout', {token: fcm});
+    console.log(response);
+  } catch (err) {
+    console.log(err.response.data);
+  }
   await AsyncStorage.removeItem('_token');
   await AsyncStorage.removeItem('_type');
   await AsyncStorage.removeItem('_user');
+  await AsyncStorage.removeItem('_fcmToken');
+  await messaging().deleteToken();
+  await messaging().unregisterDeviceForRemoteMessages();
 };

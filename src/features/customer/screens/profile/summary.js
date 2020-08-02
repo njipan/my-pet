@@ -18,7 +18,12 @@ import {AuthService, CustomerService, PetService} from '@service';
 import * as Modal from '@util/modal';
 import {encodeFromBuffer} from '@util/file';
 
-const MyPet = ({navigation, pets = [], onAddPet = () => {}}) => {
+const MyPet = ({
+  navigation,
+  pets = [],
+  onAddPet = () => {},
+  onEditPetPress = () => {},
+}) => {
   return (
     <View style={{padding: 16, backgroundColor: Colors.WHITE}}>
       <Heading
@@ -35,7 +40,12 @@ const MyPet = ({navigation, pets = [], onAddPet = () => {}}) => {
         <View>
           {pets &&
             pets.map((pet) => (
-              <PetItemCard data={pet} key={pet.id} navigation={navigation} />
+              <PetItemCard
+                data={pet}
+                key={pet.id}
+                navigation={navigation}
+                onEditPress={onEditPetPress}
+              />
             ))}
         </View>
         <TouchableOpacity onPress={onAddPet}>
@@ -69,6 +79,7 @@ const ProfileSummaryScreen = ({navigation}) => {
   const getMe = async () => {
     try {
       const response = await CustomerService.getMe();
+      console.log(response);
       setMe(response.data.data.user);
       const bufferPicture = response.data.data.pictures.file?.data || null;
       if (!bufferPicture) return;
@@ -82,13 +93,15 @@ const ProfileSummaryScreen = ({navigation}) => {
   const getPets = async () => {
     try {
       const response = await PetService.all();
+      console.log(response);
       setPets(response);
     } catch (err) {}
   };
 
   const load = async () => {
     setRefreshing(true);
-    await Promise.all([getMe(), getPets()]);
+    await getMe();
+    await getPets();
     setRefreshing(false);
   };
 
@@ -164,7 +177,17 @@ const ProfileSummaryScreen = ({navigation}) => {
           />
         </View>
         <MyPet
-          onAddPet={() => navigation.navigate(Screens.ADD_PET_CUSTOMER)}
+          onAddPet={() =>
+            navigation.navigate(Screens.ADD_PET_CUSTOMER, {reload: getPets})
+          }
+          onEditPetPress={(pet, picture) => {
+            navigation.navigate(Screens.EDIT_PET_CUSTOMER, {
+              data: pet,
+              picture,
+              reload: getPets,
+              savedState: navigation.state,
+            });
+          }}
           pets={pets}
           navigation={navigation}
         />

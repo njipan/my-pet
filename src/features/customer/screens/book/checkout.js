@@ -13,7 +13,7 @@ import Dash from 'react-native-dash';
 
 import {ButtonFluid, Label, TreatmentCard} from '@component';
 import {Screens} from '@constant';
-import {AuthService, OrderService} from '@service';
+import {AuthService, CustomerService, OrderService} from '@service';
 import * as Modal from '@util/modal';
 import {Box, Colors, Typography} from '@style';
 import {toNumberFormat} from '@util/transformer';
@@ -93,8 +93,11 @@ const CheckoutScreen = ({navigation, ...props}) => {
 
   const load = async () => {
     try {
-      setUser(await AuthService.getUser());
-    } catch (err) {}
+      const response = await CustomerService.getMe();
+      setUser(response.data.data.user);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   React.useEffect(() => {
@@ -106,6 +109,9 @@ const CheckoutScreen = ({navigation, ...props}) => {
     navigation.navigate(Screens.ORDER_BOOKING_DETAIL_CUSTOMER, {
       createData: data,
       savedState: navigation.state,
+      changeBookingDatetime: (bookingDatetime) => {
+        setData({...data, bookingDatetime});
+      },
     });
   };
 
@@ -164,7 +170,8 @@ const CheckoutScreen = ({navigation, ...props}) => {
           ];
           navigation.navigate(routeBack);
         } catch (err) {
-          navigation.popToTop();
+          console.log(err);
+          modalNav.goBack(null);
         }
         navigation.push(Screens.ORDER_BOOKING_CHECKOUT_SUCCESS_CUSTOMER, {
           orderData,

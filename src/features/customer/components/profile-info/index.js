@@ -31,7 +31,7 @@ const ProfileInfo = (props) => {
           width: 72,
           height: 72,
           borderRadius: 10,
-          backgroundColor: 'white',
+          backgroundColor: picture ? Colors.WHITE : Colors.BLACK10,
           ...pictureStyle,
         }}
       />

@@ -17,14 +17,8 @@ import OrderBookingNavigator from './screens/book';
 import CustomerOrderNavigator, {HistoryDetailScreen} from './screens/order';
 import PromoNavigator from './screens/promo';
 import EventNavigator from './screens/event';
-
-const Pesanan = () => {
-  return (
-    <View>
-      <Text>Pesanan</Text>
-    </View>
-  );
-};
+import CustomerNewsTopTabNavigator, {NewsDetailScreen} from './screens/news';
+import CustomerNotificationTopTabNavigator from './screens/notification';
 
 const NotificationTopNavigator = createMaterialTopTabNavigator(
   {
@@ -155,9 +149,34 @@ export const Navigator = createStackNavigator({
       };
     },
   },
+  CustomerNewsTopTabNavigator: {
+    screen: CustomerNewsTopTabNavigator,
+    navigationOptions: {
+      title: 'Berita',
+      headerTitleStyle: Typography.FONT_HEADER_TITLE,
+      headerStyle: {
+        elevation: 0,
+        shadowOpacity: 0,
+        borderBottomWidth: 0,
+      },
+    },
+  },
+  CustomerNotificationTopTabNavigator: {
+    screen: CustomerNotificationTopTabNavigator,
+    navigationOptions: {
+      title: 'Notification',
+      headerTitleStyle: Typography.FONT_HEADER_TITLE,
+      headerStyle: {
+        elevation: 0,
+        shadowOpacity: 0,
+        borderBottomWidth: 0,
+      },
+    },
+  },
   ...ProfileNavigator,
   ...OrderBookingNavigator,
   ...PromoNavigator,
   ...EventNavigator,
   [Screens.ORDER_HISTORY_DETAIL_CUSTOMER]: HistoryDetailScreen,
+  [Screens.NEWS_DETAIL_CUSTOMER]: NewsDetailScreen,
 });

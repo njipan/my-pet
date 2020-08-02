@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, ToastAndroid} from 'react-native';
+import {ScrollView, RefreshControl, ToastAndroid} from 'react-native';
 import {Colors, Typography} from '@style';
 import {Screens} from '@constant';
 import {RightMenu, Icons} from '@component';
@@ -42,18 +42,27 @@ const DetailScreen = ({navigation, ...props}) => {
       setMedicalRecords(response.medical_records);
       getPicture(response, response.pictures.file.data || null);
       navigation.setParams({reloadPet: () => getPet()});
-    } catch (err) {
-      console.log(err);
-    }
+      navigation.setParams({
+        data: response,
+      });
+    } catch (err) {}
     setLoading(false);
   };
 
   React.useEffect(() => {
     getPet();
+    navigation.setParams({
+      reload: navigation.getParam('reload'),
+      reloadPet: getPet,
+    });
   }, []);
 
   return (
-    <ScrollView style={{backgroundColor: Colors.BLACK10}}>
+    <ScrollView
+      style={{backgroundColor: Colors.BLACK10}}
+      refreshControl={
+        <RefreshControl refreshing={loading} onRefresh={getPet} />
+      }>
       <PetDetail
         data={{
           ...pet,
@@ -78,6 +87,7 @@ DetailScreen.navigationOptions = ({navigation}) => {
           picture: navigation.getParam('picture'),
           savedState: navigation.state,
           reloadPet: navigation.getParam('reloadPet', () => {}),
+          reload: reload,
         });
         ref.hide();
       },
@@ -106,9 +116,9 @@ DetailScreen.navigationOptions = ({navigation}) => {
                   navModal.navigate({
                     routeName,
                     key,
-                    params: {otherParam: 123},
                   });
-                  reload();
+                  await navigation.getParam('reload', () => {})();
+                  await navigation.getParam('reloadPet', () => {})();
                 } catch (err) {
                   ToastAndroid.show('Terjadi Kesalahan', ToastAndroid.LONG);
                 }
@@ -127,12 +137,7 @@ DetailScreen.navigationOptions = ({navigation}) => {
       <RightMenu
         icon={<Icons.MoreVertIcon size="small" />}
         navigation={navigation}
-        items={
-          navigation.getParam('data', null) &&
-          navigation.getParam('picture', null)
-            ? rightMenus
-            : []
-        }
+        items={rightMenus}
       />
     ),
   };

@@ -79,6 +79,9 @@ const DetailScreen = ({navigation, ...props}) => {
       };
       if (savedState) {
         const {routeName, key} = savedState;
+        navigation.getParam('changeBookingDatetime')(
+          moment(`${data.date} ${data.time}`, 'DD MMMM YYYY HH:mm A'),
+        );
         navigation.navigate({routeName, key, params: body});
         return;
       }

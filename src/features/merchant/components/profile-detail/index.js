@@ -25,6 +25,7 @@ const ProfileDetail = (props) => {
             width: 72,
             height: 72,
             borderRadius: 12,
+            backgroundColor: Colors.BLACK10,
           }}
           source={data.picture}
         />

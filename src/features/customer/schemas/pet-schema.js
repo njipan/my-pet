@@ -43,14 +43,6 @@ const schema = {
     required: true,
     messageRequired: 'Warna mata harus dipilih!',
   },
-  pictureId: {
-    required: true,
-    messageRequired: 'Tambah foto untuk melanjutkan!',
-  },
-  microschipId: {
-    required: true,
-    messageRequired: 'Microschip tidak boleh kosong!',
-  },
 };
 
 export default schema;

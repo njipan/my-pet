@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
+import {StackActions, NavigationActions} from 'react-navigation';
 import {StatusBar, View, ToastAndroid, Text} from 'react-native';
+
 import {ScrollView} from 'react-native-gesture-handler';
-import {Screens} from '@constant';
+import {Screens, Navigators} from '@constant';
 import RegisterForm from './../../components/form/register-form';
 import {AuthService} from '@service';
 import {validate, isObjectValuesNull, singleValidate} from '@util/validate';
@@ -62,15 +64,30 @@ const RegisterScreen = ({navigation}) => {
 
   const onSave = async (navigation) => {
     try {
+      const fcmToken = await AuthService.getFcmToken();
       const response = await AuthService.register({
         full_name: data.fullName,
         email: data.email,
         phone: data.phone,
         password: data.password,
         type: data.type,
+        token: fcmToken,
       });
+      console.log(response);
+      await AuthService.setToken(response.data.data.token);
+      await AuthService.setType(`${data.type}`);
+      await AuthService.setUser(response.data.data);
+      let navigationName = Navigators.CUSTOMER_NAVIGATOR;
+      if (data.type == 2) navigationName = Navigators.MERCHANT_NAVIGATOR;
+      await AuthService.check(response.data.data.token, data.type);
+      navigation.dispatch(
+        StackActions.reset({
+          index: 0,
+          key: null,
+          actions: [NavigationActions.navigate({routeName: navigationName})],
+        }),
+      );
       ToastAndroid.show('Daftar berhasil!', ToastAndroid.LONG);
-      navigation.navigate(Screens.LOGIN_SCREEN);
     } catch (err) {
       console.log(err);
       let message = 'Oops..\nLengkapi form yang tersedia';

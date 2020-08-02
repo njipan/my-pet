@@ -78,5 +78,9 @@ export const NEWS_LATEST_CUSTOMER = 'News_Latest_Customer';
 export const NEWS_TRENDING_CUSTOMER = 'News_Trending_Customer';
 export const NEWS_LIFE_CUSTOMER = 'News_Life_Customer';
 export const NEWS_STORY_CUSTOMER = 'News_Story_Customer';
-export const NEWS_MOVIES_CUSTOMER = 'News_Movies_Customer';
+export const NEWS_MOVIE_CUSTOMER = 'News_Movie_Customer';
 export const NEWS_DETAIL_CUSTOMER = 'News_Detail_Customer';
+
+export const NOTIFICATION_ORDER_CUSTOMER = 'Notification_Order_Customer';
+export const NOTIFICATION_PROMO_CUSTOMER = 'Notification_Promo_Customer';
+export const NOTIFICATION_EVENT_CUSTOMER = 'Notification_Event_Customer';

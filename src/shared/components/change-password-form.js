@@ -23,7 +23,7 @@ const ChangePasswordForm = ({navigation, ...props}) => {
       <PasswordInput
         value={data.newPassword}
         icon={<Icons.KeyFormIcon />}
-        label="Kata Sandi"
+        label="Kata Sandi Baru"
         toggle={true}
         onChangeText={(value) => onFormValueChange('newPassword', value)}
         error={messages.newPassword || false}
@@ -31,7 +31,7 @@ const ChangePasswordForm = ({navigation, ...props}) => {
       <PasswordInput
         value={data.confirmNewPassword}
         icon={<Icons.KeyFormIcon />}
-        label="Ulangi Kata Sandi"
+        label="Ulangi Kata Sandi Baru"
         toggle={true}
         onChangeText={(value) => onFormValueChange('confirmNewPassword', value)}
         error={messages.confirmNewPassword || false}

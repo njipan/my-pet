@@ -21,7 +21,7 @@ import {Screens} from '@constant';
 import {TitleWithAction} from './checkout';
 
 const CheckoutSuccessScreen = ({navigation, ...props}) => {
-  const orderData = navigation.getParam('orderData', null);
+  const orderData = navigation.getParam('orderData', {}) || {};
   const createData = navigation.getParam('createData', {});
 
   React.useEffect(() => {

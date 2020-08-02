@@ -9,11 +9,10 @@ const NotificationCard = (props) => {
     <TouchableHighlight underlayColor="transparent" onPress={onPress}>
       <View
         style={{
-          elevation: 3,
-          shadowColor: '#000',
           backgroundColor: 'white',
+          borderColor: Colors.SHADOW,
+          borderWidth: 1,
           ...Mixins.padding(14, 18),
-          margin: 3,
           borderRadius: 6,
           flexDirection: 'row',
           alignItems: 'center',
